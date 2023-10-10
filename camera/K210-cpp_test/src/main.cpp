@@ -1,47 +1,34 @@
 #include <Arduino.h>
-#include <WS2812FX.h>
-#include <IO-Kit.h>
+#include <SPI.h>
 
 #include "./def.h"
+#include "./ext_lib/Maixduino_GC0328.h"
+#include <Sipeed_ST7789.h>
 
-uint32_t baudrate = 9600;
+SPIClass spi_(SPI0);  // MUST be SPI0 for Maix series on board LCD
+Sipeed_ST7789 lcd(320, 240, spi_);
 
-WS2812FX led = WS2812FX(numLEDs, rgbLED, NEO_GRB + NEO_KHZ800);
-
-Input buttonA = Input(buttonAPin);
-Input buttonB = Input(buttonBPin);
-
-uint32_t red = led.Color(255, 0, 0);
-uint32_t blue = led.Color(0, 0, 255);
-uint32_t black = led.Color(0, 0, 0);
+Maixduino_GC0328 camera(FRAMESIZE_QVGA, PIXFORMAT_RGB565);
 
 void setup() {
-    Serial.begin(baudrate);
-
-    Serial.println("--------------");
-    Serial.println("K210 Test");
-    Serial.println("baudrate: " + String(baudrate));
-    Serial.println("--------------");
-    delay(2000);
-
-    led.init();
-    led.setBrightness(255);
-    led.show();
+    Serial.begin(9600);
+    lcd.begin(15000000, COLOR_RED);
+    if (!camera.begin())
+        Serial.printf("camera init fail\n");
+    else
+        Serial.printf("camera init success\n");
+    camera.run(true);
 }
 
+int g_FrameCounter;
+
 void loop() {
-    Serial.print(millis());
-
-    if (!buttonA) {
-        Serial.print("\tButton A is pressed!");
-        led.setPixelColor(0, red);
-    } else if (!buttonB) {
-        Serial.print("\tButton B is pressed!");
-        led.setPixelColor(0, blue);
+    g_FrameCounter++;
+    uint8_t *img = camera.snapshot();
+    if (img == nullptr || img == 0) {
+        Serial.printf("snap fail\n");
     } else {
-        led.setPixelColor(0, black);
+        Serial.printf("snap success\n");
+        lcd.drawImage(0, 0, camera.width(), camera.height(), (uint16_t *)img);
     }
-    led.show();
-
-    Serial.println();
 }
