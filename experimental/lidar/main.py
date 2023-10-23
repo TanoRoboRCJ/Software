@@ -15,26 +15,17 @@ def main():
     maxCov = -1.0
     phase = 0
 
-    # 時間配列を用意。1秒分。
+    # 配列を用意して正弦波をrawdata[:, 0]に入れる
     rawData = np.zeros((len(t), 2))
+    rawData[:, 0] = dataInit(0)  # NOTE:標準化は位相に影響しないので不要
 
-    # ノイズデータ生成（擬似的な生データ）
-    # noiseRange = 0.05
-    # noise = np.random.normal(size=(samples,1)) * noiseRange
-    # rawData[:,1] = np.cos(2 * math.pi * freq * t + phaseDiff) + np.sin(6 * math.pi * freq * t + phaseDiff)
-    # rawData[:,1] = rawData[:,1] + noise[:,0]
+    # よっ！お待ちかね測定データのヒストグラムだ！
     rawData[:, 1] = lidar.lidar
-
-    # 初期状況
-    rawData[:, 0] = dataInit(0)
-    data = standardization(rawData)
-    plot(data)
 
     for i in range(628):
         rawData[:, 0] = dataInit(i / 100)
-        data = standardization(rawData)
 
-        cov = calcCov(data)
+        cov = calcCov(rawData)
         print(cov)
 
         if cov > maxCov:
@@ -43,14 +34,15 @@ def main():
 
     # 最終プロット
     rawData[:, 0] = dataInit(phase / 100)
-    data = standardization(rawData)
-    c = np.cov(np.transpose(data))
-    print("maxCov: ", maxCov, "phase:", phase / 100)
+    c = np.cov(np.transpose(rawData))
+
     place = (phase / 100) / (2 * math.pi) * 300
-    if (place > 150) :
+    if place > 150:
         place = place - 300
+
+    print("maxCov: ", maxCov, "phase:", phase / 100)
     print("place:", place)
-    plot(data)
+    plot(rawData)
 
 
 def standardization(data):
