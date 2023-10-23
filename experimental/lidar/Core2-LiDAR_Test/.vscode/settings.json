@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.ino": "cpp",
+        "*.pde": "cpp",
+        "ccomplex": "cpp",
+        "complex": "cpp"
+    }
+}

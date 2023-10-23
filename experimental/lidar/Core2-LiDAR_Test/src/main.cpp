@@ -6,13 +6,37 @@ LIDAR lidar(&Serial2, 32, 33);
 
 void setup() {
     M5.begin();
+    M5.Lcd.printf("Hello World\n");
 
-    Serial.begin(9600);
+    Serial.begin(115200);
 }
 
 void loop() {
-    static int speed = 128;
-    static int count = 0;
-    M5.Lcd.printf("Count: %d\n", count);  // LCDに表示
-    count++;
+    lidar.read();
+
+    if (Serial.available() > 0) {
+        Serial.read();
+        Serial.read();
+        Serial.read();
+        Serial.read();
+        M5.Lcd.printf("read:\n");
+
+        for (int i = 0; i < LIDAR_POINT_BUFFER_SIZE; i++) {
+            Serial.print(i);
+            Serial.print("\t");
+            Serial.print(lidar.point[i].x);
+            Serial.print("\t");
+            Serial.println(lidar.point[i].y);
+        }
+    }
+
+    // Serial.print(lidar.radarSpeed);
+    // Serial.print("\t");
+
+    // Serial.print(lidar.startAngle);
+    // Serial.print("\t");
+    // Serial.print(lidar.endAngle);
+    // Serial.print("\t");
+
+    // Serial.println();
 }
