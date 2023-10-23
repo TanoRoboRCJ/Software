@@ -4,24 +4,21 @@ import matplotlib.pyplot as plt
 import lidar
 from sklearn.preprocessing import StandardScaler
 
-phaseDiff = 0
 freq = 6
-samples = 181
+samples = 181  # 90 + 90 + 0
 
 t = np.arange(samples) / samples
 
 
 def main():
-    maxCov = -1.0
-    phase = 0
-
-    # 配列を用意して正弦波をrawdata[:, 0]に入れる
     rawData = np.zeros((len(t), 2))
-    rawData[:, 0] = dataInit(0)  # NOTE:標準化は位相に影響しないので不要
 
     # よっ！お待ちかね測定データのヒストグラムだ！
     rawData[:, 1] = lidar.lidar
 
+    # NOTE: 位相推定
+    maxCov = -1000.0
+    phase = 0
     for i in range(628):
         rawData[:, 0] = dataInit(i / 100)
 
@@ -43,13 +40,6 @@ def main():
     print("maxCov: ", maxCov, "phase:", phase / 100)
     print("place:", place)
     plot(rawData)
-
-
-def standardization(data):
-    scaler = StandardScaler()
-    scaler.fit(data)
-    data = scaler.transform(data)
-    return data
 
 
 def plot(data):
