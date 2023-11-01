@@ -28,5 +28,6 @@ void loop() {
             Serial.print("\t");
             Serial.println(lidar.point[i].y);
         }
+        Serial.println();
     }
 }
