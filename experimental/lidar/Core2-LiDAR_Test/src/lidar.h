@@ -1,26 +1,33 @@
 #include <Arduino.h>
 
-#define LIDAR_BAUDRATE 230400
-#define LIDAR_POINT_BUFFER_SIZE 500
-
-#define LIDAR_DATA_LENGTH 47
-#define LIDAR_DATA_START_CHAR 0x54
-
-
 class POINT {
    public:
     double x = 0;
     double y = 0;
 };
 
+class HISTOGRAM {
+   public:
+    int x = 0;
+    int y = 0;
+};
+
 class LIDAR {
    public:
-    HardwareSerial *uartPtr;
+    static const int DataBuffLength = 500;
+    static const int HistogramRange = 900 * 2;
+    static const int HistogramBinWidth = 10;
+
     LIDAR(HardwareSerial *_uartPtr, int _rxPin, int _pwmPin);
 
-    POINT point[LIDAR_POINT_BUFFER_SIZE];
-
     void read(void);
+
+    POINT point[DataBuffLength];
+    HISTOGRAM histogarm[HistogramRange / HistogramBinWidth];
+
    private:
+    HardwareSerial *uartPtr;
     int pwmPin;
+
+    HISTOGRAM _histogram[HistogramRange / HistogramBinWidth];
 };

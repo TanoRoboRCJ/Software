@@ -21,7 +21,7 @@ void loop() {
         Serial.read();
         M5.Lcd.printf("read:\n");
 
-        for (int i = 0; i < LIDAR_POINT_BUFFER_SIZE; i++) {
+        for (int i = 0; i < LIDAR::DataBuffLength; i++) {
             Serial.print(i);
             Serial.print("\t");
             Serial.print(lidar.point[i].x);
@@ -29,6 +29,4 @@ void loop() {
             Serial.println(lidar.point[i].y);
         }
     }
-
-
 }
