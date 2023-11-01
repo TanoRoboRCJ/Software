@@ -15,10 +15,9 @@ void loop() {
     lidar.read();
 
     if (Serial.available() > 0) {
-        Serial.read();
-        Serial.read();
-        Serial.read();
-        Serial.read();
+        while (Serial.available() != 0) {
+            Serial.read();
+        }
         M5.Lcd.printf("read:\n");
 
         for (int i = 0; i < LIDAR::DataBuffLength; i++) {
