@@ -30,13 +30,5 @@ void loop() {
         }
     }
 
-    // Serial.print(lidar.radarSpeed);
-    // Serial.print("\t");
 
-    // Serial.print(lidar.startAngle);
-    // Serial.print("\t");
-    // Serial.print(lidar.endAngle);
-    // Serial.print("\t");
-
-    // Serial.println();
 }
