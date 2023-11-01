@@ -34,10 +34,10 @@ void LIDAR::read(void) {
     // https://www.notion.so/shirokuma89dev/LiDAR-LD06-6998a6b96af247ac8309316f9cc44c03?pvs=4
     const int DataLength = 12;  // Fixed value
     const int RadarSpeed = (rawData[2] << 8) + rawData[1];
-    const double StartAngle = ((rawData[4] << 8) + rawData[3]) / 100.0;
-    const double EndAngle = ((rawData[42] << 8) + rawData[41]) / 100.0;
     const int TimeStamp = (rawData[44] << 8) + rawData[43];
     const int CrcCheck = rawData[45];
+    const double StartAngle = ((rawData[4] << 8) + rawData[3]) / 100.0;
+    const double EndAngle = ((rawData[42] << 8) + rawData[41]) / 100.0;
 
     double leadAngle = EndAngle - StartAngle;
     if (leadAngle < 0.0) {
