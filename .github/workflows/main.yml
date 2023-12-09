@@ -1,0 +1,11 @@
+name: Issue notify
+
+on:
+  issues:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Discord Message Notify
+      run: curl -X POST -F content="${{ github.actor }}がIssueを立てたよ👀 みんな確認して‼️ @everyone" ${{ secrets.WEBHOOK_URL }}
