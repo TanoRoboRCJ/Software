@@ -363,12 +363,7 @@ void GifuBlock_App(App) {
         servo.velocity = SPEED;
 
         if (tof.val[0] < 130) {
-            servo.suspend = true;
-            app.delay(WAIT);
-            servo.suspend = false;
-            servo.angle += 90;
-            servo.isCorrectingAngle = 0;
-            app.delay(WAIT * 2);
+           turnLeft();
         }
     }
 }
@@ -376,13 +371,13 @@ void GifuBlock_App(App) {
 void GB_adjustmentApp(App) {
     while (1) {
         const int radius      = 20  // ToFの半径(mm)
-            static bool isHit = false;
+        static bool isHit = false;
 
         if (radius + distanceSensor.val[3] + 30 <
             0.70710678 *
                 (radius +
                  distanceSensor.val[5])) {  // 1/√2(distanceSensorが22.5°間隔)
-            servo.angle += 1;                // 一度ずつ補正
+            servo.angle += 1;               // 一度ずつ補正
         }
         if (radius + distanceSensor.val[3] - 30 >
             0.70710678 * (radius + distanceSensor.val[5])) {
