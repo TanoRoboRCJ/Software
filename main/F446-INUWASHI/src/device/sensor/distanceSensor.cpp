@@ -233,7 +233,7 @@ void DISTANCE_SENSOR::wallCondition(void) {
         wallStatus = 13;
     }else if(!isFrontWall && isRightWall && isBehindWall && isLeftWall){
         wallStatus = 14;
-    }else if(isFrontWall && isRightWall && isBehindWall && isLeftWal){
+    }else if(isFrontWall && isRightWall && isBehindWall && isLeftWall){
         wallStatus = 15;
     }
 }

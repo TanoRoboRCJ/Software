@@ -39,7 +39,7 @@ void rightWallApp(App) {
     double oldCoordinateY = 0;
     while (1) {
         app.delay(period);
-        servo.suspend = true;
+        servo.suspend  = true;
         servo.velocity = 0;
         oldCoordinateX = location.coordinateX;
         oldCoordinateY = location.coordinateY;
@@ -91,12 +91,12 @@ void rightWallApp(App) {
             default:
                 break;
         }
-          while (abs(location.coordinateX - oldCoordinateX) < 280 &&
+        while (abs(location.coordinateX - oldCoordinateX) < 280 &&
                abs(location.coordinateY - oldCoordinateY) < 280) {
             if (tof.val[0] < 130) {
                 break;
             }
-            servo.suspend = false;
+            servo.suspend  = false;
             servo.velocity = SPEED;
             app.delay(period);
         }  // 次のタイルまで前進
@@ -356,4 +356,62 @@ void turnReverse(void) {
     servo.isCorrectingAngle = 0;
     app.delay(WAIT * 3);
 }
+
+void GifuBlock_App(App) {
+    while (1) {
+        servo.suspend  = false;
+        servo.velocity = SPEED;
+
+        if (tof.val[0] < 130) {
+            servo.suspend = true;
+            app.delay(WAIT);
+            servo.suspend = false;
+            servo.angle += 90;
+            servo.isCorrectingAngle = 0;
+            app.delay(WAIT * 2);
+        }
+    }
+}
+
+void GB_adjustmentApp(App) {
+    while (1) {
+        const int radius      = 20  // ToFの半径(mm)
+            static bool isHit = false;
+
+        if (radius + distanceSensor.val[3] + 30 <
+            0.70710678 *
+                (radius +
+                 distanceSensor.val[5])) {  // 1/√2(distanceSensorが22.5°間隔)
+            servo.angle += 1;                // 一度ずつ補正
+        }
+        if (radius + distanceSensor.val[3] - 30 >
+            0.70710678 * (radius + distanceSensor.val[5])) {
+            servo.angle -= 1;
+        }
+
+        if (loadcell.status == RIGHT) {
+            app.stop(servoApp);
+            servo.driveAngularVelocity(-30, -45);
+            app.delay(500);
+            servo.driveAngularVelocity(-30, 45);
+            app.delay(500);
+            isHit = false;
+        }
+        if (loadcell.status == LEFT) {
+            app.stop(servoApp);
+            servo.driveAngularVelocity(-30, 45);
+            app.delay(500);
+            servo.driveAngularVelocity(-30, -45);
+            app.delay(500);
+            isHit = false;
+        }
+        if (!isHit) {
+            servo.velocity = SPEED;
+            app.start(servoApp);
+            isHit = true;
+        }
+        app.delay(period);
+    }
+}
+
 #endif
