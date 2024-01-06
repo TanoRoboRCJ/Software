@@ -361,6 +361,7 @@ void GifuBlock_App(App) {
     while (1) {
         servo.suspend  = false;
         servo.velocity = SPEED;
+        app.delay(period);
 
         if (tof.val[0] < 130) {
            turnLeft();
@@ -370,18 +371,18 @@ void GifuBlock_App(App) {
 
 void GB_adjustmentApp(App) {
     while (1) {
-        const int radius      = 20  // ToFの半径(mm)
-        static bool isHit = false;
+        const int radius      = 20;  // ToFの半径(mm)
+        static bool IsHit = false;
 
-        if (radius + distanceSensor.val[3] + 30 <
+        if (radius + tof.val[3] + 10 <
             0.70710678 *
                 (radius +
-                 distanceSensor.val[5])) {  // 1/√2(distanceSensorが22.5°間隔)
-            servo.angle += 1;               // 一度ずつ補正
+                 tof.val[5])) {  // 1/√2(tofが22.5°間隔)
+            servo.angle -= 1;               // 一度ずつ補正
         }
-        if (radius + distanceSensor.val[3] - 30 >
-            0.70710678 * (radius + distanceSensor.val[5])) {
-            servo.angle -= 1;
+        if (radius + tof.val[3] - 30 >
+            0.70710678 * (radius + tof.val[5])) {
+            servo.angle += 1;
         }
 
         if (loadcell.status == RIGHT) {
@@ -390,7 +391,7 @@ void GB_adjustmentApp(App) {
             app.delay(500);
             servo.driveAngularVelocity(-30, 45);
             app.delay(500);
-            isHit = false;
+            IsHit = false;
         }
         if (loadcell.status == LEFT) {
             app.stop(servoApp);
@@ -398,12 +399,12 @@ void GB_adjustmentApp(App) {
             app.delay(500);
             servo.driveAngularVelocity(-30, -45);
             app.delay(500);
-            isHit = false;
+            IsHit = false;
         }
-        if (!isHit) {
+        if (!IsHit) {
             servo.velocity = SPEED;
             app.start(servoApp);
-            isHit = true;
+            IsHit = true;
         }
         app.delay(period);
     }

@@ -19,18 +19,20 @@ void setup() {
 
     // 処理系統
     app.create(mainApp, firstPriority);
-    app.create(rightWallApp);
+    // app.create(rightWallApp);
     // app.create(leftWallApp);
     app.create(locationApp, firstPriority);
     // app.create(DepthFirstSearchApp, secondPriority); 
     // app.create(AstarApp, secondPriority);
-    app.create(adjustmentApp);
+    // app.create(adjustmentApp);
     // app.create(floorApp);
 
     // 入出力系統
     app.create(sensorApp, secondPriority);
     app.create(servoApp, secondPriority);
     app.create(monitorApp);
+    app.create(GifuBlock_App);
+    app.create(GB_adjustmentApp);
 
     // UI系統
     app.create(victimNotifyApp);

@@ -34,17 +34,19 @@ void mainApp(App) {
     while (1) {
         if (ui.toggle) {
             if (status) {
-                    app.start(rightWallApp);
-                    app.start(adjustmentApp);
-                    app.start(locationApp);
-                    app.start(DepthFirstSearchApp);
-                    app.start(floorApp);
-                    app.start(victimNotifyApp);
-                    location.coordinateX = 0;
-                    location.coordinateY = 0;
-                    servo.suspend = false;
-                    servo.velocity = SPEED;
-                    status = false;
+                app.start(GifuBlock_App);
+                app.start(GB_adjustmentApp);
+                app.start(rightWallApp);
+                app.start(adjustmentApp);
+                app.start(locationApp);
+                app.start(DepthFirstSearchApp);
+                app.start(floorApp);
+                app.start(victimNotifyApp);
+                location.coordinateX = 0;
+                location.coordinateY = 0;
+                servo.suspend        = false;
+                servo.velocity       = SPEED;
+                status               = false;
             }
 
             runningWrite();
@@ -57,9 +59,9 @@ void mainApp(App) {
             app.stop(floorApp);
             app.stop(AstarApp);
 
-            servo.suspend = true;
+            servo.suspend  = true;
             servo.velocity = 0;
-            status        = true;
+            status         = true;
 
             settingWrite();
         }
