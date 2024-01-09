@@ -21,6 +21,7 @@ extern RTOS_Kit app;
 #define RIGHT_WEIGHT 1
 #define FRONT_WEIGHT 2
 #define LEFT_WEIGHT 3
+#define PASSED_WEIGHT 5
 
 bool virtualWall[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {false};
 bool isRightWallApp                              = false;
@@ -313,7 +314,9 @@ void turnReverse(void) {
 }
 
 void weighting(void){
-    if()
+    if(tof.val[4] < 150){
+        
+    }
 }
 
 #endif
