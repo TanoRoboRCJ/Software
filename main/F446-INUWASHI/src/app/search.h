@@ -41,10 +41,6 @@ void rightWallApp(App) {
         app.delay(period);
         servo.suspend  = true;
         servo.velocity = 0;
-        oldCoordinateX = location.coordinateX;
-        oldCoordinateY = location.coordinateY;
-
-        tof.wallCondition();
 
         switch (tof.wallStatus) {
             case 0:
@@ -91,6 +87,8 @@ void rightWallApp(App) {
             default:
                 break;
         }
+        oldCoordinateX = location.coordinateX;
+        oldCoordinateY = location.coordinateY;
         while (abs(location.coordinateX - oldCoordinateX) < 280 &&
                abs(location.coordinateY - oldCoordinateY) < 280) {
             if (tof.val[0] < 130) {

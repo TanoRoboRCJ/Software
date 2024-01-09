@@ -46,7 +46,6 @@ void mainApp(App) {
                 servo.velocity       = SPEED;
                 status               = false;
             }
-
             runningWrite();
         } else {
             app.stop(rightWallApp);
