@@ -18,6 +18,10 @@ extern RTOS_Kit app;
 #define WEST 3
 #define RETURN_TIME 300000  // 帰還開始時間(ms)
 
+#define RIGHT_WEIGHT 1
+#define FRONT_WEIGHT 2
+#define LEFT_WEIGHT 3
+
 bool virtualWall[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {false};
 bool isRightWallApp                              = false;
 bool oldstatus                                   = false;
@@ -35,58 +39,10 @@ void turnLeft(void);
 void turnReverse(void);
 
 void rightWallApp(App) {
-    double oldCoordinateX = 0;
-    double oldCoordinateY = 0;
     while (1) {
         app.delay(period);
         servo.suspend  = true;
         servo.velocity = 0;
-
-        switch (tof.wallStatus) {
-            case 0:
-                turnRight();
-                break;
-            case 1:
-                turnRight();
-                break;
-            case 2:
-                break;
-            case 3:
-                turnRight();
-                break;
-            case 4:
-                turnRight();
-                break;
-            case 5:
-                turnLeft();
-                break;
-            case 6:
-                turnRight();
-                break;
-            case 7:
-                turnRight();
-                break;
-            case 8:
-                break;
-            case 9:
-                break;
-            case 10:
-                turnRight();
-                break;
-            case 11:
-                turnLeft();
-                break;
-            case 12:
-                turnReverse();
-                break;
-            case 13:
-                turnRight();
-                break;
-            case 14:
-                break;
-            default:
-                break;
-        }
         oldCoordinateX = location.coordinateX;
         oldCoordinateY = location.coordinateY;
         while (abs(location.coordinateX - oldCoordinateX) < 280 &&
@@ -98,6 +54,7 @@ void rightWallApp(App) {
             servo.velocity = SPEED;
             app.delay(period);
         }  // 次のタイルまで前進
+        turnRight();
     }
 }
 
@@ -354,4 +311,9 @@ void turnReverse(void) {
     servo.isCorrectingAngle = 0;
     app.delay(WAIT * 3);
 }
+
+void weighting(void){
+    if()
+}
+
 #endif

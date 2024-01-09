@@ -207,8 +207,7 @@ void monitorApp(App) {
         uart1.print(tof.isSouthWall);
         uart1.print("\t");
         uart1.print(tof.isWestWall);
-        uart1.print("\t");
-        uart1.println(tof.wallStatus);
+        uart1.println("\t");
         app.delay(1000);
     }
 }

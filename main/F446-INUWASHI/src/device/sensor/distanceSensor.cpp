@@ -51,7 +51,6 @@ void DISTANCE_SENSOR::calc(int angle) {
         vecX[n] = val[n] * sin(radians(n * 22.5 + angle));
         vecY[n] = val[n] * cos(radians(n * 22.5 + angle));
     }
-    wallCondition();
     direction();
     leftWall();
     rightWall();
@@ -199,41 +198,5 @@ void DISTANCE_SENSOR::relativeDirection(void) {
         isLeftWall = true;
     } else {
         isLeftWall = false;
-    }
-}
-
-void DISTANCE_SENSOR::wallCondition(void) {
-    if (!isFrontWall && !isRightWall && !isBehindWall && !isLeftWall) {
-        wallStatus = 0;
-    } else if (isFrontWall && !isRightWall && !isBehindWall && !isLeftWall) {
-        wallStatus = 1;
-    } else if (!isFrontWall && isRightWall && !isBehindWall && !isLeftWall) {
-        wallStatus = 2;
-    } else if (!isFrontWall && !isRightWall && isBehindWall && !isLeftWall) {
-        wallStatus = 3;
-    } else if (!isFrontWall && !isRightWall && !isBehindWall && isLeftWall) {
-        wallStatus = 4;
-    } else if (isFrontWall && isRightWall && !isBehindWall && !isLeftWall) {
-        wallStatus = 5;
-    } else if (isFrontWall && !isRightWall && isBehindWall && !isLeftWall) {
-        wallStatus = 6;
-    } else if (isFrontWall && !isRightWall && !isBehindWall && isLeftWall) {
-        wallStatus = 7;
-    } else if (!isFrontWall && isRightWall && isBehindWall && !isLeftWall) {
-        wallStatus = 8;
-    } else if (!isFrontWall && isRightWall && !isBehindWall && isLeftWall) {
-        wallStatus = 9;
-    } else if (!isFrontWall && !isRightWall && isBehindWall && isLeftWall) {
-        wallStatus = 10;
-    } else if (isFrontWall && isRightWall && isBehindWall && !isLeftWall) {
-        wallStatus = 11;
-    } else if (isFrontWall && isRightWall && !isBehindWall && isLeftWall) {
-        wallStatus = 12;
-    } else if (isFrontWall && !isRightWall && isBehindWall && isLeftWall) {
-        wallStatus = 13;
-    } else if (!isFrontWall && isRightWall && isBehindWall && isLeftWall) {
-        wallStatus = 14;
-    } else if (isFrontWall && isRightWall && isBehindWall && isLeftWall) {
-        wallStatus = 15;
     }
 }
