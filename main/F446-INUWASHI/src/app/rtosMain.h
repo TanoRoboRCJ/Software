@@ -34,8 +34,6 @@ void mainApp(App) {
     while (1) {
         if (ui.toggle) {
             if (status) {
-                app.start(GifuBlock_App);
-                app.start(GB_adjustmentApp);
                 app.start(rightWallApp);
                 app.start(adjustmentApp);
                 app.start(locationApp);
