@@ -22,6 +22,10 @@ extern RTOS_Kit app;
 #define FRONT_WEIGHT 2
 #define LEFT_WEIGHT 3
 #define PASSED_WEIGHT 5
+#define right 0
+#define front 1
+#define left 2
+#define DISABLE 50
 
 bool virtualWall[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {false};
 bool isRightWallApp                              = false;
@@ -32,22 +36,38 @@ int checkPointY                                  = MAP_ORIGIN;
 static double oldCoordinateX                     = 0;
 static double oldCoordinateY                     = 0;
 static bool locationIsChanged                    = false;
+static int direction                             = 0;
 
 void AstarApp(App);
 void adjustmentApp(App);
 void turnRight(void);
 void turnLeft(void);
 void turnReverse(void);
+void weighting(void);
 
 void rightWallApp(App) {
     while (1) {
         app.delay(period);
         servo.suspend  = true;
         servo.velocity = 0;
+
+        weighting();
+        switch (direction) {
+            case right:
+                turnRight();
+                break;
+            case front:
+                break;
+            case left:
+                turnLeft();
+                break;
+        }
+
         oldCoordinateX = location.coordinateX;
         oldCoordinateY = location.coordinateY;
-        while (abs(location.coordinateX - oldCoordinateX) < 280 &&
-               abs(location.coordinateY - oldCoordinateY) < 280) {
+
+        while (abs(location.coordinateX - oldCoordinateX) < 300 &&
+               abs(location.coordinateY - oldCoordinateY) < 300) {
             if (tof.val[0] < 130) {
                 break;
             }
@@ -55,7 +75,9 @@ void rightWallApp(App) {
             servo.velocity = SPEED;
             app.delay(period);
         }  // 次のタイルまで前進
-        turnRight();
+        servo.suspend  = true;
+        servo.velocity = 0;
+        app.delay(WAIT * 2);
     }
 }
 
@@ -313,9 +335,24 @@ void turnReverse(void) {
     app.delay(WAIT * 3);
 }
 
-void weighting(void){
-    if(tof.val[4] < 150){
-        
+void weighting(void) {
+    int weight[3] = {RIGHT_WEIGHT, FRONT_WEIGHT, LEFT_WEIGHT};
+    if (tof.val[4] < 150) {
+        weight[right] = DISABLE;
+    }
+    if (tof.val[0] < 150) {
+        weight[front] = DISABLE;
+    }
+    if (tof.val[12] < 150) {
+        weight[left] = DISABLE;
+    }
+    if (weight[right] <= weight[front] && weight[right] <= weight[left]) {
+        direction = right;
+    } else if (weight[front] <= weight[right] &&
+               weight[front] <= weight[left]) {
+        direction = front;
+    } else if (weight[left] <= weight[right] && weight[left] <= weight[front]) {
+        direction = left;
     }
 }
 
