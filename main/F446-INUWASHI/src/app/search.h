@@ -68,7 +68,7 @@ void rightWallApp(App) {
 
         while (abs(location.coordinateX - oldCoordinateX) < 300 &&
                abs(location.coordinateY - oldCoordinateY) < 300) {
-            if (tof.val[0] < 130) {
+            if (tof.val[0] < 150) {
                 break;
             }
             servo.suspend  = false;
