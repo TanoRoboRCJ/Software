@@ -23,7 +23,6 @@ void rightWallApp(App);
 void leftWallApp(App);
 void monitorApp(App);
 void adjustmentApp(App);
-void DepthFirstSearchApp(App);
 void junction(void);
 
 static bool JCT[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {false};
@@ -50,7 +49,6 @@ void AstarApp(App) {  // NOTE 動いた
                 servo.suspend  = true;
                 app.stop(rightWallApp);
                 app.stop(leftWallApp);
-                app.stop(DepthFirstSearchApp);
                 app.stop(victimNotifyApp);
                 app.delay(WAIT);
                 servo.suspend = false;
@@ -209,63 +207,6 @@ void monitorApp(App) {
         uart1.print(tof.isWestWall);
         uart1.println("\t");
         app.delay(1000);
-    }
-}
-
-void DepthFirstSearchApp(App) {  // NOTE 二方向以上進める座標を記録する変数
-                                 // "JCT"
-    static bool turn = false;
-    app.delay(WAIT);
-    while (1) {
-        virtualWall[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN] =
-            true;  // 仮想壁
-        app.delay(period);
-
-        // if (!tof.isNotFront) {
-        //     app.stop(rightWallApp);
-        //     app.stop(adjustmentApp);
-        //     servo.suspend = true;
-        //     app.delay(WAIT);
-        //     servo.suspend = false;
-        //     servo.angle += 90;
-        //     servo.velocity = 0;
-        //     app.delay(WAIT * 2);
-        //     servo.suspend = true;
-        //     app.delay(WAIT);
-        //     servo.suspend = false;
-        //     servo.angle += 90;
-        //     app.delay(WAIT * 3);
-        //     isRightWallApp = false;
-        //     app.start(leftWallApp);
-        //     app.start(adjustmentApp);
-        //     isRightWallApp = false;
-        //     app.delay(period);
-        // }  // 前方+左右に壁があったら反転して左壁追従
-
-        // if (!isRightWallApp &&
-        //     JCT[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN]) {
-        //     app.stop(leftWallApp);
-        //     app.start(rightWallApp);
-        //     isRightWallApp = true;
-        // }
-        // if (isRightWallApp) {
-        //     junction();
-        // }
-
-        if (checkPointX == location.x && checkPointY == location.y &&
-            oldmillis + 10000 < millis()) {  // DFS開始地点に戻ってきたら反転
-            oldmillis      = millis();
-            checkPointX    = MAP_ORIGIN;
-            checkPointY    = MAP_ORIGIN;
-            servo.velocity = 0;
-            servo.suspend  = true;
-            app.delay(WAIT);
-            servo.suspend = false;
-            app.stop(rightWallApp);
-            servo.angle += 180;
-            app.delay(WAIT * 2);
-            app.start(rightWallApp);
-        }
     }
 }
 

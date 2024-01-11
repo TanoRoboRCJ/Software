@@ -37,7 +37,6 @@ void mainApp(App) {
                 app.start(rightWallApp);
                 app.start(adjustmentApp);
                 app.start(locationApp);
-                app.start(DepthFirstSearchApp);
                 app.start(victimNotifyApp);
                 location.coordinateX = 0;
                 location.coordinateY = 0;
