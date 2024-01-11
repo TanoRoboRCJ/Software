@@ -23,7 +23,6 @@ void rightWallApp(App);
 void leftWallApp(App);
 void monitorApp(App);
 void adjustmentApp(App);
-void junction(void);
 
 static bool JCT[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {false};
 
@@ -210,10 +209,5 @@ void monitorApp(App) {
     }
 }
 
-void junction(void) {
-    if (tof.val[0] > 450 && (tof.isNotRight || tof.isNotLeft)) {
-        JCT[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN] = true;
-    }
-}
 
 #endif
