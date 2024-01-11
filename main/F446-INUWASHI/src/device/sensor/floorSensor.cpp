@@ -27,19 +27,17 @@ void FLOOR_SENSOR::setFloorColor(unsigned long color) {
 
 void FLOOR_SENSOR::colorJudgment(void) {
     if (blankVal > 400 && blueVal > 250) {
-        isBlack = true;
-        isWhite = false;
-        isBlue  = false;
+        color = 1;
         // 黒
     } else if ( (blankVal > 100 && blankVal < 650) && blueVal < 300) {
-        isBlue  = true;
-        isWhite = false;
-        isBlack = false;
+        color = 2;
         // 青
-    } else {
-        isWhite = true;
-        isBlue  = false;
-        isBlack = false;
+    } else if(1){
+        color = 3;
+        // 銀
+    }else {
+        color = 0;
+        // 白
     }
 }
 

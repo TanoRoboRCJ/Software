@@ -32,4 +32,4 @@ class Map {
     };
 };
 
-Map map[200];
+#endif

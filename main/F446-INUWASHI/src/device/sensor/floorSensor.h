@@ -25,11 +25,7 @@ class FLOOR_SENSOR {
     unsigned long white = colorRGB(255, 255, 255);
     unsigned long blank = colorRGB(0, 0, 0);
 
-    bool isRed   = false;
-    bool isGreen = false;
-    bool isBlue  = false;
-    bool isBlack = false;
-    bool isWhite = false;
+   int color = 0;
 
     void init(void);
 

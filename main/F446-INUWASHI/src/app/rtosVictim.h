@@ -11,7 +11,6 @@ extern bool isRightWallApp;
 extern void rightWallApp(App);
 extern void leftWallApp(App);
 extern void DepthFirstSearchApp(App);
-extern void floorApp(App);
 
 #define SPEED 100
 
@@ -49,7 +48,6 @@ void victimNotifyApp(App) {
         app.stop(rightWallApp);
         app.stop(leftWallApp);
         app.stop(DepthFirstSearchApp);
-        app.stop(floorApp);
 
         victim.place[location.x + 20][location.y + 20] = true;
         victim.isDetected                              = true;
@@ -122,7 +120,6 @@ void victimNotifyApp(App) {
         camera[1].data       = 'N';
 
         app.restart(DepthFirstSearchApp);
-        app.restart(floorApp);
         // if (isRightWallApp) {
         app.restart(rightWallApp);
         // } else {

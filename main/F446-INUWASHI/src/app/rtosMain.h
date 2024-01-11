@@ -38,7 +38,6 @@ void mainApp(App) {
                 app.start(adjustmentApp);
                 app.start(locationApp);
                 app.start(DepthFirstSearchApp);
-                app.start(floorApp);
                 app.start(victimNotifyApp);
                 location.coordinateX = 0;
                 location.coordinateY = 0;
@@ -51,7 +50,6 @@ void mainApp(App) {
             app.stop(rightWallApp);
             app.stop(adjustmentApp);
             app.stop(locationApp);
-            app.stop(floorApp);
             app.stop(AstarApp);
 
             servo.suspend  = true;
