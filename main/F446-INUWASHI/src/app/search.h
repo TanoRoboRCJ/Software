@@ -35,27 +35,25 @@ int checkPointX                                  = MAP_ORIGIN;
 int checkPointY                                  = MAP_ORIGIN;
 static double oldCoordinateX                     = 0;
 static double oldCoordinateY                     = 0;
-static bool locationIsChanged                    = false;
-static int direction                             = 0;
 
 void AstarApp(App);
 void adjustmentApp(App);
 void turnRight(void);
 void turnLeft(void);
 void turnReverse(void);
-void weighting(void);
+int weighting(void);
+void move_1tile(void);
 
 extern void updateMap(void);
 
 void rightWallApp(App) {
-    updateMap();
+    updateMap();//初期状態を記録。以降は停止時に更新
     while (1) {
         app.delay(period);
         servo.suspend  = true;
         servo.velocity = 0;
 
-        weighting();
-        switch (direction) {
+        switch (weighting()) {
             case right:
                 turnRight();
                 break;
@@ -65,21 +63,8 @@ void rightWallApp(App) {
                 turnLeft();
                 break;
         }
-
-        oldCoordinateX = location.coordinateX;
-        oldCoordinateY = location.coordinateY;
-
-        while (abs(location.coordinateX - oldCoordinateX) < 300 &&
-               abs(location.coordinateY - oldCoordinateY) < 300) {
-            if (tof.val[0] < 150) {
-                break;
-            }
-            servo.suspend  = false;
-            servo.velocity = SPEED;
-            app.delay(period);
-        }  // 次のタイルまで前進
-        servo.suspend  = true;
-        servo.velocity = 0;
+        
+        move_1tile();
         updateMap();
         app.delay(WAIT * 2);
     }
@@ -212,7 +197,24 @@ void turnReverse(void) {
     app.delay(WAIT * 3);
 }
 
-void weighting(void) {
+void move_1tile(void) {
+    oldCoordinateX = location.coordinateX;
+    oldCoordinateY = location.coordinateY;
+
+    while (abs(location.coordinateX - oldCoordinateX) < 300 &&
+           abs(location.coordinateY - oldCoordinateY) < 300) {
+        if (tof.val[0] < 150) {
+            break;
+        }
+        servo.suspend  = false;
+        servo.velocity = SPEED;
+        app.delay(period);
+    }  // 次のタイルまで前進
+    servo.suspend  = true;
+    servo.velocity = 0;
+}
+
+int weighting(void) {
     int weight[3] = {RIGHT_WEIGHT, FRONT_WEIGHT, LEFT_WEIGHT};
     if (tof.val[4] < 150) {
         weight[right] = DISABLE;
@@ -224,13 +226,17 @@ void weighting(void) {
         weight[left] = DISABLE;
     }
     if (weight[right] <= weight[front] && weight[right] <= weight[left]) {
-        direction = right;
+        return right;
     } else if (weight[front] <= weight[right] &&
                weight[front] <= weight[left]) {
-        direction = front;
+        return front;
     } else if (weight[left] <= weight[right] && weight[left] <= weight[front]) {
-        direction = left;
+        return left;
     }
+}
+
+void extensionRight(void){
+
 }
 
 #endif

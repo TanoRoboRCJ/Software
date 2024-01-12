@@ -200,7 +200,7 @@ void AstarApp(App) {  // NOTE 動いた
     }
 }
 
-void monitorApp(App) {
+void monitorApp(App) {//NOTE センサの値見たい時に使う。
     while (1) {
         uart1.print(floorSensor.redVal);
         uart1.print("\t");
