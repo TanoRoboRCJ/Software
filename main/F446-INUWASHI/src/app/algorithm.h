@@ -215,6 +215,17 @@ void updateMap(void) {
     static int i = 0;
 
     Map[i].x = location.x;
+    Map[i].y = location.y;
+
+    Map[i].color   = floorSensor.color;
+    Map[i].victim  = victim.isDetected;
+
+    Map[i].wall[0] = tof.isNorthWall;   //北
+    Map[i].wall[1] = tof.isEastWall;    //東
+    Map[i].wall[2] = tof.isSouthWall;   //南
+    Map[i].wall[3] = tof.isWestWall;    //西
+
+    i++;
 }
 
 #endif
