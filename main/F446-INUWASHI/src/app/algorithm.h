@@ -3,13 +3,14 @@
 
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
-#include "./algorithm/map.h"
+#include "./algorithm/field.h"
 #include "./rtosIO.h"
 #include "./rtosLocation.h"
 #include "./rtosVictim.h"
 #include "./search.h"
 
 extern RTOS_Kit app;
+Field field;
 
 #define SPEED 100
 #define WAIT 500
@@ -213,7 +214,7 @@ void monitorApp(App) {
 void updateMap(void) {
     static int i = 0;
 
-    // mapping[i].x = location.x;
+    Map[i].x = location.x;
 }
 
 #endif

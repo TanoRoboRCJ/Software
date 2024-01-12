@@ -1,5 +1,5 @@
-#ifndef _Map_H
-#define _Map_H
+#ifndef _Field_H
+#define _Field_H
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
@@ -7,7 +7,7 @@
 #include "WProgram.h"
 #endif
 
-class Map {
+class Field {
    public:
     static const int White  = 0;
     static const int Black  = 1;
@@ -31,5 +31,7 @@ class Map {
         }
     };
 };
+
+Field Map[200];
 
 #endif
