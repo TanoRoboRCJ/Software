@@ -45,7 +45,10 @@ void turnLeft(void);
 void turnReverse(void);
 void weighting(void);
 
+extern void updateMap(void);
+
 void rightWallApp(App) {
+    updateMap();
     while (1) {
         app.delay(period);
         servo.suspend  = true;
@@ -77,6 +80,7 @@ void rightWallApp(App) {
         }  // 次のタイルまで前進
         servo.suspend  = true;
         servo.velocity = 0;
+        updateMap();
         app.delay(WAIT * 2);
     }
 }

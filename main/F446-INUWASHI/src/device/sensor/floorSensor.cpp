@@ -32,13 +32,10 @@ void FLOOR_SENSOR::colorJudgment(void) {
     } else if ( (blankVal > 100 && blankVal < 650) && blueVal < 300) {
         color = 2;
         // 青
-    } else if(1){
-        color = 3;
-        // 銀
-    }else {
+    } else {
         color = 0;
         // 白
-    }
+    }//FIXME ここに銀色の判定を入れる
 }
 
 // void FLOOR_SENSOR::tof_of_bottom_read(void) {

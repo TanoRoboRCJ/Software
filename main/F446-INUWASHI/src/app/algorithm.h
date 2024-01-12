@@ -26,7 +26,10 @@ void leftWallApp(App);
 void monitorApp(App);
 void adjustmentApp(App);
 
+void info(void);
+
 static bool JCT[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {false};
+static int info_show                            = 0;
 
 void AstarApp(App) {  // NOTE 動いた
     app.delay(WAIT);
@@ -199,15 +202,13 @@ void AstarApp(App) {  // NOTE 動いた
 
 void monitorApp(App) {
     while (1) {
-        uart1.print(tof.isNorthWall);
+        uart1.print(floorSensor.redVal);
         uart1.print("\t");
-        uart1.print(tof.isEastWall);
+        uart1.print(floorSensor.blueVal);
         uart1.print("\t");
-        uart1.print(tof.isSouthWall);
-        uart1.print("\t");
-        uart1.print(tof.isWestWall);
-        uart1.println("\t");
-        app.delay(1000);
+        uart1.print(floorSensor.blankVal);
+        uart1.print("\n");
+        app.delay(period);
     }
 }
 
@@ -217,15 +218,61 @@ void updateMap(void) {
     Map[i].x = location.x;
     Map[i].y = location.y;
 
-    Map[i].color   = floorSensor.color;
-    Map[i].victim  = victim.isDetected;
+    Map[i].color  = floorSensor.color;
+    Map[i].victim = victim.isDetected;
 
-    Map[i].wall[0] = tof.isNorthWall;   //北
-    Map[i].wall[1] = tof.isEastWall;    //東
-    Map[i].wall[2] = tof.isSouthWall;   //南
-    Map[i].wall[3] = tof.isWestWall;    //西
+    Map[i].wall[0] = tof.isNorthWall;  // 北
+    Map[i].wall[1] = tof.isEastWall;   // 東
+    Map[i].wall[2] = tof.isSouthWall;  // 南
+    Map[i].wall[3] = tof.isWestWall;   // 西
+
+    info();
 
     i++;
+    info_show++;
+}
+
+void info(void){
+    uart1.print("(");
+        uart1.print(Map[info_show].x);
+        uart1.print(",");
+        uart1.print(Map[info_show].y);
+        uart1.print(")");
+        uart1.print("\t");
+
+        uart1.print("FloorColor:");
+        switch(Map[info_show].color){
+            case 0:
+                uart1.print("White");
+                break;
+            case 1:
+                uart1.print("Black");
+                break;
+            case 2:
+                uart1.print("Blue");
+                break;
+            case 3:
+                uart1.print("Silver");
+                break;
+        }
+        uart1.print("\t");
+
+        uart1.print("Victim:");
+        uart1.print(Map[info_show].victim);
+        uart1.print("\t");
+
+        uart1.print("North:");
+        uart1.print(Map[info_show].wall[0]);
+        uart1.print("\t");
+        uart1.print("East:");
+        uart1.print(Map[info_show].wall[1]);
+        uart1.print("\t");
+        uart1.print("South:");
+        uart1.print(Map[info_show].wall[2]);
+        uart1.print("\t");
+        uart1.print("West:");
+        uart1.print(Map[info_show].wall[3]);
+        uart1.print("\n");
 }
 
 #endif

@@ -30,7 +30,7 @@ void sensorApp(App) {
         app.delay(2);
         floorSensor.redVal = analogRead(PC0);
 
-        floorSensor.setFloorColor(floorSensor.blank);
+        floorSensor.setFloorColor(floorSensor.green);
         app.delay(2);
         floorSensor.blankVal = analogRead(PC0);
 
