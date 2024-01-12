@@ -3,6 +3,7 @@
 
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
+#include "./algorithm/map.h"
 #include "./rtosIO.h"
 #include "./rtosLocation.h"
 #include "./rtosVictim.h"
@@ -209,5 +210,10 @@ void monitorApp(App) {
     }
 }
 
+void updateMap(void) {
+    static int i = 0;
+
+    // mapping[i].x = location.x;
+}
 
 #endif
