@@ -236,7 +236,7 @@ int weighting(void) {
 }
 
 void extensionRight(void){
-
+    
 }
 
 #endif

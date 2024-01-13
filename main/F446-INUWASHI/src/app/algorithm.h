@@ -202,12 +202,12 @@ void AstarApp(App) {  // NOTE 動いた
 
 void monitorApp(App) {//NOTE センサの値見たい時に使う。
     while (1) {
-        uart1.print(floorSensor.redVal);
-        uart1.print("\t");
-        uart1.print(floorSensor.blueVal);
-        uart1.print("\t");
-        uart1.print(floorSensor.blankVal);
-        uart1.print("\n");
+        // uart1.print(floorSensor.redVal);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.blueVal);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.blankVal);
+        // uart1.print("\n");
         app.delay(period);
     }
 }
@@ -226,7 +226,7 @@ void updateMap(void) {
     Map[i].wall[2] = tof.isSouthWall;  // 南
     Map[i].wall[3] = tof.isWestWall;   // 西
 
-    info();
+    // info();
 
     i++;
     info_show++;
