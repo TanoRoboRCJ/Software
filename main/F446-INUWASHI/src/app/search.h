@@ -71,7 +71,7 @@ void rightWallApp(App) {
         move_1tile();
         updateMap();
         reachingCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN]++;
-        app.delay(WAIT);
+        app.delay(100);
     }
 }
 
@@ -225,13 +225,13 @@ int weighting(void) {
     weight[front] += FrontWeight();
     weight[left] += LeftWeigt();
 
-    if (tof.val[4] < 150) {
+    if (tof.val[4] < 170) {
         weight[right] = DISABLE;
     }
-    if (tof.val[0] < 150) {
+    if (tof.val[0] < 170) {
         weight[front] = DISABLE;
     }
-    if (tof.val[12] < 150) {
+    if (tof.val[12] < 170) {
         weight[left] = DISABLE;
     }
     if (weight[right] <= weight[front] && weight[right] <= weight[left]) {
