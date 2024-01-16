@@ -22,7 +22,6 @@ Field field;
 #define RETURN_TIME 300000  // 帰還開始時間(ms)
 
 void rightWallApp(App);
-void leftWallApp(App);
 void monitorApp(App);
 void adjustmentApp(App);
 
@@ -52,7 +51,6 @@ void AstarApp(App) {  // NOTE 動いた
                 servo.velocity = 0;
                 servo.suspend  = true;
                 app.stop(rightWallApp);
-                app.stop(leftWallApp);
                 app.stop(victimNotifyApp);
                 app.delay(WAIT);
                 servo.suspend = false;

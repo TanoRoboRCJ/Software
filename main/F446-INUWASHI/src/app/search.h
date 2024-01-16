@@ -27,11 +27,8 @@ extern RTOS_Kit app;
 #define left 2
 #define DISABLE 50
 
-bool isRightWallApp                                      = false;
 bool oldstatus                                           = false;
 static int oldmillis                                     = 0;
-int checkPointX                                          = MAP_ORIGIN;
-int checkPointY                                          = MAP_ORIGIN;
 static double oldCoordinateX                             = 0;
 static double oldCoordinateY                             = 0;
 static int reachingCount[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {0};
@@ -72,50 +69,6 @@ void rightWallApp(App) {
         updateMap();
         reachingCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN]++;
         app.delay(100);
-    }
-}
-
-void leftWallApp(App) {
-    while (1) {
-        // uart3.println("左壁探索中...");
-        app.stop(rightWallApp);
-        servo.velocity = SPEED;
-        servo.suspend  = false;
-        isRightWallApp = false;
-        app.delay(period);
-
-        if (tof.isNotLeft) {  // 左壁が消えた時の処理
-            servo.velocity = 0;
-            servo.suspend  = true;
-            app.delay(WAIT);
-            servo.suspend = false;
-            servo.angle -= 90;
-            servo.isCorrectingAngle = 0;
-            servo.velocity          = 0;
-            servo.suspend           = true;
-            app.delay(WAIT * 2);
-            servo.suspend  = false;
-            servo.velocity = SPEED;
-            while (abs(location.coordinateX - oldCoordinateX) < 250 &&
-                   abs(location.coordinateY - oldCoordinateY) < 250) {
-                if (tof.val[0] < 160) {
-                    break;
-                }
-                servo.velocity = SPEED;
-                app.delay(period);
-            }  // 次のタイルまで前進
-        }
-
-        if (tof.val[0] < 120) {  // 前に壁が来た時の処理
-            servo.velocity = 0;
-            servo.suspend  = true;
-            app.delay(WAIT);
-            servo.suspend = false;
-            servo.angle += 90;
-            servo.isCorrectingAngle = 0;
-            app.delay(WAIT * 2);
-            servo.velocity = SPEED;
-        }
     }
 }
 

@@ -20,7 +20,6 @@ void setup() {
     // 処理系統
     app.create(mainApp, firstPriority);
     app.create(rightWallApp);
-    // app.create(leftWallApp);
     app.create(locationApp, firstPriority);
     // app.create(AstarApp, secondPriority);
     app.create(adjustmentApp);
