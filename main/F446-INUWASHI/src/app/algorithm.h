@@ -8,6 +8,7 @@
 #include "./rtosLocation.h"
 #include "./rtosVictim.h"
 #include "./search.h"
+#include "./algorithm/field.h"
 
 extern RTOS_Kit app;
 Field field;

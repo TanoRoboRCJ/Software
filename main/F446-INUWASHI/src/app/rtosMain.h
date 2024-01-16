@@ -16,13 +16,6 @@ extern RTOS_Kit app;
 int robotStaus = 0;
 
 #define SPEED 100
-#define WAIT 500
-#define NORTH 0
-#define EAST 1
-#define SOUTH 2
-#define WEST 3
-#define MAX_DISTANCE 800
-#define FEEDBACK 300000  // 帰還開始時間(ms)
 
 void mainApp(App) {
     app.start(ledApp);

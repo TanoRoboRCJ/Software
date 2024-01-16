@@ -9,15 +9,10 @@
 #include "./rtosVictim.h"
 
 extern RTOS_Kit app;
+extern void updateMap();
 
 #define SPEED 100
 #define WAIT 500
-#define NORTH 0
-#define EAST 1
-#define SOUTH 2
-#define WEST 3
-#define RETURN_TIME 300000  // 帰還開始時間(ms)
-
 #define RIGHT_WEIGHT 1
 #define FRONT_WEIGHT 2
 #define LEFT_WEIGHT 3
@@ -27,8 +22,6 @@ extern RTOS_Kit app;
 #define left 2
 #define DISABLE 50
 
-bool oldstatus                                           = false;
-static int oldmillis                                     = 0;
 static double oldCoordinateX                             = 0;
 static double oldCoordinateY                             = 0;
 static int reachingCount[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {0};
@@ -44,7 +37,7 @@ int FrontWeight(void);
 int LeftWeigt(void);
 void move_1tile(void);
 
-extern void updateMap(void);
+// extern void updateMap(void);
 
 void rightWallApp(App) {
     updateMap();  // 初期状態を記録。以降は停止時に更新
