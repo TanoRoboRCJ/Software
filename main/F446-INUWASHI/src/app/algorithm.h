@@ -202,12 +202,12 @@ void AstarApp(App) {  // NOTE 動いた
 
 void monitorApp(App) {//NOTE センサの値見たい時に使う。
     while (1) {
-        // uart1.print(floorSensor.redVal);
-        // uart1.print("\t");
-        // uart1.print(floorSensor.blueVal);
-        // uart1.print("\t");
-        // uart1.print(floorSensor.blankVal);
-        // uart1.print("\n");
+        uart1.print(camera[0].data);
+        uart1.print("\t");
+        uart1.print(camera[1].data);
+        uart1.print("\t");
+        uart1.print(victim.isRightOrLeft);
+        uart1.println("\t");
         app.delay(period);
     }
 }

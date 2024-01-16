@@ -19,3 +19,9 @@ void CAMERA::read(void) {
         }
     }
 }
+
+void CAMERA::flush(void) {
+    while (serialPtr->available() > 0) {
+        serialPtr->read();
+    }
+}

@@ -16,8 +16,8 @@ class LED {
     Adafruit_NeoPixel* ptrArr[4];
 
     // settings:
-    const int maxBrightness = 255;
-    const int normalBrightness = 50;
+    const int maxBrightness = 0;
+    const int normalBrightness = 0;
     const bool disableAll = false;
 
     bool disableUI = false;

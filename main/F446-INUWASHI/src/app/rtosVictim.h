@@ -18,19 +18,18 @@ void victimNotifyApp(App) {
     while (1) {
         int rescueKitNum = 0;
 
+        static int camTimer = 0;
         while (1) {
             if (victim.isRightOrLeft != 0 && ui.toggle == true) {
-                if (victim.place[location.x + 20][location.y + 20] == false) {
-                    if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
-                         tof.val[5] < 220) ||
-                        (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
-                         tof.val[11] < 220)) {
-                        break;
-                    } else {
-                        victim.isRightOrLeft = 0;
-                        camera[0].data       = 'N';
-                        camera[1].data       = 'N';
-                    }
+                if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
+                     tof.val[5] < 220) ||
+                    (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
+                     tof.val[11] < 220)) {
+                    break;
+                } else {
+                    victim.isRightOrLeft = 0;
+                    camera[0].data       = 'N';
+                    camera[1].data       = 'N';
                 }
             }
             app.delay(10);
@@ -102,20 +101,23 @@ void victimNotifyApp(App) {
 
         servo.suspend  = false;
         servo.velocity = SPEED;
+        app.restart(rightWallApp);
+
+        camTimer = millis();
+        while (1) {
+            if (millis() - camTimer > 3000) {
+                break;
+            }
+            app.delay(10);
+            camera[0].flush();
+            camera[1].flush();
+        }
 
         victim.isDetected    = false;
         victim.id            = 0;
         victim.isRightOrLeft = 0;
         camera[0].data       = 'N';
         camera[1].data       = 'N';
-
-        // if (isRightWallApp) {
-        app.restart(rightWallApp);
-        // } else {
-        //     app.start(leftWallApp);
-        // }
-
-        victim.isRightOrLeft = 0;
     }
 }
 
