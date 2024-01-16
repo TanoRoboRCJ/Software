@@ -21,7 +21,6 @@ void setup() {
     app.create(mainApp, firstPriority);
     app.create(rightWallApp);
     app.create(locationApp, firstPriority);
-    // app.create(AstarApp, secondPriority);
     app.create(adjustmentApp);
 
     // 入出力系統

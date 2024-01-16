@@ -29,7 +29,6 @@ void mainApp(App) {
     app.start(sensorApp);
     app.start(monitorApp);
     app.start(servoApp);
-    app.start(AstarApp);
     static bool status = false;
     while (1) {
         if (ui.toggle) {
@@ -49,7 +48,6 @@ void mainApp(App) {
             app.stop(rightWallApp);
             app.stop(adjustmentApp);
             app.stop(locationApp);
-            app.stop(AstarApp);
 
             servo.suspend  = true;
             servo.velocity = 0;
