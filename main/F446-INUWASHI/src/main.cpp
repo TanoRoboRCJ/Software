@@ -22,7 +22,7 @@ void setup() {
     app.create(rightWallApp);
     app.create(locationApp, firstPriority);
     app.create(adjustmentApp);
-
+    
     // 入出力系統
     app.create(sensorApp, secondPriority);
     app.create(servoApp, secondPriority);

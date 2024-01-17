@@ -36,6 +36,8 @@ void initDevice(void) {
     gyro.init();
     gyro.setOffset();
 
+    floorSensor.init();
+
     led.initCompleteIllumination();
     delay(200);
 

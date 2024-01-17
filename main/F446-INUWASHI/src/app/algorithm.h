@@ -34,10 +34,13 @@ static int info_show                            = 0;
 
 void monitorApp(App) {//NOTE センサの値見たい時に使う。
     while (1) {
-        uart1.print(tof.val[4]);
+        uart1.print(floorSensor.redVal);
         uart1.print("\t");
-        uart1.print(tof.val[5]);
+        uart1.print(floorSensor.blankVal);
         uart1.print("\t");
+        uart1.print(floorSensor.blueVal);
+        uart1.print("\t");
+        uart1.print(floorSensor.Color);
         uart1.println("\t");
         app.delay(period);
     }
@@ -49,7 +52,7 @@ void updateMap(void) {
     Map[i].x = location.x;
     Map[i].y = location.y;
 
-    Map[i].color  = floorSensor.color;
+    Map[i].color  = floorSensor.Color;
     Map[i].victim = victim.isDetected;
 
     Map[i].wall[0] = tof.isNorthWall;  // 北
