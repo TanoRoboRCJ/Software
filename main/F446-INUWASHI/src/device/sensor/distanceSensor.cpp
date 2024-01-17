@@ -162,17 +162,17 @@ void DISTANCE_SENSOR::relativeDirection(void) {
     } else {
         isFrontWall = false;
     }
-    if (val[4] < 150) {
+    if (val[4] < 180) {
         isRightWall = true;
     } else {
         isRightWall = false;
     }
-    if (val[8] < 150) {
+    if (val[8] < 180) {
         isBehindWall = true;
     } else {
         isBehindWall = false;
     }
-    if (val[12] < 150) {
+    if (val[12] < 180) {
         isLeftWall = true;
     } else {
         isLeftWall = false;

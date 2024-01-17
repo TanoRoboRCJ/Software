@@ -20,9 +20,9 @@ void victimNotifyApp(App) {
         while (1) {
             if (victim.isRightOrLeft != 0 && ui.toggle == true) {
                 if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
-                     tof.val[5] < 220) ||
+                     tof.val[5] < 260) ||
                     (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
-                     tof.val[11] < 220)) {
+                     tof.val[11] < 260)) {
                     break;
                 } else {
                     victim.isRightOrLeft = 0;

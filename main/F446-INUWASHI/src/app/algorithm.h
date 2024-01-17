@@ -34,11 +34,10 @@ static int info_show                            = 0;
 
 void monitorApp(App) {//NOTE センサの値見たい時に使う。
     while (1) {
-        uart1.print(camera[0].data);
+        uart1.print(tof.val[4]);
         uart1.print("\t");
-        uart1.print(camera[1].data);
+        uart1.print(tof.val[5]);
         uart1.print("\t");
-        uart1.print(victim.isRightOrLeft);
         uart1.println("\t");
         app.delay(period);
     }
