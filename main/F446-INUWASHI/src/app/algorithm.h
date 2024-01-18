@@ -109,4 +109,107 @@ void info(void){
         uart1.print("\n");
 }
 
+int weighting(void) {
+    int weight[3] = {RIGHT_WEIGHT, FRONT_WEIGHT, LEFT_WEIGHT};
+    weight[right] += RightWeight();
+    weight[front] += FrontWeight();
+    weight[left] += LeftWeigt();
+
+    if (tof.val[4] < 170) {
+        weight[right] = DISABLE;
+    }
+    if (tof.val[0] < 170) {
+        weight[front] = DISABLE;
+    }
+    if (tof.val[12] < 170) {
+        weight[left] = DISABLE;
+    }
+    if (weight[right] <= weight[front] && weight[right] <= weight[left]) {
+        return right;
+    } else if (weight[front] <= weight[right] &&
+               weight[front] <= weight[left]) {
+        return front;
+    } else if (weight[left] <= weight[right] && weight[left] <= weight[front]) {
+        return left;
+    }
+}
+
+int RightWeight(void) {
+    if (gyro.West && !tof.isNorthWall &&
+        reachedCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN + 1] !=
+            0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
+                                            [location.y + MAP_ORIGIN + 1];
+    } else if (gyro.North && !tof.isEastWall &&
+               reachedCount[location.x + MAP_ORIGIN + 1]
+                            [location.y + MAP_ORIGIN] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN + 1]
+                                            [location.y + MAP_ORIGIN];
+    } else if (gyro.East && !tof.isSouthWall &&
+               reachedCount[location.x + MAP_ORIGIN]
+                            [location.y + MAP_ORIGIN - 1] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
+                                            [location.y + MAP_ORIGIN - 1];
+    } else if (gyro.South && !tof.isWestWall &&
+               reachedCount[location.x + MAP_ORIGIN - 1]
+                            [location.y + MAP_ORIGIN] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN - 1]
+                                            [location.y + MAP_ORIGIN];
+    } else {
+        return 0;
+    }
+}
+
+int FrontWeight(void) {
+    if (gyro.West && !tof.isWestWall &&
+        reachedCount[location.x + MAP_ORIGIN - 1][location.y + MAP_ORIGIN] !=
+            0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN - 1]
+                                            [location.y + MAP_ORIGIN];
+    } else if (gyro.North && !tof.isNorthWall &&
+               reachedCount[location.x + MAP_ORIGIN]
+                            [location.y + MAP_ORIGIN + 1] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
+                                            [location.y + MAP_ORIGIN + 1];
+    } else if (gyro.East && !tof.isEastWall &&
+               reachedCount[location.x + MAP_ORIGIN + 1]
+                            [location.y + MAP_ORIGIN] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN + 1]
+                                            [location.y + MAP_ORIGIN];
+    } else if (gyro.South && !tof.isSouthWall &&
+               reachedCount[location.x + MAP_ORIGIN]
+                            [location.y + MAP_ORIGIN - 1] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
+                                            [location.y + MAP_ORIGIN - 1];
+    } else {
+        return 0;
+    }
+}
+
+int LeftWeigt(void) {
+    if (gyro.West && !tof.isSouthWall &&
+        reachedCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN - 1] !=
+            0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
+                                            [location.y + MAP_ORIGIN - 1];
+    } else if (gyro.North && !tof.isWestWall &&
+               reachedCount[location.x + MAP_ORIGIN - 1]
+                            [location.y + MAP_ORIGIN] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN - 1]
+                                            [location.y + MAP_ORIGIN];
+    } else if (gyro.East && !tof.isNorthWall &&
+               reachedCount[location.x + MAP_ORIGIN]
+                            [location.y + MAP_ORIGIN + 1] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
+                                            [location.y + MAP_ORIGIN + 1];
+    } else if (gyro.South && !tof.isEastWall &&
+               reachedCount[location.x + MAP_ORIGIN + 1]
+                            [location.y + MAP_ORIGIN] != 0) {
+        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN + 1]
+                                            [location.y + MAP_ORIGIN];
+    } else {
+        return 0;
+    }
+}
+
 #endif
