@@ -13,17 +13,9 @@ extern void updateMap();
 
 #define SPEED 100
 #define WAIT 500
-#define RIGHT_WEIGHT 1
-#define FRONT_WEIGHT 2
-#define LEFT_WEIGHT 3
-#define PASSED_WEIGHT 5
-#define right 0
-#define front 1
-#define left 2
-#define DISABLE 50
 
-static double oldCoordinateX                             = 0;
-static double oldCoordinateY                             = 0;
+static double oldCoordinateX                            = 0;
+static double oldCoordinateY                            = 0;
 static int reachedCount[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {0};
 
 void AstarApp(App);
@@ -32,9 +24,9 @@ void turnRight(void);
 void turnLeft(void);
 void turnReverse(void);
 int weighting(void);
-int RightWeight(void);
-int FrontWeight(void);
-int LeftWeigt(void);
+int rightWeight(void);
+int frontWeight(void);
+int leftWeigt(void);
 void move_1tile(void);
 
 // extern void updateMap(void);
@@ -48,16 +40,15 @@ void rightWallApp(App) {
         servo.velocity = 0;
 
         switch (weighting()) {
-            case right:
+            case 0: //right
                 turnRight();
                 break;
-            case front:
+            case 1: //front
                 break;
-            case left:
+            case 2: //left
                 turnLeft();
                 break;
         }
-
         move_1tile();
         updateMap();
         reachedCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN]++;
@@ -164,7 +155,5 @@ void move_1tile(void) {
     servo.suspend  = true;
     servo.velocity = 0;
 }
-
-
 
 #endif

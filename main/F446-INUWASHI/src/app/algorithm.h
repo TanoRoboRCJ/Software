@@ -8,19 +8,15 @@
 #include "./rtosLocation.h"
 #include "./rtosVictim.h"
 #include "./search.h"
-#include "./algorithm/field.h"
 
 extern RTOS_Kit app;
 Field field;
 
-#define SPEED 100
-#define WAIT 500
-#define NORTH 0
-#define EAST 1
-#define SOUTH 2
-#define WEST 3
-#define MAX_DISTANCE 800
-#define RETURN_TIME 300000  // 帰還開始時間(ms)
+#define PASSED_WEIGHT 5
+#define RIGHT 0
+#define FRONT 1
+#define LEFT 2
+#define DISABLE 50
 
 void rightWallApp(App);
 void monitorApp(App);
@@ -31,8 +27,7 @@ void info(void);
 static bool JCT[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {false};
 static int info_show                            = 0;
 
-
-void monitorApp(App) {//NOTE センサの値見たい時に使う。
+void monitorApp(App) {  // NOTE センサの値見たい時に使う。
     while (1) {
         uart1.print(floorSensor.redVal);
         uart1.print("\t");
@@ -66,150 +61,136 @@ void updateMap(void) {
     info_show++;
 }
 
-void info(void){
+void info(void) {
     uart1.print("(");
-        uart1.print(Map[info_show].x);
-        uart1.print(",");
-        uart1.print(Map[info_show].y);
-        uart1.print(")");
-        uart1.print("\t");
+    uart1.print(Map[info_show].x);
+    uart1.print(",");
+    uart1.print(Map[info_show].y);
+    uart1.print(")");
+    uart1.print("\t");
 
-        uart1.print("FloorColor:");
-        switch(Map[info_show].color){
-            case 0:
-                uart1.print("White");
-                break;
-            case 1:
-                uart1.print("Black");
-                break;
-            case 2:
-                uart1.print("Blue");
-                break;
-            case 3:
-                uart1.print("Silver");
-                break;
-        }
-        uart1.print("\t");
+    uart1.print("FloorColor:");
+    switch (Map[info_show].color) {
+        case 0:
+            uart1.print("White");
+            break;
+        case 1:
+            uart1.print("Black");
+            break;
+        case 2:
+            uart1.print("Blue");
+            break;
+        case 3:
+            uart1.print("Silver");
+            break;
+    }
+    uart1.print("\t");
 
-        uart1.print("Victim:");
-        uart1.print(Map[info_show].victim);
-        uart1.print("\t");
+    uart1.print("Victim:");
+    uart1.print(Map[info_show].victim);
+    uart1.print("\t");
 
-        uart1.print("North:");
-        uart1.print(Map[info_show].wall[0]);
-        uart1.print("\t");
-        uart1.print("East:");
-        uart1.print(Map[info_show].wall[1]);
-        uart1.print("\t");
-        uart1.print("South:");
-        uart1.print(Map[info_show].wall[2]);
-        uart1.print("\t");
-        uart1.print("West:");
-        uart1.print(Map[info_show].wall[3]);
-        uart1.print("\n");
+    uart1.print("North:");
+    uart1.print(Map[info_show].wall[0]);
+    uart1.print("\t");
+    uart1.print("East:");
+    uart1.print(Map[info_show].wall[1]);
+    uart1.print("\t");
+    uart1.print("South:");
+    uart1.print(Map[info_show].wall[2]);
+    uart1.print("\t");
+    uart1.print("West:");
+    uart1.print(Map[info_show].wall[3]);
+    uart1.print("\n");
 }
 
 int weighting(void) {
-    int weight[3] = {RIGHT_WEIGHT, FRONT_WEIGHT, LEFT_WEIGHT};
-    weight[right] += RightWeight();
-    weight[front] += FrontWeight();
-    weight[left] += LeftWeigt();
+    int weight[3] = {1, 2, 3};  // {right, front, left}
+
+    weight[RIGHT] += rightWeight();
+    weight[FRONT] += frontWeight();
+    weight[LEFT] += leftWeigt();
 
     if (tof.val[4] < 170) {
-        weight[right] = DISABLE;
+        weight[RIGHT] = DISABLE;
     }
     if (tof.val[0] < 170) {
-        weight[front] = DISABLE;
+        weight[FRONT] = DISABLE;
     }
     if (tof.val[12] < 170) {
-        weight[left] = DISABLE;
+        weight[LEFT] = DISABLE;
     }
-    if (weight[right] <= weight[front] && weight[right] <= weight[left]) {
-        return right;
-    } else if (weight[front] <= weight[right] &&
-               weight[front] <= weight[left]) {
-        return front;
-    } else if (weight[left] <= weight[right] && weight[left] <= weight[front]) {
-        return left;
-    }
-}
-
-int RightWeight(void) {
-    if (gyro.West && !tof.isNorthWall &&
-        reachedCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN + 1] !=
-            0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
-                                            [location.y + MAP_ORIGIN + 1];
-    } else if (gyro.North && !tof.isEastWall &&
-               reachedCount[location.x + MAP_ORIGIN + 1]
-                            [location.y + MAP_ORIGIN] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN + 1]
-                                            [location.y + MAP_ORIGIN];
-    } else if (gyro.East && !tof.isSouthWall &&
-               reachedCount[location.x + MAP_ORIGIN]
-                            [location.y + MAP_ORIGIN - 1] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
-                                            [location.y + MAP_ORIGIN - 1];
-    } else if (gyro.South && !tof.isWestWall &&
-               reachedCount[location.x + MAP_ORIGIN - 1]
-                            [location.y + MAP_ORIGIN] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN - 1]
-                                            [location.y + MAP_ORIGIN];
-    } else {
-        return 0;
+    if (weight[RIGHT] <= weight[FRONT] && weight[RIGHT] <= weight[LEFT]) {
+        return 0;  // right
+    } else if (weight[FRONT] <= weight[RIGHT] &&
+               weight[FRONT] <= weight[LEFT]) {
+        return 1;  // front
+    } else if (weight[LEFT] <= weight[RIGHT] && weight[LEFT] <= weight[FRONT]) {
+        return 2;  // left
     }
 }
 
-int FrontWeight(void) {
-    if (gyro.West && !tof.isWestWall &&
-        reachedCount[location.x + MAP_ORIGIN - 1][location.y + MAP_ORIGIN] !=
-            0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN - 1]
-                                            [location.y + MAP_ORIGIN];
-    } else if (gyro.North && !tof.isNorthWall &&
-               reachedCount[location.x + MAP_ORIGIN]
-                            [location.y + MAP_ORIGIN + 1] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
-                                            [location.y + MAP_ORIGIN + 1];
-    } else if (gyro.East && !tof.isEastWall &&
-               reachedCount[location.x + MAP_ORIGIN + 1]
-                            [location.y + MAP_ORIGIN] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN + 1]
-                                            [location.y + MAP_ORIGIN];
-    } else if (gyro.South && !tof.isSouthWall &&
-               reachedCount[location.x + MAP_ORIGIN]
-                            [location.y + MAP_ORIGIN - 1] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
-                                            [location.y + MAP_ORIGIN - 1];
-    } else {
-        return 0;
+int rightWeight(void) {
+    int x = location.x + MAP_ORIGIN;
+    int y = location.y + MAP_ORIGIN;
+
+    int weight = 0;
+
+    if (gyro.West && !tof.isNorthWall) {
+        weight = reachedCount[x][y + 1];
+    } else if (gyro.North && !tof.isEastWall) {
+        weight = reachedCount[x + 1][y];
+    } else if (gyro.East && !tof.isSouthWall) {
+        weight = reachedCount[x][y - 1];
+    } else if (gyro.South && !tof.isWestWall) {
+        weight = reachedCount[x - 1][y];
     }
+
+    return weight * PASSED_WEIGHT;
 }
 
-int LeftWeigt(void) {
-    if (gyro.West && !tof.isSouthWall &&
-        reachedCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN - 1] !=
-            0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
-                                            [location.y + MAP_ORIGIN - 1];
-    } else if (gyro.North && !tof.isWestWall &&
-               reachedCount[location.x + MAP_ORIGIN - 1]
-                            [location.y + MAP_ORIGIN] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN - 1]
-                                            [location.y + MAP_ORIGIN];
-    } else if (gyro.East && !tof.isNorthWall &&
-               reachedCount[location.x + MAP_ORIGIN]
-                            [location.y + MAP_ORIGIN + 1] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN]
-                                            [location.y + MAP_ORIGIN + 1];
-    } else if (gyro.South && !tof.isEastWall &&
-               reachedCount[location.x + MAP_ORIGIN + 1]
-                            [location.y + MAP_ORIGIN] != 0) {
-        return PASSED_WEIGHT * reachedCount[location.x + MAP_ORIGIN + 1]
-                                            [location.y + MAP_ORIGIN];
-    } else {
-        return 0;
+int frontWeight(void) {
+    int x = location.x + MAP_ORIGIN;
+    int y = location.y + MAP_ORIGIN;
+
+    int weight = 0;
+
+    if (gyro.West && !tof.isWestWall) {
+        weight = reachedCount[x - 1][y];
+
+    } else if (gyro.North && !tof.isNorthWall) {
+        weight = reachedCount[x][y + 1];
+
+    } else if (gyro.East && !tof.isEastWall) {
+        weight = reachedCount[x + 1][y];
+
+    } else if (gyro.South && !tof.isSouthWall) {
+        weight = reachedCount[x][y - 1];
     }
+
+    return weight * PASSED_WEIGHT;
+}
+
+int leftWeigt(void) {
+    int weight = 0;
+
+    int x = location.x + MAP_ORIGIN;
+    int y = location.y + MAP_ORIGIN;
+
+    if (gyro.West && !tof.isSouthWall) {
+        weight = reachedCount[x][y - 1];
+
+    } else if (gyro.North && !tof.isWestWall) {
+        weight = reachedCount[x - 1][y];
+
+    } else if (gyro.East && !tof.isNorthWall) {
+        weight = reachedCount[x][y + 1];
+
+    } else if (gyro.South && !tof.isEastWall) {
+        weight = reachedCount[x + 1][y];
+    }
+
+    return weight * PASSED_WEIGHT;
 }
 
 #endif
