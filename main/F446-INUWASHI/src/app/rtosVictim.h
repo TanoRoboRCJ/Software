@@ -19,10 +19,14 @@ void victimNotifyApp(App) {
         static int camTimer = 0;
         while (1) {
             if (victim.isRightOrLeft != 0 && ui.toggle == true) {
-                if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
-                     tof.val[3] < 240 && tof.val[5] < 240) ||
-                    (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
-                     tof.val[13] < 240 && tof.val[11] < 240)) {
+                if (victim.place[location.x + 20][location.y + 20] == true) {
+                    victim.isRightOrLeft = 0;
+                    camera[0].data       = 'N';
+                    camera[1].data       = 'N';
+                } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
+                            tof.val[3] < 240 && tof.val[5] < 240) ||
+                           (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
+                            tof.val[13] < 240 && tof.val[11] < 240)) {
                     break;
                 } else {
                     victim.isRightOrLeft = 0;
