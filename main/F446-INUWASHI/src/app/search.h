@@ -13,6 +13,11 @@ extern void updateMap();
 
 #define SPEED 100
 #define WAIT 500
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
+
 
 static double oldCoordinateX                            = 0;
 static double oldCoordinateY                            = 0;

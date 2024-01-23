@@ -4,6 +4,11 @@
 
 extern GYRO gyro;
 
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
+
 DISTANCE_SENSOR::DISTANCE_SENSOR(HardwareSerial *p) {
     serialPtr = p;
     serialPtr->begin(1000000);
@@ -54,127 +59,103 @@ void DISTANCE_SENSOR::calc(int angle) {
     direction();
 }
 
-
 void DISTANCE_SENSOR::direction(void) {
     gyro.read();
-    if (gyro.North) {
+    if (gyro.direction == NORTH) {
         if (val[0] > 170) {
-            isNorthWall = false;
+            wallExist[NORTH] = false;
         } else {
-            isNorthWall = true;
+            wallExist[NORTH] = true;
         }
 
         if (val[4] > 210) {
-            isEastWall = false;
+            wallExist[EAST] = false;
         } else {
-            isEastWall = true;
+            wallExist[EAST] = true;
         }
 
         if (val[8] > 210) {
-            isSouthWall = false;
+            wallExist[SOUTH] = false;
         } else {
-            isSouthWall = true;
+            wallExist[SOUTH] = true;
         }
 
         if (val[12] > 210) {
-            isWestWall = false;
+            wallExist[WEST] = false;
         } else {
-            isWestWall = true;
+            wallExist[WEST] = true;
         }
-    } else if (gyro.East) {
+    } else if (gyro.direction == EAST) {
         if (val[12] > 210) {
-            isNorthWall = false;
+            wallExist[NORTH] = false;
         } else {
-            isNorthWall = true;
+            wallExist[NORTH] = true;
         }
 
         if (val[0] > 210) {
-            isEastWall = false;
+            wallExist[EAST] = false;
         } else {
-            isEastWall = true;
+            wallExist[EAST] = true;
         }
 
         if (val[4] > 210) {
-            isSouthWall = false;
+            wallExist[SOUTH] = false;
         } else {
-            isSouthWall = true;
+            wallExist[SOUTH] = true;
         }
 
         if (val[8] > 210) {
-            isWestWall = false;
+            wallExist[WEST] = false;
         } else {
-            isWestWall = true;
+            wallExist[WEST] = true;
         }
-    } else if (gyro.South) {
+    } else if (gyro.direction == SOUTH) {
         if (val[8] > 210) {
-            isNorthWall = false;
+            wallExist[NORTH] = false;
         } else {
-            isNorthWall = true;
+            wallExist[NORTH] = true;
         }
 
         if (val[12] > 210) {
-            isEastWall = false;
+            wallExist[EAST] = false;
         } else {
-            isEastWall = true;
+            wallExist[EAST] = true;
         }
 
         if (val[0] > 210) {
-            isSouthWall = false;
+            wallExist[SOUTH] = false;
         } else {
-            isSouthWall = true;
+            wallExist[SOUTH] = true;
         }
 
         if (val[4] > 210) {
-            isWestWall = false;
+            wallExist[WEST] = false;
         } else {
-            isWestWall = true;
+            wallExist[WEST] = true;
         }
-    } else if (gyro.West) {
+    } else if (gyro.direction == WEST) {
         if (val[4] > 210) {
-            isNorthWall = false;
+            wallExist[NORTH] = false;
         } else {
-            isNorthWall = true;
+            wallExist[NORTH] = true;
         }
 
         if (val[8] > 210) {
-            isEastWall = false;
+            wallExist[EAST] = false;
         } else {
-            isEastWall = true;
+            wallExist[EAST] = true;
         }
 
         if (val[12] > 210) {
-            isSouthWall = false;
+            wallExist[SOUTH] = false;
         } else {
-            isSouthWall = true;
+            wallExist[SOUTH] = true;
         }
 
         if (val[0] > 210) {
-            isWestWall = false;
+            wallExist[WEST] = false;
         } else {
-            isWestWall = true;
+            wallExist[WEST] = true;
         }
-    }
-}
-
-void DISTANCE_SENSOR::relativeDirection(void) {
-    if (val[0] < 150) {
-        isFrontWall = true;
-    } else {
-        isFrontWall = false;
-    }
-    if (val[4] < 180) {
-        isRightWall = true;
-    } else {
-        isRightWall = false;
-    }
-    if (val[8] < 180) {
-        isBehindWall = true;
-    } else {
-        isBehindWall = false;
-    }
-    if (val[12] < 180) {
-        isLeftWall = true;
-    } else {
-        isLeftWall = false;
     }
 }

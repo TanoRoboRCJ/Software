@@ -23,20 +23,21 @@ void monitorApp(App);
 void adjustmentApp(App);
 
 void info(void);
+// void makeMap(void);
 
 static bool JCT[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {false};
-static int info_show                            = 0;
+static int infoShow                             = 0;
 
 void monitorApp(App) {  // NOTE センサの値見たい時に使う。
     while (1) {
-        uart1.print(floorSensor.redVal);
-        uart1.print("\t");
-        uart1.print(floorSensor.blankVal);
-        uart1.print("\t");
-        uart1.print(floorSensor.blueVal);
-        uart1.print("\t");
-        uart1.print(floorSensor.Color);
-        uart1.println("\t");
+        // uart1.print(floorSensor.redVal);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.blankVal);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.blueVal);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.Color);
+        // uart1.println("\t");
         app.delay(period);
     }
 }
@@ -50,27 +51,28 @@ void updateMap(void) {
     Map[i].color  = floorSensor.Color;
     Map[i].victim = victim.isDetected;
 
-    Map[i].wall[0] = tof.isNorthWall;  // 北
-    Map[i].wall[1] = tof.isEastWall;   // 東
-    Map[i].wall[2] = tof.isSouthWall;  // 南
-    Map[i].wall[3] = tof.isWestWall;   // 西
+    Map[i].wall[0] = tof.wallExist[NORTH];  // 北
+    Map[i].wall[1] = tof.wallExist[EAST];   // 東
+    Map[i].wall[2] = tof.wallExist[SOUTH];  // 南
+    Map[i].wall[3] = tof.wallExist[WEST];   // 西
 
     // info();
 
     i++;
-    info_show++;
+    infoShow++;
+    // makeMap();
 }
 
 void info(void) {
     uart1.print("(");
-    uart1.print(Map[info_show].x);
+    uart1.print(Map[infoShow].x);
     uart1.print(",");
-    uart1.print(Map[info_show].y);
+    uart1.print(Map[infoShow].y);
     uart1.print(")");
     uart1.print("\t");
 
     uart1.print("FloorColor:");
-    switch (Map[info_show].color) {
+    switch (Map[infoShow].color) {
         case 0:
             uart1.print("White");
             break;
@@ -87,20 +89,20 @@ void info(void) {
     uart1.print("\t");
 
     uart1.print("Victim:");
-    uart1.print(Map[info_show].victim);
+    uart1.print(Map[infoShow].victim);
     uart1.print("\t");
 
     uart1.print("North:");
-    uart1.print(Map[info_show].wall[0]);
+    uart1.print(Map[infoShow].wall[0]);
     uart1.print("\t");
     uart1.print("East:");
-    uart1.print(Map[info_show].wall[1]);
+    uart1.print(Map[infoShow].wall[1]);
     uart1.print("\t");
     uart1.print("South:");
-    uart1.print(Map[info_show].wall[2]);
+    uart1.print(Map[infoShow].wall[2]);
     uart1.print("\t");
     uart1.print("West:");
-    uart1.print(Map[info_show].wall[3]);
+    uart1.print(Map[infoShow].wall[3]);
     uart1.print("\n");
 }
 
@@ -136,13 +138,13 @@ int rightWeight(void) {
 
     int weight = 0;
 
-    if (gyro.West && !tof.isNorthWall) {
+    if (gyro.direction == WEST && tof.wallExist[NORTH] == false) {
         weight = reachedCount[x][y + 1];
-    } else if (gyro.North && !tof.isEastWall) {
+    } else if (gyro.direction == NORTH && tof.wallExist[EAST] == false) {
         weight = reachedCount[x + 1][y];
-    } else if (gyro.East && !tof.isSouthWall) {
+    } else if (gyro.direction == EAST && tof.wallExist[SOUTH] == false) {
         weight = reachedCount[x][y - 1];
-    } else if (gyro.South && !tof.isWestWall) {
+    } else if (gyro.direction == SOUTH && tof.wallExist[WEST] == false) {
         weight = reachedCount[x - 1][y];
     }
 
@@ -155,16 +157,16 @@ int frontWeight(void) {
 
     int weight = 0;
 
-    if (gyro.West && !tof.isWestWall) {
+    if (gyro.direction == WEST && tof.wallExist[WEST] == false) {
         weight = reachedCount[x - 1][y];
 
-    } else if (gyro.North && !tof.isNorthWall) {
+    } else if (gyro.direction == NORTH && tof.wallExist[NORTH] == false) {
         weight = reachedCount[x][y + 1];
 
-    } else if (gyro.East && !tof.isEastWall) {
+    } else if (gyro.direction == EAST && !tof.wallExist[EAST] == false) {
         weight = reachedCount[x + 1][y];
 
-    } else if (gyro.South && !tof.isSouthWall) {
+    } else if (gyro.direction == SOUTH && !tof.wallExist[SOUTH] == false) {
         weight = reachedCount[x][y - 1];
     }
 
@@ -177,20 +179,23 @@ int leftWeigt(void) {
     int x = location.x + MAP_ORIGIN;
     int y = location.y + MAP_ORIGIN;
 
-    if (gyro.West && !tof.isSouthWall) {
+    if (gyro.direction == WEST && tof.wallExist[SOUTH] == false) {
         weight = reachedCount[x][y - 1];
 
-    } else if (gyro.North && !tof.isWestWall) {
+    } else if (gyro.direction == NORTH && tof.wallExist[WEST] == false) {
         weight = reachedCount[x - 1][y];
 
-    } else if (gyro.East && !tof.isNorthWall) {
+    } else if (gyro.direction == EAST && tof.wallExist[NORTH] == false) {
         weight = reachedCount[x][y + 1];
 
-    } else if (gyro.South && !tof.isEastWall) {
+    } else if (gyro.direction == SOUTH && tof.wallExist[EAST] == false) {
         weight = reachedCount[x + 1][y];
     }
 
     return weight * PASSED_WEIGHT;
 }
+
+// void makeMap(void) {
+// }
 
 #endif

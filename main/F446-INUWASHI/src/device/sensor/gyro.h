@@ -35,10 +35,12 @@ class GYRO {
     bool South = false;
     bool West  = false;
 
+   int direction = 0;
+
     void init(void);
     void setOffset(void);
     int read(void);
-    void direction(void);
+    void directionDecision(void);
 
    private:
 };
