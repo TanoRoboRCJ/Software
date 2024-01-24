@@ -63,99 +63,99 @@ void DISTANCE_SENSOR::direction(void) {
     gyro.read();
     if (gyro.direction == NORTH) {
         if (val[0] > 170) {
-            wallExist[NORTH] = false;
+            wallExists[NORTH] = false;
         } else {
-            wallExist[NORTH] = true;
+            wallExists[NORTH] = true;
         }
 
         if (val[4] > 210) {
-            wallExist[EAST] = false;
+            wallExists[EAST] = false;
         } else {
-            wallExist[EAST] = true;
+            wallExists[EAST] = true;
         }
 
         if (val[8] > 210) {
-            wallExist[SOUTH] = false;
+            wallExists[SOUTH] = false;
         } else {
-            wallExist[SOUTH] = true;
+            wallExists[SOUTH] = true;
         }
 
         if (val[12] > 210) {
-            wallExist[WEST] = false;
+            wallExists[WEST] = false;
         } else {
-            wallExist[WEST] = true;
+            wallExists[WEST] = true;
         }
     } else if (gyro.direction == EAST) {
         if (val[12] > 210) {
-            wallExist[NORTH] = false;
+            wallExists[NORTH] = false;
         } else {
-            wallExist[NORTH] = true;
+            wallExists[NORTH] = true;
         }
 
         if (val[0] > 210) {
-            wallExist[EAST] = false;
+            wallExists[EAST] = false;
         } else {
-            wallExist[EAST] = true;
+            wallExists[EAST] = true;
         }
 
         if (val[4] > 210) {
-            wallExist[SOUTH] = false;
+            wallExists[SOUTH] = false;
         } else {
-            wallExist[SOUTH] = true;
+            wallExists[SOUTH] = true;
         }
 
         if (val[8] > 210) {
-            wallExist[WEST] = false;
+            wallExists[WEST] = false;
         } else {
-            wallExist[WEST] = true;
+            wallExists[WEST] = true;
         }
     } else if (gyro.direction == SOUTH) {
         if (val[8] > 210) {
-            wallExist[NORTH] = false;
+            wallExists[NORTH] = false;
         } else {
-            wallExist[NORTH] = true;
+            wallExists[NORTH] = true;
         }
 
         if (val[12] > 210) {
-            wallExist[EAST] = false;
+            wallExists[EAST] = false;
         } else {
-            wallExist[EAST] = true;
+            wallExists[EAST] = true;
         }
 
         if (val[0] > 210) {
-            wallExist[SOUTH] = false;
+            wallExists[SOUTH] = false;
         } else {
-            wallExist[SOUTH] = true;
+            wallExists[SOUTH] = true;
         }
 
         if (val[4] > 210) {
-            wallExist[WEST] = false;
+            wallExists[WEST] = false;
         } else {
-            wallExist[WEST] = true;
+            wallExists[WEST] = true;
         }
     } else if (gyro.direction == WEST) {
         if (val[4] > 210) {
-            wallExist[NORTH] = false;
+            wallExists[NORTH] = false;
         } else {
-            wallExist[NORTH] = true;
+            wallExists[NORTH] = true;
         }
 
         if (val[8] > 210) {
-            wallExist[EAST] = false;
+            wallExists[EAST] = false;
         } else {
-            wallExist[EAST] = true;
+            wallExists[EAST] = true;
         }
 
         if (val[12] > 210) {
-            wallExist[SOUTH] = false;
+            wallExists[SOUTH] = false;
         } else {
-            wallExist[SOUTH] = true;
+            wallExists[SOUTH] = true;
         }
 
         if (val[0] > 210) {
-            wallExist[WEST] = false;
+            wallExists[WEST] = false;
         } else {
-            wallExist[WEST] = true;
+            wallExists[WEST] = true;
         }
     }
 }

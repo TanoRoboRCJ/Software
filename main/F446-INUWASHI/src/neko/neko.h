@@ -3,5 +3,9 @@
 
 #include "./location.h"
 extern Location location;
+extern Field Map[200];
 
-#endif  // _NEKO_H_
+#include "./victim.h"
+extern VICTIM victim;
+
+#endif

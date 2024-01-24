@@ -19,7 +19,7 @@ class DISTANCE_SENSOR {
     int vecX[16]    = {0};
     int vecY[16]    = {0};
 
-    bool wallExist[4] = {false};
+    bool wallExists[4] = {false};
 
     int read(void);
     void calc(int angle);  // 定義しときました〜

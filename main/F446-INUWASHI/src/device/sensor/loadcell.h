@@ -6,7 +6,8 @@
 #include "../../kit/IO-Kit.h"
 
 #define LEFT 2
-#define RIGHT 1
+#define NONE 5
+#define RIGHT 0
 
 class LOADCELL {
    public:
@@ -40,7 +41,7 @@ class LOADCELL {
                 status = RIGHT;
             }
         } else {
-            status = 0;
+            status = NONE;
         }
     }
 

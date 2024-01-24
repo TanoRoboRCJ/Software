@@ -4,7 +4,6 @@
 #include <Arduino.h>
 
 #include "../device/device.h"
-#include "./rtosLocation.h"
 
 void settingWrite() {
     // flag

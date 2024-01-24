@@ -5,7 +5,7 @@ HardwareSerial uart3(PC5, PB10);
 
 const int Period = 10;
 
-//ACTUATOR
+// ACTUATOR
 Output buzzerPin = Output(PB6);
 BUZZER buzzer(&buzzerPin);
 
@@ -16,9 +16,9 @@ Adafruit_NeoPixel topLED(32, PC1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel rightLED(7, PB13, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel leftLED(7, PA15, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel uiLED(14, PB14, NEO_GRB + NEO_KHZ800);
-LED led(&topLED, &rightLED, &leftLED, &uiLED);
+LED led(&rightLED, &topLED, &leftLED, &uiLED);
 
-//SENSOR
+// SENSOR
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 Adafruit_NeoPixel stripFloor = Adafruit_NeoPixel(4, PB15, NEO_GRB + NEO_KHZ800);
 

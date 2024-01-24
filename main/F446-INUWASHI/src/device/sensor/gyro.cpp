@@ -5,7 +5,6 @@
 #define SOUTH 2
 #define WEST 3
 
-
 GYRO::GYRO(Adafruit_BNO055 *p) {
     sensorPtr = p;
 }

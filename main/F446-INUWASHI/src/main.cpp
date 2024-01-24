@@ -8,8 +8,7 @@
 #include "./kit/RTOS-Kit.h"
 
 #include "./neko/neko.h"
-#include "./rtos/rtosIO.h"
-#include "./rtos/rtosMain.h"
+#include "./rtos/rtos.h"
 #include "./device/device.h"
 
 void setup() {

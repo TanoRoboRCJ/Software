@@ -4,8 +4,8 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 
-#define TOP 0
-#define RIGHT 1
+#define TOP 1
+#define RIGHT 0
 #define LEFT 2
 #define UI 3
 

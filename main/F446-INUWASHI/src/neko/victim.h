@@ -1,7 +1,7 @@
 #ifndef _VICTIM_H_
 #define _VICTIM_H_
 
-#include "../../device/device.h"
+#include "../device/device.h"
 
 class VICTIM {
    public:
@@ -57,6 +57,6 @@ class VICTIM {
         return returnColor;
     }
 
-} victim;
+};
 
 #endif
