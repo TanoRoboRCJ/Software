@@ -8,7 +8,6 @@
 #include "./rtosLocation.h"
 #include "./rtosVictim.h"
 
-extern RTOS_Kit app;
 extern void updateMap();
 
 #define SPEED 100

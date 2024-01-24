@@ -12,7 +12,6 @@
 #include "./search.h"
 #include "./uartUI.h"
 
-extern RTOS_Kit app;
 int robotStaus = 0;
 
 #define SPEED 100

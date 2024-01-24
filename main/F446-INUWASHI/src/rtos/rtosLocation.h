@@ -5,7 +5,6 @@
 #include "../kit/RTOS-Kit.h"
 #include "../neko/neko.h"
 
-extern RTOS_Kit app;
 
 void mapUpdate(void) {
     int tempX = constrain(location.x + MAP_ORIGIN, 3, MAP_ORIGIN * 2 - 3);

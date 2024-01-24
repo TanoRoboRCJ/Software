@@ -5,7 +5,6 @@
 #include "../kit/RTOS-Kit.h"
 #include "../neko/neko.h"
 
-extern RTOS_Kit app;
 
 extern void rightWallApp(App);
 

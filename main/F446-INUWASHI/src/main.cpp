@@ -8,7 +8,6 @@
 #include <Arduino.h>
 
 #include "./kit/RTOS-Kit.h"
-RTOS_Kit app;
 
 #include "./neko/neko.h"
 #include "./rtos/rtosIO.h"

@@ -2,7 +2,6 @@
 
 #include "../../kit/RTOS-Kit.h"
 
-extern RTOS_Kit app;
 
 BUZZER::BUZZER(Output *pinPtr) {
     this->pinPtr = pinPtr;

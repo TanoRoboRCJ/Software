@@ -5,7 +5,6 @@
 #include "../kit/RTOS-Kit.h"
 #include "./algorithm/victim.h"
 
-extern RTOS_Kit app;
 
 const int period = 10;  // 制御周期
 

@@ -1,11 +1,4 @@
-#ifndef _OUTPUT_H_
-#define _OUTPUT_H_
-
-#include "Arduino.h"
-
-#include "buzzer.h"
-#include "led.h"
-#include "sts3032.h"
+#include "./actuator.h"
 
 Output buzzerPin = Output(PB6);
 BUZZER buzzer(&buzzerPin);
@@ -18,5 +11,3 @@ Adafruit_NeoPixel rightLED(7, PB13, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel leftLED(7, PA15, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel uiLED(14, PB14, NEO_GRB + NEO_KHZ800);
 LED led(&topLED, &rightLED, &leftLED, &uiLED);
-
-#endif

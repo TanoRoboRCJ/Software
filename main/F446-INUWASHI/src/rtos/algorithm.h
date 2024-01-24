@@ -9,7 +9,6 @@
 #include "./rtosVictim.h"
 #include "./search.h"
 
-extern RTOS_Kit app;
 Field field;
 
 #define PASSED_WEIGHT 5

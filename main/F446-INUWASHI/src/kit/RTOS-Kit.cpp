@@ -58,3 +58,5 @@ void RTOS_Kit::startRTOS(void) {
 void RTOS_Kit::delay(unsigned long ms) {
     vTaskDelay(ms/portTICK_RATE_MS);
 }
+
+RTOS_Kit app;
