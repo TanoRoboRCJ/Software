@@ -3,8 +3,6 @@
  * あっぱれ！！あっぱれ！！
  */
 
-// ヘッダファイルの読み込み
-
 #include <Arduino.h>
 
 #include "./kit/RTOS-Kit.h"
