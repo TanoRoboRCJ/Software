@@ -3,9 +3,8 @@
 
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
-#include "./algorithm/location.h"
+#include "../neko/neko.h"
 
-Location_Kit location;
 extern RTOS_Kit app;
 
 void mapUpdate(void) {

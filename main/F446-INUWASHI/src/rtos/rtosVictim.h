@@ -3,7 +3,7 @@
 
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
-#include "./algorithm/location.h"
+#include "../neko/neko.h"
 
 extern RTOS_Kit app;
 

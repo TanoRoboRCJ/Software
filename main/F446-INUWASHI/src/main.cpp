@@ -10,8 +10,9 @@
 #include "./kit/RTOS-Kit.h"
 RTOS_Kit app;
 
-#include "./app/rtosIO.h"
-#include "./app/rtosMain.h"
+#include "./neko/neko.h"
+#include "./rtos/rtosIO.h"
+#include "./rtos/rtosMain.h"
 #include "./device/device.h"
 
 void setup() {
