@@ -17,7 +17,6 @@ extern void updateMap();
 #define SOUTH 2
 #define WEST 3
 
-
 static double oldCoordinateX                            = 0;
 static double oldCoordinateY                            = 0;
 static int reachedCount[MAP_ORIGIN * 2][MAP_ORIGIN * 2] = {0};
@@ -39,7 +38,7 @@ void rightWallApp(App) {
     updateMap();  // 初期状態を記録。以降は停止時に更新
     reachedCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN]++;
     while (1) {
-        app.delay(period);
+        app.delay(Period);
         servo.suspend  = true;
         servo.velocity = 0;
 
@@ -112,7 +111,7 @@ void adjustmentApp(App) {
             app.start(servoApp);
             isHit = true;
         }
-        app.delay(period);
+        app.delay(Period);
     }
 }
 
@@ -154,7 +153,7 @@ void move_1tile(void) {
         }
         servo.suspend  = false;
         servo.velocity = SPEED;
-        app.delay(period);
+        app.delay(Period);
     }  // 次のタイルまで前進
     servo.suspend  = true;
     servo.velocity = 0;

@@ -37,7 +37,7 @@ void monitorApp(App) {  // NOTE センサの値見たい時に使う。
         // uart1.print("\t");
         // uart1.print(floorSensor.Color);
         // uart1.println("\t");
-        app.delay(period);
+        app.delay(Period);
     }
 }
 

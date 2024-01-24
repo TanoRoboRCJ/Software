@@ -21,7 +21,9 @@ void mainApp(App) {
     app.start(sensorApp);
     app.start(monitorApp);
     app.start(servoApp);
+
     static bool status = false;
+
     while (1) {
         if (ui.toggle) {
             if (status) {
@@ -29,26 +31,26 @@ void mainApp(App) {
                 app.start(adjustmentApp);
                 app.start(locationApp);
                 app.start(victimNotifyApp);
-                location.coordinateX = 0;
-                location.coordinateY = 0;
-                servo.suspend        = false;
-                servo.velocity       = SPEED;
-                status               = false;
+                
+                servo.suspend = false;
+                servo.velocity = SPEED;
+                status = false;
             }
             runningWrite();
+
         } else {
             app.stop(rightWallApp);
             app.stop(adjustmentApp);
             app.stop(locationApp);
 
-            servo.suspend  = true;
+            servo.suspend = true;
             servo.velocity = 0;
-            status         = true;
+            status = true;
 
             settingWrite();
         }
 
-        app.delay(period);
+        app.delay(Period);
     }
 }
 

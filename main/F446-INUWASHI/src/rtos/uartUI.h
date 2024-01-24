@@ -53,8 +53,6 @@ void runningWrite(void) {
     uart4.write(highByte(gyro.deg));
     uart4.write(lowByte(gyro.deg));
 
-    // coordinate
-//send in 2 byte
     uart4.write(highByte((int)location.coordinateX));
     uart4.write(lowByte((int)location.coordinateX));
 

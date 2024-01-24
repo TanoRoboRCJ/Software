@@ -14,4 +14,6 @@ void initUART(void);
 void initI2C(void);
 void initDevice(void);
 
+extern const int Period;  // 制御周期
+
 #endif

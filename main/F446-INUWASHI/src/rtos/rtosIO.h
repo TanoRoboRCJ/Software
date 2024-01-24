@@ -5,10 +5,10 @@
 #include "../kit/RTOS-Kit.h"
 #include "./algorithm/victim.h"
 
-
-const int period = 10;  // 制御周期
-
-extern int robotStatus;
+double mapDouble(double x, double in_min, double in_max, double out_min,
+                 double out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 void sensorApp(App) {
     while (1) {
@@ -24,12 +24,8 @@ void sensorApp(App) {
         floorSensor.setFloorColor(floorSensor.white);
         app.delay(2);
         floorSensor.redVal = analogRead(PC0);
-
-        // floorSensor.setFloorColor(floorSensor.blank);
         app.delay(2);
         floorSensor.blankVal = analogRead(PC0);
-
-        floorSensor.setFloorColor(floorSensor.white);
         app.delay(2);
         floorSensor.blueVal = analogRead(PC0);
 
@@ -55,14 +51,9 @@ void servoApp(App) {
     }
 }
 
-double mapDouble(double x, double in_min, double in_max, double out_min,
-                 double out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
 void ledApp(App) {
-    int ledStatus           = 0;
-    int victimId            = 0;
+    int ledStatus = 0;
+    int victimId = 0;
     unsigned long startTime = millis();
     for (int i = 0; i < 4; i++) {
         led.setColor(i, led.cyan);
@@ -83,7 +74,7 @@ void ledApp(App) {
             }
             victimId = 0;
         } else {
-            ledStatus         = 2;
+            ledStatus = 2;
             static bool blink = true;
 
             int brightness;

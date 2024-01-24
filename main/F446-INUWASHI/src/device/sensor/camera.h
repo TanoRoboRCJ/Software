@@ -21,7 +21,7 @@ class CAMERA {
     CAMERA(HardwareSerial *ptr);
 
     bool isVictimDetected = true;
-    int data              = 'N';
+    int data = 'N';
 
     void read(void);
     void flush(void);

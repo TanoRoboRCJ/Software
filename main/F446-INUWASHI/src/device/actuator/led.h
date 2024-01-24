@@ -8,6 +8,7 @@
 #define RIGHT 1
 #define LEFT 2
 #define UI 3
+
 class LED {
    public:
     LED(Adafruit_NeoPixel* top, Adafruit_NeoPixel* right,

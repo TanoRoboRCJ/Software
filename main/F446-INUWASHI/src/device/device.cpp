@@ -3,6 +3,8 @@
 HardwareSerial uart1(PA10, PA9);
 HardwareSerial uart3(PC5, PB10);
 
+const int Period = 10;
+
 void initUART(void) {
     uart1.setRx(PA10);
     uart1.setTx(PA9);
