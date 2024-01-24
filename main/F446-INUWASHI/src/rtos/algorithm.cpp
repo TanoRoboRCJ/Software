@@ -5,38 +5,35 @@
  */
 
 #include "./RTOS.h"
-
-static double oldCoordinateX = 0;
-static double oldCoordinateY = 0;
-
-#define WAIT 500
+#include "../algorithm/exploring.h"
+#include "../algorithm/movement.h"
 
 void rightWallApp(App) {
-    updateMap();  // 初期状態を記録。以降は停止時に更新
-    reachedCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN]++;
+    exploring.updateMap();
+    exploring.reachedCount[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]++;
     while (1) {
         app.delay(Period);
         servo.suspend = true;
         servo.velocity = 0;
 
-        switch (weighting()) {
+        switch (exploring.weighting()) {
             case 0:  // right
-                turnRight();
+                movement.turnRight();
                 break;
             case 1:  // front
                 break;
             case 2:  // left
-                turnLeft();
+                movement.turnLeft();
                 break;
         }
-        move_1tile();
-        updateMap();
-        reachedCount[location.x + MAP_ORIGIN][location.y + MAP_ORIGIN]++;
+        movement.move_1tile();
+        exploring.updateMap();
+        exploring.reachedCount[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]++;
         app.delay(100);
     }
 }
 
-void adjustmentApp(App) {
+void adjustmentApp(App) {  // NOTE::ハードコードだからmovement.hへ分割を検討してもいいかも
     while (1) {
         static bool isHit = false;
         if (tof.val[4] + tof.val[12] < 300) {
@@ -90,48 +87,4 @@ void adjustmentApp(App) {
         }
         app.delay(Period);
     }
-}
-
-void turnRight(void) {
-    servo.suspend = true;
-    app.delay(WAIT);
-    servo.suspend = false;
-    servo.angle += 90;
-    servo.isCorrectingAngle = 0;
-    app.delay(WAIT * 2);
-}
-
-void turnLeft(void) {
-    servo.suspend = true;
-    app.delay(WAIT);
-    servo.suspend = false;
-    servo.angle -= 90;
-    servo.isCorrectingAngle = 0;
-    app.delay(WAIT * 2);
-}
-
-void turnReverse(void) {
-    servo.suspend = true;
-    app.delay(WAIT);
-    servo.suspend = false;
-    servo.angle += 180;
-    servo.isCorrectingAngle = 0;
-    app.delay(WAIT * 3);
-}
-
-void move_1tile(void) {
-    oldCoordinateX = location.coordinateX;
-    oldCoordinateY = location.coordinateY;
-
-    while (abs(location.coordinateX - oldCoordinateX) < 300 &&
-           abs(location.coordinateY - oldCoordinateY) < 300) {
-        if (tof.val[0] < 150) {
-            break;
-        }
-        servo.suspend = false;
-        servo.velocity = servo.DefaultSpeed;
-        app.delay(Period);
-    }  // 次のタイルまで前進
-    servo.suspend = true;
-    servo.velocity = 0;
 }

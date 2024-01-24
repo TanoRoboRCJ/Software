@@ -6,28 +6,26 @@
 #include <Arduino.h>
 
 #include "./kit/RTOS-Kit.h"
-
-// #include "./neko/neko.h"
-#include "./rtos/rtos.h"
+#include "./RTOS/RTOS.h"
 #include "./device/device.h"
 
 void setup() {
     initDevice();
 
-    // 処理系統
+    // メイン管制
     app.create(mainApp, firstPriority);
-    app.create(rightWallApp);
-    app.create(locationApp, firstPriority);
-    app.create(adjustmentApp);
-    
-    // 入出力系統
-    app.create(sensorApp, secondPriority);
-    app.create(servoApp, secondPriority);
-    app.create(monitorApp);
 
-    // UI系統
+    // デーモン
+    app.create(monitorApp);
+    app.create(locationApp, firstPriority);
     app.create(victimNotifyApp);
     app.create(ledApp);
+    app.create(sensorApp, secondPriority);
+    app.create(servoApp, secondPriority);
+
+    // 動作系統
+    app.create(rightWallApp);
+    app.create(adjustmentApp);
 
     app.start(mainApp);
     app.startRTOS();

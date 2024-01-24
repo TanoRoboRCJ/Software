@@ -2,12 +2,14 @@
 #define _PROCESS_H_
 
 #include "./location.h"
-extern Location location;
-extern Field Map[200];
-
 #include "./victim.h"
+#include "./LCD.h"
+
+extern Location location;
+extern Route Map[200];
+
 extern VICTIM victim;
 
-#include "./UI.h"
+extern LCD lcd;
 
 #endif

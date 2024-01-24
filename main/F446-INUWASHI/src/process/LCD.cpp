@@ -1,6 +1,6 @@
-#include "./UI.h"
+#include "./LCD.h"
 
-void UI_settingWrite() {
+void LCD::begin() {
     // flag
     uart4.write('U');
     uart4.write('I');
@@ -35,7 +35,7 @@ void UI_settingWrite() {
     uart4.write(0);
 }
 
-void UI_runningWrite(void) {
+void LCD::writeRunningStatus(void) {
     // flag
     uart4.write('U');
     uart4.write('I');

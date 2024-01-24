@@ -6,7 +6,10 @@
 
 extern Location location;
 
-void UI_settingWrite();
-void UI_runningWrite();
+class LCD {
+   public:
+    void begin();
+    void writeRunningStatus();
+};
 
 #endif

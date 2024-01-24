@@ -3,9 +3,10 @@
 
 #include "../device/device.h"
 
-#define MAP_ORIGIN 20
+#define FIELD_ORIGIN 20
 
-class MAP_Kit {
+// FIXME: いずれはFieldとRouteを統合したい
+class Field {
    public:
     bool isPassed = false;
     bool isDetected = false;
@@ -22,11 +23,11 @@ class MAP_Kit {
     unsigned long firstPassedTime = 0;
 };
 
-class Field {
+class Route {
    public:
-    static const int White  = 0;
-    static const int Black  = 1;
-    static const int Blue   = 2;
+    static const int White = 0;
+    static const int Black = 1;
+    static const int Blue = 2;
     static const int Silver = 3;
 
     static const int unreached = 1000;
@@ -34,7 +35,7 @@ class Field {
     int x = unreached;
     int y = unreached;
 
-    int color   = White;                          // 床色
+    int color = White;                            // 床色
     bool victim = false;                          // 被災者の有無
     bool wall[4] = {false, false, false, false};  // 北東南西の順, 絶対方位
 
@@ -63,7 +64,8 @@ class Location {
     void updateMap(void);
 
     // VARIABLE
-    MAP_Kit mapData[MAP_ORIGIN * 2][MAP_ORIGIN * 2];
+    Field field[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
+    Route route[200];
 
     int x = 0;
     int y = 0;

@@ -6,7 +6,7 @@
 class VICTIM {
    public:
     int isRightOrLeft = 0;  // 0;NAN 1;right 2;left
-    int id            = 0;
+    int id = 0;
 
     bool isDetected = false;
 
@@ -18,7 +18,7 @@ class VICTIM {
             camera[i].read();
             if (camera[i].data != 'N') {
                 this->id = camera[i].data;
-                timer    = millis();
+                timer = millis();
 
                 if (i == 0) {
                     this->isRightOrLeft = RIGHT;
@@ -56,7 +56,6 @@ class VICTIM {
 
         return returnColor;
     }
-
 };
 
 #endif

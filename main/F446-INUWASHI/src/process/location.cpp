@@ -111,18 +111,18 @@ void Location::updateObservationData(void) {
 }
 
 void Location::updateMap(void) {
-    int tempX = constrain(x + MAP_ORIGIN, 3, MAP_ORIGIN * 2 - 3);
+    int tempX = constrain(x + FIELD_ORIGIN, 3, FIELD_ORIGIN * 2 - 3);
 
-    int tempY = constrain(y + MAP_ORIGIN, 3, MAP_ORIGIN * 2 - 3);
+    int tempY = constrain(y + FIELD_ORIGIN, 3, FIELD_ORIGIN * 2 - 3);
 
-    if (mapData[tempX][tempY].isPassed == false) {
-        mapData[tempX][tempY].isPassed = true;
-        mapData[tempX][tempY].isDetected = true;
-        mapData[tempX][tempY].firstPassedTime = millis();
+    if (field[tempX][tempY].isPassed == false) {
+        field[tempX][tempY].isPassed = true;
+        field[tempX][tempY].isDetected = true;
+        field[tempX][tempY].firstPassedTime = millis();
     }
 
-    if ((millis() - mapData[tempX][tempY].firstPassedTime) < 3000 &&
-        (millis() - mapData[tempX][tempY].firstPassedTime) > 1000 &&
+    if ((millis() - field[tempX][tempY].firstPassedTime) < 3000 &&
+        (millis() - field[tempX][tempY].firstPassedTime) > 1000 &&
         abs(gyro.slope) == 0) {
         int judgeGain[2] = {400, 240};
 
@@ -130,13 +130,13 @@ void Location::updateMap(void) {
             if (tof.val[IndexOfSensorFacingNorth] > judgeGain[0] &&
                 tof.val[(IndexOfSensorFacingNorth + 1) % 16] > judgeGain[1] &&
                 tof.val[(IndexOfSensorFacingNorth + 15) % 16] > judgeGain[1]) {
-                mapData[tempX][tempY + 1].isDetected = true;
+                field[tempX][tempY + 1].isDetected = true;
             }
 
             if (tof.val[(IndexOfSensorFacingNorth + 6) % 16] > judgeGain[0] &&
                 tof.val[(IndexOfSensorFacingNorth + 5) % 16] > judgeGain[1] &&
                 tof.val[(IndexOfSensorFacingNorth + 7) % 16] > judgeGain[1]) {
-                mapData[tempX][tempY - 1].isDetected = true;
+                field[tempX][tempY - 1].isDetected = true;
             }
         }
 
@@ -144,12 +144,12 @@ void Location::updateMap(void) {
             if (tof.val[(IndexOfSensorFacingNorth + 3) % 16] > judgeGain[0] &&
                 tof.val[(IndexOfSensorFacingNorth + 4) % 16] > judgeGain[1] &&
                 tof.val[(IndexOfSensorFacingNorth + 2) % 16] > judgeGain[1]) {
-                mapData[tempX + 1][tempY].isDetected = true;
+                field[tempX + 1][tempY].isDetected = true;
             }
             if (tof.val[(IndexOfSensorFacingNorth + 9) % 16] > judgeGain[0] &&
                 tof.val[(IndexOfSensorFacingNorth + 10) % 16] > judgeGain[1] &&
                 tof.val[(IndexOfSensorFacingNorth + 8) % 16] > judgeGain[1]) {
-                mapData[tempX - 1][tempY].isDetected = true;
+                field[tempX - 1][tempY].isDetected = true;
             }
         }
     }

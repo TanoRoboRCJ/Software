@@ -1,3 +1,7 @@
+/**
+ * mainApp.cpp
+ * スイッチによる競技進行切り替え動作を行う
+ */
 #include "./RTOS.h"
 
 void mainApp(App) {
@@ -17,7 +21,7 @@ void mainApp(App) {
                 servo.velocity = servo.DefaultSpeed;
                 status = false;
             }
-            UI_runningWrite();
+            lcd.writeRunningStatus();
 
         } else {
             app.stop(rightWallApp);
@@ -28,7 +32,7 @@ void mainApp(App) {
             servo.velocity = 0;
             status = true;
 
-            UI_settingWrite();
+            lcd.begin();
         }
 
         app.delay(Period);

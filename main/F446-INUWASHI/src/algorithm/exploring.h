@@ -16,13 +16,18 @@
 #define LEFT 2
 #define DISABLE 50
 
-extern int reachedCount[MAP_ORIGIN * 2][MAP_ORIGIN * 2];
+class Exploring {
+   public:
+    void updateMap(void);
 
-void updateMap(void);
+    int rightWeight(void);
+    int frontWeight(void);
+    int leftWeigt(void);
+    int weighting(void);
 
-int rightWeight(void);
-int frontWeight(void);
-int leftWeigt(void);
-int weighting(void);
+    int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
+};
+
+extern Exploring exploring;
 
 #endif

@@ -1,9 +1,15 @@
+/**
+ * RTOS.h
+ * RTOSの大御所的存在
+ * 基本あまりいじることはない
+ */
+
 #ifndef _RTOS_H_
 #define _RTOS_H_
 
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
-#include "../algorithm/exploring.h"
+#include "../process/process.h"
 
 // mainApp.cpp
 extern void mainApp(App);
@@ -15,16 +21,11 @@ extern void servoApp(App);
 extern void ledApp(App);
 extern void monitorApp(App);
 
-// 
+// algorithm.cpp
 extern void rightWallApp(App);
 extern void adjustmentApp(App);
 
-
-extern void turnRight(void);
-extern void turnLeft(void);
-extern void turnReverse(void);
-extern void move_1tile(void);
-
+// process.cpp
 extern void locationApp(App);
 extern void victimNotifyApp(App);
 

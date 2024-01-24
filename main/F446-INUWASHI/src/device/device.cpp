@@ -1,9 +1,11 @@
 #include "device.h"
 
+// CONSTANNT
+const int Period = 10;
+
+// COMMUNICATION
 HardwareSerial uart1(PA10, PA9);
 HardwareSerial uart3(PC5, PB10);
-
-const int Period = 10;
 
 // ACTUATOR
 Output buzzerPin = Output(PB6);
@@ -34,6 +36,7 @@ HardwareSerial uart2(PA3, PA2);
 HardwareSerial uart6(PC7, PC6);
 CAMERA camera[2] = {CAMERA(&uart6), CAMERA(&uart2)};  // 右左
 
+// FUNCTION
 void initUART(void) {
     uart1.setRx(PA10);
     uart1.setTx(PA9);
@@ -64,8 +67,6 @@ void initDevice(void) {
 
     led.initCompleteIllumination();
     delay(200);
-
-    // // delay(1`)
 
     buzzer.bootSound();
 }
