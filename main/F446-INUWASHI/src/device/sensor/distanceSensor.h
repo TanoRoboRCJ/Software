@@ -12,18 +12,17 @@ class DISTANCE_SENSOR {
    public:
     DISTANCE_SENSOR(HardwareSerial *p);
 
+    int read(void);
+    void calc(int angle);
+    void direction(void);
+
     HardwareSerial *serialPtr;
 
     int val[16] = {0};
-
-    int vecX[16]    = {0};
-    int vecY[16]    = {0};
+    int vecX[16] = {0};
+    int vecY[16] = {0};
 
     bool wallExists[4] = {false};
-
-    int read(void);
-    void calc(int angle);  // 定義しときました〜
-    void direction(void);
 
    private:
     int _valTemp[16] = {0};

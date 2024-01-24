@@ -15,32 +15,33 @@
 
 class GYRO {
    public:
+    const bool isGyroDisabled = true;
+
     GYRO(Adafruit_BNO055 *p);
-    Adafruit_BNO055 *sensorPtr;
-
-    int deg      = 0;
-    int magnetic = 0;
-    int offset   = 0;
-
-    int error  = 0;
-    int oldDeg = 0;
-
-    int slope       = 0;
-    int slopeOffset = 0;
-
-    bool isGyroDisabled = true;
-
-    bool North = false;
-    bool East  = false;
-    bool South = false;
-    bool West  = false;
-
-   int direction = 0;
 
     void init(void);
     void setOffset(void);
     int read(void);
     void directionDecision(void);
+
+    Adafruit_BNO055 *sensorPtr;
+
+    int deg = 0;
+    int magnetic = 0;
+    int offset = 0;
+
+    int error = 0;
+    int oldDeg = 0;
+
+    int slope = 0;
+    int slopeOffset = 0;
+
+    bool North = false;
+    bool East = false;
+    bool South = false;
+    bool West = false;
+
+    int direction = 0;
 
    private:
 };

@@ -2,15 +2,15 @@
 #define _VICTIM_H_
 
 #include "../device/device.h"
+#include "./location.h"
 
 class VICTIM {
    public:
+    bool isDetected = false;
     int isRightOrLeft = 0;  // 0;NAN 1;right 2;left
     int id = 0;
 
-    bool isDetected = false;
-
-    bool place[20 * 2][20 * 2] = {false};
+    bool place[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {false};
 
     void read(void) {
         static unsigned long timer = 0;

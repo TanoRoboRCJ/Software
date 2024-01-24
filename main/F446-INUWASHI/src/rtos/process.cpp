@@ -26,7 +26,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         static int camTimer = 0;
         while (1) {
             if (victim.isRightOrLeft != 0 && ui.toggle == true) {
-                if (victim.place[location.x + 20][location.y + 20] == true) {
+                if (victim.place[location.x + FIELD_ORIGIN]
+                                [location.y + FIELD_ORIGIN] == true) {
                     victim.isRightOrLeft = 0;
                     camera[0].data = 'N';
                     camera[1].data = 'N';
@@ -46,7 +47,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         app.stop(rightWallApp);
 
-        victim.place[location.x + 20][location.y + 20] = true;
+        victim.place[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN] =
+            true;
         victim.isDetected = true;
 
         servo.velocity = 0;
