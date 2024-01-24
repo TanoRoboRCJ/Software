@@ -3,10 +3,10 @@
 
 extern HardwareSerial uart1;
 
-Location_Kit::Location_Kit(/* args */) {
+Location::Location(/* args */) {
 }
 
-void Location_Kit::updateOdometory(void) {
+void Location::updateOdometory(void) {
     double vec = (servo.rightWheelSpeed + servo.leftWheelSpeed) / 2.0;
     double vecX = vec * sin(radians(gyro.deg));
     double vecY = vec * cos(radians(gyro.deg));
@@ -15,7 +15,7 @@ void Location_Kit::updateOdometory(void) {
     coordinateY += vecY * Period * _VelocityConstant * cos(radians(gyro.slope));
 }
 
-void Location_Kit::updateObservationData(void) {
+void Location::updateObservationData(void) {
     static bool trustX = false;
     static bool trustY = false;
 
@@ -110,7 +110,7 @@ void Location_Kit::updateObservationData(void) {
     y = round(coordinateY / 300.0);
 }
 
-void Location_Kit::updateMap(void) {
+void Location::updateMap(void) {
     int tempX = constrain(x + MAP_ORIGIN, 3, MAP_ORIGIN * 2 - 3);
 
     int tempY = constrain(y + MAP_ORIGIN, 3, MAP_ORIGIN * 2 - 3);

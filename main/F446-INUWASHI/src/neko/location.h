@@ -22,7 +22,7 @@ class MAP_Kit {
     unsigned long firstPassedTime = 0;
 };
 
-class Location_Kit {
+class Location {
    private:
     // CONSTANT
     double _VelocityConstant = 0.00159;
@@ -32,7 +32,7 @@ class Location_Kit {
     static const int Period = 10;
 
     // FUNCTION
-    Location_Kit();
+    Location();
     void updateOdometory(void);
     void updateObservationData(void);
     void updateMap(void);

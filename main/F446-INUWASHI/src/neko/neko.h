@@ -2,6 +2,6 @@
 #define _NEKO_H_
 
 #include "./location.h"
-Location_Kit location;
+extern Location location;
 
 #endif  // _NEKO_H_
