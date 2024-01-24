@@ -1,11 +1,6 @@
-#ifndef _UI_KIT_H_
-#define _UI_KIT_H_
+#include "./UI.h"
 
-#include <Arduino.h>
-
-#include "../device/device.h"
-
-void settingWrite() {
+void UI_settingWrite() {
     // flag
     uart4.write('U');
     uart4.write('I');
@@ -40,7 +35,7 @@ void settingWrite() {
     uart4.write(0);
 }
 
-void runningWrite(void) {
+void UI_runningWrite(void) {
     // flag
     uart4.write('U');
     uart4.write('I');
@@ -64,5 +59,3 @@ void runningWrite(void) {
     // check sum
     uart4.write(0);
 }
-
-#endif
