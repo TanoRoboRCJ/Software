@@ -7,7 +7,7 @@
 
 #include "./kit/RTOS-Kit.h"
 
-#include "./neko/neko.h"
+// #include "./neko/neko.h"
 #include "./rtos/rtos.h"
 #include "./device/device.h"
 

@@ -5,8 +5,7 @@
 
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
-#include "../neko/exploring.h"
-
+#include "../algorithm/exploring.h"
 
 extern void mainApp(App);
 extern void sensorApp(App);

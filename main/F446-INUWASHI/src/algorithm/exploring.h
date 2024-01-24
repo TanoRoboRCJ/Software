@@ -3,7 +3,7 @@
 
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
-#include "./neko.h"
+#include "../process/process.h"
 
 #define NORTH 0
 #define EAST 1
@@ -19,6 +19,7 @@
 extern int reachedCount[MAP_ORIGIN * 2][MAP_ORIGIN * 2];
 
 void updateMap(void);
+
 int rightWeight(void);
 int frontWeight(void);
 int leftWeigt(void);
