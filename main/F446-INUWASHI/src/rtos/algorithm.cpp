@@ -7,6 +7,7 @@
 #include "./RTOS.h"
 #include "../algorithm/exploring.h"
 #include "../algorithm/movement.h"
+#include "../algorithm/homing.h"
 
 void rightWallApp(App) {
     exploring.updateMap();
@@ -85,6 +86,12 @@ void adjustmentApp(App) {  // NOTE::ハードコードだからmovement.hへ分�
             app.start(servoApp);
             isHit = true;
         }
+        app.delay(Period);
+    }
+}
+
+void homingApp(App){
+    while(1){
         app.delay(Period);
     }
 }
