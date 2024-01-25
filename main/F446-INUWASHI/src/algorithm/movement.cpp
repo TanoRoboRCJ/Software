@@ -45,3 +45,39 @@ void Movement::move_1tile(void) {
     servo.suspend = true;
     servo.velocity = 0;
 }
+
+void Movement::turnNorth(void){
+     servo.suspend = true;
+    app.delay(_Wait);
+    servo.suspend = false;
+    servo.angle = 0;
+    servo.isCorrectingAngle = 0;
+    app.delay(_Wait * 3);
+}
+
+void Movement::turnEast(void){
+     servo.suspend = true;
+    app.delay(_Wait);
+    servo.suspend = false;
+    servo.angle = 90;
+    servo.isCorrectingAngle = 0;
+    app.delay(_Wait * 3);
+}
+
+void Movement::turnSouth(void){
+     servo.suspend = true;
+    app.delay(_Wait);
+    servo.suspend = false;
+    servo.angle = 180;
+    servo.isCorrectingAngle = 0;
+    app.delay(_Wait * 3);
+}
+
+void Movement::turnWest(void){
+     servo.suspend = true;
+    app.delay(_Wait);
+    servo.suspend = false;
+    servo.angle = 270;
+    servo.isCorrectingAngle = 0;
+    app.delay(_Wait * 3);
+}

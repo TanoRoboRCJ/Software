@@ -16,6 +16,7 @@ void mainApp(App) {
                 app.start(adjustmentApp);
                 app.start(locationApp);
                 app.start(victimNotifyApp);
+                app.start(homingApp);
 
                 servo.suspend = false;
                 servo.velocity = servo.DefaultSpeed;
@@ -24,6 +25,7 @@ void mainApp(App) {
             lcd.writeRunningStatus();
 
         } else {
+            app.stop(homingApp);
             app.stop(rightWallApp);
             app.stop(adjustmentApp);
             app.stop(locationApp);

@@ -14,6 +14,7 @@ void startDaemon(void) {
 
 void monitorApp(App) {
     while (1) {
+        uart1.print(exploring.maximumArray);
         app.delay(Period);
     }
 }

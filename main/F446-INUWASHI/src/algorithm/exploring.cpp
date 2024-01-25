@@ -8,7 +8,7 @@ void Exploring::updateMap(void) {
     location.route[i].x = location.x;
     location.route[i].y = location.y;
 
-    location.route[i].color = floorSensor.Color;
+    location.route[i].color  = floorSensor.Color;
     location.route[i].victim = victim.isDetected;
 
     location.route[i].wall[0] = tof.wallExists[NORTH];  // 北
@@ -17,6 +17,7 @@ void Exploring::updateMap(void) {
     location.route[i].wall[3] = tof.wallExists[WEST];   // 西
 
     i++;
+    maximumArray = i;
 }
 
 int Exploring::weighting(void) {
@@ -46,7 +47,6 @@ int Exploring::weighting(void) {
 
     // FIXME: ここには来ないはず
 }
-
 
 int Exploring::rightWeight(void) {
     int x = location.x + FIELD_ORIGIN;

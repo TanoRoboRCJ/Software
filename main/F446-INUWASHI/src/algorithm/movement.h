@@ -17,6 +17,10 @@ class Movement {
     void turnRight(void);
     void turnLeft(void);
     void turnReverse(void);
+    void turnNorth(void);
+    void turnEast(void);
+    void turnSouth(void);
+    void turnWest(void);
 };
 
 extern Movement movement;

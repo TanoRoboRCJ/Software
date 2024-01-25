@@ -24,6 +24,7 @@ extern void monitorApp(App);
 // algorithm.cpp
 extern void rightWallApp(App);
 extern void adjustmentApp(App);
+extern void homingApp(App);
 
 // process.cpp
 extern void locationApp(App);

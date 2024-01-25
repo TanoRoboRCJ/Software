@@ -4,17 +4,18 @@
  * もうちょっといいファイル名があると思うので思いついたら変えてください
  */
 
-#include "./RTOS.h"
 #include "../algorithm/exploring.h"
-#include "../algorithm/movement.h"
 #include "../algorithm/homing.h"
+#include "../algorithm/movement.h"
+#include "./RTOS.h"
 
 void rightWallApp(App) {
     exploring.updateMap();
-    exploring.reachedCount[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]++;
+    exploring
+        .reachedCount[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]++;
     while (1) {
         app.delay(Period);
-        servo.suspend = true;
+        servo.suspend  = true;
         servo.velocity = 0;
 
         switch (exploring.weighting()) {
@@ -29,12 +30,14 @@ void rightWallApp(App) {
         }
         movement.move_1tile();
         exploring.updateMap();
-        exploring.reachedCount[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]++;
+        exploring.reachedCount[location.x + FIELD_ORIGIN]
+                              [location.y + FIELD_ORIGIN]++;
         app.delay(100);
     }
 }
 
-void adjustmentApp(App) {  // NOTE::ハードコードだからmovement.hへ分割を検討してもいいかも
+void adjustmentApp(
+    App) {  // NOTE::ハードコードだからmovement.hへ分割を検討してもいいかも
     while (1) {
         static bool isHit = false;
         if (tof.val[4] + tof.val[12] < 300) {
@@ -90,8 +93,58 @@ void adjustmentApp(App) {  // NOTE::ハードコードだからmovement.hへ分�
     }
 }
 
-void homingApp(App){
-    while(1){
-        app.delay(Period);
+void homingApp(App) {
+    const int HomingTime = 15000;
+    static bool status   = true;
+    while (1) {
+        if (HomingTime < millis()) {
+            if (status) {
+                exploring.updateMap();
+                status = false;
+            }
+            // buzzer.bootSound();
+            app.stop(rightWallApp);
+            // servo.suspend  = true;
+            // servo.velocity = 0;
+            switch (homing.compareLocation(location.x, location.y)) {
+                case 0:
+                    exploring.maximumArray--;
+                    servo.suspend  = true;
+                    servo.velocity = 0;
+                    app.delay(1000);
+                    break;
+                case 1:
+                    movement.turnNorth();
+                    movement.move_1tile();
+                    exploring.maximumArray--;
+                    break;
+                case 2:
+                    movement.turnEast();
+                    movement.move_1tile();
+                    exploring.maximumArray--;
+                    break;
+                case 3:
+                    movement.turnSouth();
+                    movement.move_1tile();
+                    exploring.maximumArray--;
+                    break;
+                case 4:
+                    movement.turnWest();
+                    movement.move_1tile();
+                    exploring.maximumArray--;
+                    break;
+                default:
+                    break;
+            }
+
+            if (location.x == 0 && location.y == 0) {
+                servo.suspend  = true;
+                servo.velocity = 0;
+                buzzer.matsukenSamba();
+            }
+            app.delay(Period);
+        } else {
+            app.delay(Period);
+        }
     }
 }
