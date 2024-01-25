@@ -19,16 +19,16 @@ void locationApp(App) {
 }
 
 void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるかな？
-    victim.isRightOrLeft = 0;
+    victim.isRightOrLeft = NONE;
     while (1) {
         int rescueKitNum = 0;
 
         static int camTimer = 0;
         while (1) {
-            if (victim.isRightOrLeft != 0 && ui.toggle == true) {
+            if (victim.isRightOrLeft != NONE && ui.toggle == true) {
                 if (victim.place[location.x + FIELD_ORIGIN]
                                 [location.y + FIELD_ORIGIN] == true) {
-                    victim.isRightOrLeft = 0;
+                    victim.isRightOrLeft = NONE;
                     camera[0].data = 'N';
                     camera[1].data = 'N';
                 } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
@@ -37,7 +37,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                             tof.val[13] < 240 && tof.val[11] < 240)) {
                     break;
                 } else {
-                    victim.isRightOrLeft = 0;
+                    victim.isRightOrLeft = NONE;
                     camera[0].data = 'N';
                     camera[1].data = 'N';
                 }
@@ -113,6 +113,12 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.velocity = servo.DefaultSpeed;
         app.start(rightWallApp);
 
+        victim.isDetected = false;
+        victim.id = 0;
+        victim.isRightOrLeft = NONE;
+        camera[0].data = 'N';
+        camera[1].data = 'N';
+
         camTimer = millis();
         while (1) {
             if (millis() - camTimer > 3000) {
@@ -125,7 +131,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         victim.isDetected = false;
         victim.id = 0;
-        victim.isRightOrLeft = 0;
+        victim.isRightOrLeft = NONE;
         camera[0].data = 'N';
         camera[1].data = 'N';
     }

@@ -23,7 +23,7 @@ class LED {
 
     bool disableUI = false;
     bool disableTop = true;
-    bool disableSide = false;
+    bool disableSide = true;
 
     const bool* disablePtr[4] = {&disableSide, &disableTop, &disableSide,
                                  &disableUI};

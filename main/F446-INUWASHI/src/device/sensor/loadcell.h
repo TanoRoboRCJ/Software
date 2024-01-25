@@ -17,7 +17,7 @@ class LOADCELL {
 
     int offset[2];
 
-    int status = 0;
+    int status = NONE;
     int moment = 0;
 
     void read(void) {
