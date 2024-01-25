@@ -46,6 +46,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         }
 
         app.stop(rightWallApp);
+        app.stop(adjustmentApp);
 
         victim.place[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN] =
             true;
@@ -112,6 +113,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.suspend = false;
         servo.velocity = servo.DefaultSpeed;
         app.start(rightWallApp);
+        app.start(adjustmentApp);
 
         victim.isDetected = false;
         victim.id = 0;

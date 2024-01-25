@@ -19,7 +19,7 @@ class LED {
     // settings:
     const int maxBrightness = 50;
     const int normalBrightness = 50;
-    const bool disableAll = false;
+    const bool disableAll = true;
 
     bool disableUI = false;
     bool disableTop = true;
