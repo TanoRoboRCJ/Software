@@ -94,57 +94,7 @@ void adjustmentApp(
 }
 
 void homingApp(App) {
-    const int HomingTime = 15000;
-    static bool status   = true;
     while (1) {
-        if (HomingTime < millis()) {
-            if (status) {
-                exploring.updateMap();
-                status = false;
-            }
-            // buzzer.bootSound();
-            app.stop(rightWallApp);
-            // servo.suspend  = true;
-            // servo.velocity = 0;
-            switch (homing.compareLocation(location.x, location.y)) {
-                case 0:
-                    exploring.maximumArray--;
-                    servo.suspend  = true;
-                    servo.velocity = 0;
-                    app.delay(1000);
-                    break;
-                case 1:
-                    movement.turnNorth();
-                    movement.move_1tile();
-                    exploring.maximumArray--;
-                    break;
-                case 2:
-                    movement.turnEast();
-                    movement.move_1tile();
-                    exploring.maximumArray--;
-                    break;
-                case 3:
-                    movement.turnSouth();
-                    movement.move_1tile();
-                    exploring.maximumArray--;
-                    break;
-                case 4:
-                    movement.turnWest();
-                    movement.move_1tile();
-                    exploring.maximumArray--;
-                    break;
-                default:
-                    break;
-            }
-
-            if (location.x == 0 && location.y == 0) {
-                servo.suspend  = true;
-                servo.velocity = 0;
-                buzzer.matsukenSamba();
-            }
-            app.delay(Period);
-        } else {
-            app.delay(Period);
-        }
+       app.delay(Period);
     }
 }

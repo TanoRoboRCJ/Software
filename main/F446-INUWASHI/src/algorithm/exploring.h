@@ -20,7 +20,6 @@ class Exploring {
    public:
     int  maximumArray= 0;
 
-
     void updateMap(void);
 
     int rightWeight(void);

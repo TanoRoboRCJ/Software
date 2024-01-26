@@ -17,13 +17,13 @@ class LED {
     Adafruit_NeoPixel* ptrArr[4];
 
     // settings:
-    const int maxBrightness = 50;
-    const int normalBrightness = 50;
-    const bool disableAll = true;
+    const int maxBrightness = 0;
+    const int normalBrightness = 0;
+    const bool disableAll = false;
 
     bool disableUI = false;
-    bool disableTop = true;
-    bool disableSide = true;
+    bool disableTop = false;
+    bool disableSide = false;
 
     const bool* disablePtr[4] = {&disableSide, &disableTop, &disableSide,
                                  &disableUI};

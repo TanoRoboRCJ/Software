@@ -5,6 +5,11 @@
 
 #include "./RTOS.h"
 
+
+#include "../process/process.h"
+#include "../algorithm/exploring.h"
+#include "../algorithm/homing.h"
+
 void startDaemon(void) {
     app.start(monitorApp);
     app.start(sensorApp);
@@ -14,6 +19,9 @@ void startDaemon(void) {
 
 void monitorApp(App) {
     while (1) {
+        uart3.print(homing.compareLocation(location.x, location.y));
+        uart3.print("\t");
+        uart3.print(exploring.maximumArray);
         app.delay(Period);
     }
 }
@@ -60,8 +68,8 @@ void servoApp(App) {
 }
 
 void ledApp(App) {
-    int ledStatus = 0;
-    int victimId = 0;
+    int ledStatus           = 0;
+    int victimId            = 0;
     unsigned long startTime = millis();
     for (int i = 0; i < 4; i++) {
         led.setColor(i, led.cyan);
@@ -82,7 +90,7 @@ void ledApp(App) {
             }
             victimId = 0;
         } else {
-            ledStatus = 2;
+            ledStatus         = 2;
             static bool blink = true;
 
             int brightness;
