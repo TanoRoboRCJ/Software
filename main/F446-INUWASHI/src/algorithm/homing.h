@@ -8,7 +8,7 @@
 
 class Homing{
     public:
-        const int HomingTime = 15000;
+        const int HomingTime = 180000;
 
         int compareLocation(int x, int y);
     private:

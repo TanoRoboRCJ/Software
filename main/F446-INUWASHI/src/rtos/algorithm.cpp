@@ -94,7 +94,54 @@ void adjustmentApp(
 }
 
 void homingApp(App) {
+    static bool isHoming = false;
     while (1) {
-       app.delay(Period);
+        if (homing.HomingTime < millis() && victim.isDetected == false) {
+            isHoming = true;
+            if (isHoming) {
+                servo.suspend  = true;
+                servo.velocity = 0;
+                location.updateMap();
+                app.stop(rightWallApp);
+                app.stop(victimNotifyApp);
+                isHoming = false;
+            }
+            switch (homing.compareLocation(location.x, location.y)) {
+                case 0:
+                    app.delay(500);
+                    break;
+                case 1:
+                    movement.turnNorth();
+                    movement.move_1tile();
+                    break;
+                case 2:
+                    movement.turnEast();
+                    movement.move_1tile();
+                    break;
+                case 3:
+                    movement.turnSouth();
+                    movement.move_1tile();
+                    break;
+                case 4:
+                    movement.turnWest();
+                    movement.move_1tile();
+                    break;
+                case 5:
+                    exploring.maximumArray++;
+                    app.delay(500);
+                    break;
+                default:
+                    break;
+            }
+            exploring.maximumArray--;
+            if ((location.x == 0) && (location.y == 0)) {
+                servo.suspend  = true;
+                servo.velocity = 0;
+                buzzer.matsukenSamba();
+            }
+            app.delay(Period);
+        } else {
+            app.delay(Period);
+        }
     }
 }
