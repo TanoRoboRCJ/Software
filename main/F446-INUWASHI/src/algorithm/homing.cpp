@@ -51,7 +51,7 @@ int Homing::homingRightWeight(void) {
     return weight;
 }
 
-int Homing::homingFrontWeight(void) {
+int Homing::homingFrontWeight(void) {   //FIXME weightなおす右の判定と合わせる
     int x = location.x + FIELD_ORIGIN;
     int y = location.y + FIELD_ORIGIN;
 

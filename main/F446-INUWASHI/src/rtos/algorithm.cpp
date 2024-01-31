@@ -120,7 +120,7 @@ void homingApp(App) {
             homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                      [location.y + FIELD_ORIGIN]++;
                             
-            if((location.x == 0) && (location.y == 0)){
+            if((location.x == 0) && (location.y == 0)){ //FIXME 帰還出来ても反映されない
                 app.stop(adjustmentApp);
                 servo.suspend = true;
                 servo.velocity = 0;
