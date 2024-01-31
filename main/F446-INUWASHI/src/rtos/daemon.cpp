@@ -19,9 +19,6 @@ void startDaemon(void) {
 
 void monitorApp(App) {
     while (1) {
-        uart3.print(homing.compareLocation(location.x, location.y));
-        uart3.print("\t");
-        uart3.print(exploring.maximumArray);
         app.delay(Period);
     }
 }

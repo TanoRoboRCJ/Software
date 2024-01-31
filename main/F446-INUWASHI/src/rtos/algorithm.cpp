@@ -94,52 +94,39 @@ void adjustmentApp(
 }
 
 void homingApp(App) {
-    static bool isHoming = false;
+    static bool isHoming = true;
     while (1) {
-        if (homing.HomingTime < millis() && victim.isDetected == false) {
-            isHoming = true;
+        if (millis() > homing.HomingTime && victim.isDetected == false) {
             if (isHoming) {
-                servo.suspend  = true;
-                servo.velocity = 0;
-                location.updateMap();
                 app.stop(rightWallApp);
                 app.stop(victimNotifyApp);
+                homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                         [location.y + FIELD_ORIGIN]++;
                 isHoming = false;
             }
-            switch (homing.compareLocation(location.x, location.y)) {
-                case 0:
-                    app.delay(500);
+            servo.suspend  = true;
+            servo.velocity = 0;
+            switch (homing.homingWeighting()) {
+                case 0:  // right
+                    movement.turnRight();
                     break;
-                case 1:
-                    movement.turnNorth();
-                    movement.move_1tile();
+                case 1:  // front
                     break;
-                case 2:
-                    movement.turnEast();
-                    movement.move_1tile();
-                    break;
-                case 3:
-                    movement.turnSouth();
-                    movement.move_1tile();
-                    break;
-                case 4:
-                    movement.turnWest();
-                    movement.move_1tile();
-                    break;
-                case 5:
-                    exploring.maximumArray++;
-                    app.delay(500);
-                    break;
-                default:
+                case 2:  // left
+                    movement.turnLeft();
                     break;
             }
-            exploring.maximumArray--;
-            if ((location.x == 0) && (location.y == 0)) {
-                servo.suspend  = true;
+            movement.move_1tile();
+            homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                     [location.y + FIELD_ORIGIN]++;
+                            
+            if((location.x == 0) && (location.y == 0)){
+                app.stop(adjustmentApp);
+                servo.suspend = true;
                 servo.velocity = 0;
                 buzzer.matsukenSamba();
             }
-            app.delay(Period);
+            app.delay(100);
         } else {
             app.delay(Period);
         }

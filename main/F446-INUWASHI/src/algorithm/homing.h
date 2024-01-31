@@ -8,9 +8,14 @@
 
 class Homing{
     public:
-        const int HomingTime = 180000;
+        const int HomingTime = 60000;
 
-        int compareLocation(int x, int y);
+        int homingWeighting(void);
+        int homingRightWeight(void);
+        int homingFrontWeight(void);
+        int homingLeftWeight(void);
+
+        int homingReachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
     private:
 };
 

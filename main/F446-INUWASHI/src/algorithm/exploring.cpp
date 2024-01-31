@@ -17,7 +17,6 @@ void Exploring::updateMap(void) {
     location.route[i].wall[3] = tof.wallExists[WEST];   // 西
 
     i++;
-    maximumArray = i;
 }
 
 int Exploring::weighting(void) {
