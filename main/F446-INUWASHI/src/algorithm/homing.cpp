@@ -51,46 +51,46 @@ int Homing::homingRightWeight(void) {
     return weight;
 }
 
-int Homing::homingFrontWeight(void) {   //FIXME weightなおす右の判定と合わせる
+int Homing::homingFrontWeight(void) {
     int x = location.x + FIELD_ORIGIN;
     int y = location.y + FIELD_ORIGIN;
 
-    int weight = abs(location.x) + abs(location.y);
+    int weight = (abs(location.x) + abs(location.y)) * 10;
 
     if (gyro.direction == WEST && tof.wallExists[WEST] == false) {
-        weight += homingReachedCount[x - 1][y];
+        weight += homingReachedCount[x - 1][y] * 100;
 
     } else if (gyro.direction == NORTH && tof.wallExists[NORTH] == false) {
-        weight += homingReachedCount[x][y + 1];
+        weight += homingReachedCount[x][y + 1] * 100;
 
     } else if (gyro.direction == EAST && !tof.wallExists[EAST] == false) {
-        weight += homingReachedCount[x + 1][y];
+        weight += homingReachedCount[x + 1][y] * 100;
 
     } else if (gyro.direction == SOUTH && !tof.wallExists[SOUTH] == false) {
-        weight += homingReachedCount[x][y - 1];
+        weight += homingReachedCount[x][y - 1] * 100;
     }
 
-    return weight * PASSED_WEIGHT;
+    return weight;
 }
 
 int Homing::homingLeftWeight(void) {
     int x = location.x + FIELD_ORIGIN;
     int y = location.y + FIELD_ORIGIN;
 
-    int weight = abs(location.x) + abs(location.y);
+    int weight = (abs(location.x) + abs(location.y)) * 10;
 
     if (gyro.direction == WEST && tof.wallExists[SOUTH] == false) {
-        weight += homingReachedCount[x][y - 1];
+        weight += homingReachedCount[x][y - 1] * 100;
 
     } else if (gyro.direction == NORTH && tof.wallExists[WEST] == false) {
-        weight += homingReachedCount[x - 1][y];
+        weight += homingReachedCount[x - 1][y] * 100;
 
     } else if (gyro.direction == EAST && tof.wallExists[NORTH] == false) {
-        weight += homingReachedCount[x][y + 1];
+        weight += homingReachedCount[x][y + 1] * 100;
 
     } else if (gyro.direction == SOUTH && tof.wallExists[EAST] == false) {
-        weight += homingReachedCount[x + 1][y];
+        weight += homingReachedCount[x + 1][y] * 100;
     }
 
-    return weight * PASSED_WEIGHT;
+    return weight;
 }

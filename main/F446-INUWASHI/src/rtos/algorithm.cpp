@@ -104,27 +104,28 @@ void homingApp(App) {
                                          [location.y + FIELD_ORIGIN]++;
                 isHoming = false;
             }
-            servo.suspend  = true;
-            servo.velocity = 0;
-            switch (homing.homingWeighting()) {
-                case 0:  // right
-                    movement.turnRight();
-                    break;
-                case 1:  // front
-                    break;
-                case 2:  // left
-                    movement.turnLeft();
-                    break;
-            }
-            movement.move_1tile();
-            homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                     [location.y + FIELD_ORIGIN]++;
-                            
-            if((location.x == 0) && (location.y == 0)){ //FIXME 帰還出来ても反映されない
+            if ((location.x == 0) &&
+                (location.y == 0)) {
                 app.stop(adjustmentApp);
-                servo.suspend = true;
+                servo.suspend  = true;
                 servo.velocity = 0;
                 buzzer.matsukenSamba();
+            } else {
+                servo.suspend  = true;
+                servo.velocity = 0;
+                switch (homing.homingWeighting()) {
+                    case 0:  // right
+                        movement.turnRight();
+                        break;
+                    case 1:  // front
+                        break;
+                    case 2:  // left
+                        movement.turnLeft();
+                        break;
+                }
+                movement.move_1tile();
+                homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                         [location.y + FIELD_ORIGIN]++;
             }
             app.delay(100);
         } else {
