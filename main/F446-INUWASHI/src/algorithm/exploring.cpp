@@ -2,8 +2,6 @@
 
 Exploring exploring;
 
-extern int neko;
-
 void Exploring::updateMap(void) {
     static int i = 0;
 
@@ -19,8 +17,6 @@ void Exploring::updateMap(void) {
     location.route[i].wall[3] = tof.wallExists[WEST];   // 西
 
     i++;
-
-    neko = i;
 }
 
 int Exploring::weighting(void) {
@@ -30,13 +26,13 @@ int Exploring::weighting(void) {
     weight[FRONT] += frontWeight();
     weight[LEFT] += leftWeigt();
 
-    if (tof.val[4] < 170) {
+    if (tof.rightWallExists == true){
         weight[RIGHT] = DISABLE;
     }
-    if (tof.val[0] < 170) {
+    if (tof.frontWallExists == true){ 
         weight[FRONT] = DISABLE;
     }
-    if (tof.val[12] < 170) {
+    if (tof.leftWallExists == true) {
         weight[LEFT] = DISABLE;
     }
     if (weight[RIGHT] <= weight[FRONT] && weight[RIGHT] <= weight[LEFT]) {

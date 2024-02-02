@@ -17,8 +17,6 @@ void startDaemon(void) {
     app.start(ledApp);
 }
 
-extern int neko;
-
 void monitorApp(App) {
     while (1) {
         uart3.print(tof.val[0]);
@@ -26,8 +24,6 @@ void monitorApp(App) {
         uart3.print(tof.val[4]);
         uart3.print("\t");
         uart3.print(tof.val[12]);
-        uart3.print("\t");
-        uart3.print(neko);
         uart3.println("\t");
         app.delay(Period);
     }

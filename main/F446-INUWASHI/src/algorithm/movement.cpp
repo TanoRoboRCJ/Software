@@ -35,7 +35,7 @@ void Movement::move_1tile(void) {
 
     while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
            abs(location.coordinateY - _oldCoordinateY) < 300) {
-        if (tof.val[0] < 150) {
+        if (tof.frontWallExists == true) {
             break;
         }
         servo.suspend = false;

@@ -15,6 +15,7 @@ class DISTANCE_SENSOR {
     int read(void);
     void calc(int angle);
     void direction(void);
+    void wallJudgment(void);
 
     HardwareSerial *serialPtr;
 
@@ -23,6 +24,9 @@ class DISTANCE_SENSOR {
     int vecY[16] = {0};
 
     bool wallExists[4] = {false};
+    bool rightWallExists = false;
+    bool frontWallExists = false;
+    bool leftWallExists = false;
 
    private:
     int _valTemp[16] = {0};

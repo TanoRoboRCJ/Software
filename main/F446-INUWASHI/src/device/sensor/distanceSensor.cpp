@@ -57,12 +57,13 @@ void DISTANCE_SENSOR::calc(int angle) {
         vecY[n] = val[n] * cos(radians(n * 22.5 + angle));
     }
     direction();
+    wallJudgment();
 }
 
 void DISTANCE_SENSOR::direction(void) {
     gyro.read();
     if (gyro.direction == NORTH) {
-        if (val[0] > 170) {
+        if (val[0] > 150) {
             wallExists[NORTH] = false;
         } else {
             wallExists[NORTH] = true;
@@ -92,7 +93,7 @@ void DISTANCE_SENSOR::direction(void) {
             wallExists[NORTH] = true;
         }
 
-        if (val[0] > 210) {
+        if (val[0] > 150) {
             wallExists[EAST] = false;
         } else {
             wallExists[EAST] = true;
@@ -122,7 +123,7 @@ void DISTANCE_SENSOR::direction(void) {
             wallExists[EAST] = true;
         }
 
-        if (val[0] > 210) {
+        if (val[0] > 150) {
             wallExists[SOUTH] = false;
         } else {
             wallExists[SOUTH] = true;
@@ -152,10 +153,28 @@ void DISTANCE_SENSOR::direction(void) {
             wallExists[SOUTH] = true;
         }
 
-        if (val[0] > 210) {
+        if (val[0] > 150) {
             wallExists[WEST] = false;
         } else {
             wallExists[WEST] = true;
         }
+    }
+}
+
+void DISTANCE_SENSOR::wallJudgment(void){
+    if(val[4] > 210){
+        rightWallExists = false;
+    }else{
+        rightWallExists = true;
+    }
+    if(val[0] > 150){
+        frontWallExists = false;
+    }else{
+        frontWallExists = true;
+    }
+    if(val[12] > 210){
+        leftWallExists = false;
+    }else{
+        leftWallExists = true;
     }
 }
