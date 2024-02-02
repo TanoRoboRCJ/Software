@@ -2,6 +2,8 @@
 
 Exploring exploring;
 
+extern int neko;
+
 void Exploring::updateMap(void) {
     static int i = 0;
 
@@ -17,6 +19,8 @@ void Exploring::updateMap(void) {
     location.route[i].wall[3] = tof.wallExists[WEST];   // 西
 
     i++;
+
+    neko = i;
 }
 
 int Exploring::weighting(void) {

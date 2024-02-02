@@ -9,6 +9,8 @@
 #include "./RTOS/RTOS.h"
 #include "./device/device.h"
 
+int neko = 0;
+
 void setup() {
     initDevice();
 
