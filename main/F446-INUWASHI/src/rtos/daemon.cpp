@@ -3,12 +3,10 @@
  * 常に起動しているappを格納。ここにあるappはいかなる場合も停止されることはない。*
  */
 
-#include "./RTOS.h"
-
-
-#include "../process/process.h"
 #include "../algorithm/exploring.h"
 #include "../algorithm/homing.h"
+#include "../process/process.h"
+#include "./RTOS.h"
 
 void startDaemon(void) {
     app.start(monitorApp);
@@ -19,13 +17,9 @@ void startDaemon(void) {
 
 void monitorApp(App) {
     while (1) {
-        uart3.print(tof.val[0]);
-        uart3.print("\t");
-        uart3.print(tof.val[4]);
-        uart3.print("\t");
-        uart3.print(tof.val[12]);
+        uart3.print(gyro.deg);
         uart3.println("\t");
-        app.delay(Period);
+        app.delay(10);
     }
 }
 

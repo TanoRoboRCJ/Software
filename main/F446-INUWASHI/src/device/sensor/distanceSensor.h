@@ -26,6 +26,7 @@ class DISTANCE_SENSOR {
     bool wallExists[4] = {false};
     bool rightWallExists = false;
     bool frontWallExists = false;
+    bool behindWallExists = false;
     bool leftWallExists = false;
 
    private:

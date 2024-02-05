@@ -56,125 +56,53 @@ void DISTANCE_SENSOR::calc(int angle) {
         vecX[n] = val[n] * sin(radians(n * 22.5 + angle));
         vecY[n] = val[n] * cos(radians(n * 22.5 + angle));
     }
-    direction();
     wallJudgment();
+    direction();
 }
 
 void DISTANCE_SENSOR::direction(void) {
-    gyro.read();
     if (gyro.direction == NORTH) {
-        if (val[0] > 150) {
-            wallExists[NORTH] = false;
-        } else {
-            wallExists[NORTH] = true;
-        }
-
-        if (val[4] > 210) {
-            wallExists[EAST] = false;
-        } else {
-            wallExists[EAST] = true;
-        }
-
-        if (val[8] > 210) {
-            wallExists[SOUTH] = false;
-        } else {
-            wallExists[SOUTH] = true;
-        }
-
-        if (val[12] > 210) {
-            wallExists[WEST] = false;
-        } else {
-            wallExists[WEST] = true;
-        }
+        wallExists[NORTH] = frontWallExists;
+        wallExists[EAST]  = rightWallExists;
+        wallExists[SOUTH] = behindWallExists;
+        wallExists[WEST]  = leftWallExists;
     } else if (gyro.direction == EAST) {
-        if (val[12] > 210) {
-            wallExists[NORTH] = false;
-        } else {
-            wallExists[NORTH] = true;
-        }
-
-        if (val[0] > 150) {
-            wallExists[EAST] = false;
-        } else {
-            wallExists[EAST] = true;
-        }
-
-        if (val[4] > 210) {
-            wallExists[SOUTH] = false;
-        } else {
-            wallExists[SOUTH] = true;
-        }
-
-        if (val[8] > 210) {
-            wallExists[WEST] = false;
-        } else {
-            wallExists[WEST] = true;
-        }
+        wallExists[NORTH] = leftWallExists;
+        wallExists[EAST]  = frontWallExists;
+        wallExists[SOUTH] = rightWallExists;
+        wallExists[WEST]  = behindWallExists;
     } else if (gyro.direction == SOUTH) {
-        if (val[8] > 210) {
-            wallExists[NORTH] = false;
-        } else {
-            wallExists[NORTH] = true;
-        }
-
-        if (val[12] > 210) {
-            wallExists[EAST] = false;
-        } else {
-            wallExists[EAST] = true;
-        }
-
-        if (val[0] > 150) {
-            wallExists[SOUTH] = false;
-        } else {
-            wallExists[SOUTH] = true;
-        }
-
-        if (val[4] > 210) {
-            wallExists[WEST] = false;
-        } else {
-            wallExists[WEST] = true;
-        }
+        wallExists[NORTH] = behindWallExists;
+        wallExists[EAST]  = leftWallExists;
+        wallExists[SOUTH] = frontWallExists;
+        wallExists[WEST]  = rightWallExists;
     } else if (gyro.direction == WEST) {
-        if (val[4] > 210) {
-            wallExists[NORTH] = false;
-        } else {
-            wallExists[NORTH] = true;
-        }
-
-        if (val[8] > 210) {
-            wallExists[EAST] = false;
-        } else {
-            wallExists[EAST] = true;
-        }
-
-        if (val[12] > 210) {
-            wallExists[SOUTH] = false;
-        } else {
-            wallExists[SOUTH] = true;
-        }
-
-        if (val[0] > 150) {
-            wallExists[WEST] = false;
-        } else {
-            wallExists[WEST] = true;
-        }
+        wallExists[NORTH] = rightWallExists;
+        wallExists[EAST]  = behindWallExists;
+        wallExists[SOUTH] = leftWallExists;
+        wallExists[WEST]  = frontWallExists;
     }
 }
 
-void DISTANCE_SENSOR::wallJudgment(void){
-    if(val[4] > 210){
+void DISTANCE_SENSOR::wallJudgment(void) {
+    if (val[4] > 210) {
         rightWallExists = false;
-    }else{
+    } else {
         rightWallExists = true;
     }
-    if(val[0] > 150){
+    if (val[0] > 150) {
         frontWallExists = false;
-    }else{
+    } else {
         frontWallExists = true;
     }
-    if(val[12] > 210){
+    if (val[8] > 210) {
+        behindWallExists = false;
+    } else {
+        behindWallExists = true;
+    }
+    if (val[12] > 210) {
         leftWallExists = false;
-    }else{
+    } else {
         leftWallExists = true;
     }
 }

@@ -12,6 +12,7 @@ void mainApp(App) {
     while (1) {
         if (ui.toggle) {
             if (status) {
+                app.start(servoApp);
                 app.start(rightWallApp);
                 app.start(adjustmentApp);
                 app.start(locationApp);
@@ -32,6 +33,7 @@ void mainApp(App) {
 
             servo.suspend = true;
             servo.velocity = 0;
+            servo.driveAngularVelocity(0, 0);
             status = true;
 
             lcd.begin();
