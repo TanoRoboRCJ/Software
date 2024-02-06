@@ -24,7 +24,7 @@ int Exploring::weighting(void) {
 
     weight[RIGHT] += rightWeight();
     weight[FRONT] += frontWeight();
-    weight[LEFT] += leftWeigt();
+    weight[LEFT] += leftWeight();
 
     if (tof.rightWallExists == true){
         weight[RIGHT] = DISABLE;
@@ -91,7 +91,7 @@ int Exploring::frontWeight(void) {
     return weight * PASSED_WEIGHT;
 }
 
-int Exploring::leftWeigt(void) {
+int Exploring::leftWeight(void) {
     int weight = 0;
 
     int x = location.x + FIELD_ORIGIN;

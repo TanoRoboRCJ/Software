@@ -85,17 +85,17 @@ void DISTANCE_SENSOR::direction(void) {
 }
 
 void DISTANCE_SENSOR::wallJudgment(void) {
-    if (val[4] > 210) {
+    if (val[4] > 215) {
         rightWallExists = false;
     } else {
         rightWallExists = true;
     }
-    if (val[0] > 150) {
+    if (val[0] > 145) {
         frontWallExists = false;
     } else {
         frontWallExists = true;
     }
-    if (val[8] > 210) {
+    if (val[8] > 215) {
         behindWallExists = false;
     } else {
         behindWallExists = true;

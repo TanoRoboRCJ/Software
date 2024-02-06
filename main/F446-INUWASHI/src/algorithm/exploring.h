@@ -22,7 +22,7 @@ class Exploring {
 
     int rightWeight(void);
     int frontWeight(void);
-    int leftWeigt(void);
+    int leftWeight(void);
     int weighting(void);
 
     int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
