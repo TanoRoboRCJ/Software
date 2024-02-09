@@ -105,7 +105,7 @@ void homingApp(App) {
                 isHoming = false;
             }
             if ((location.x == 0) &&
-                (location.y == 0)) {
+                (location.y == 0)) {    //FIXME 1マス過ぎちゃう問題
                 app.stop(adjustmentApp);
                 servo.suspend  = true;
                 servo.velocity = 0;
