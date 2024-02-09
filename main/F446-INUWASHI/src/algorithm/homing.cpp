@@ -33,19 +33,23 @@ int Homing::homingRightWeight(void) {
     int x = location.x + FIELD_ORIGIN;
     int y = location.y + FIELD_ORIGIN;
 
-    int weight = (abs(location.x) + abs(location.y)) * 10;
+    int weight = 0;
 
     if (gyro.direction == WEST && tof.wallExists[NORTH] == false) {
-        weight += homingReachedCount[x][y + 1] * 100;
+        weight = abs(location.x) + abs(location.y + 1) * 10 +
+                 homingReachedCount[x][y + 1] * 100;
 
     } else if (gyro.direction == NORTH && tof.wallExists[EAST] == false) {
-        weight += homingReachedCount[x + 1][y] * 100;
+        weight = abs(location.x + 1) + abs(location.y) * 10 +
+                 homingReachedCount[x + 1][y] * 100;
 
     } else if (gyro.direction == EAST && tof.wallExists[SOUTH] == false) {
-        weight += homingReachedCount[x][y - 1] * 100;
+        weight = abs(location.x) + abs(location.y - 1) * 10 +
+                 homingReachedCount[x][y - 1] * 100;
 
     } else if (gyro.direction == SOUTH && tof.wallExists[WEST] == false) {
-        weight += homingReachedCount[x - 1][y] * 100;
+        weight = abs(location.x - 1) + abs(location.y) * 10 +
+                 homingReachedCount[x - 1][y] * 100;
     }
 
     return weight;
@@ -55,19 +59,23 @@ int Homing::homingFrontWeight(void) {
     int x = location.x + FIELD_ORIGIN;
     int y = location.y + FIELD_ORIGIN;
 
-    int weight = (abs(location.x) + abs(location.y)) * 10;
+    int weight = 0;
 
     if (gyro.direction == WEST && tof.wallExists[WEST] == false) {
-        weight += homingReachedCount[x - 1][y] * 100;
+        weight = abs(location.x - 1) + abs(location.y) * 10 +
+                 homingReachedCount[x - 1][y] * 100;
 
     } else if (gyro.direction == NORTH && tof.wallExists[NORTH] == false) {
-        weight += homingReachedCount[x][y + 1] * 100;
+        weight = abs(location.x) + abs(location.y + 1) * 10 +
+                 homingReachedCount[x][y + 1] * 100;
 
     } else if (gyro.direction == EAST && !tof.wallExists[EAST] == false) {
-        weight += homingReachedCount[x + 1][y] * 100;
+        weight = abs(location.x + 1) + abs(location.y) * 10 +
+                 homingReachedCount[x + 1][y] * 100;
 
     } else if (gyro.direction == SOUTH && !tof.wallExists[SOUTH] == false) {
-        weight += homingReachedCount[x][y - 1] * 100;
+        weight = abs(location.x) + abs(location.y - 1) * 10 +
+                 homingReachedCount[x][y - 1] * 100;
     }
 
     return weight;
@@ -77,19 +85,23 @@ int Homing::homingLeftWeight(void) {
     int x = location.x + FIELD_ORIGIN;
     int y = location.y + FIELD_ORIGIN;
 
-    int weight = (abs(location.x) + abs(location.y)) * 10;
+    int weight = 0;
 
     if (gyro.direction == WEST && tof.wallExists[SOUTH] == false) {
-        weight += homingReachedCount[x][y - 1] * 100;
+        weight = abs(location.x) + abs(location.y - 1) * 10 +
+                 homingReachedCount[x][y - 1] * 100;
 
     } else if (gyro.direction == NORTH && tof.wallExists[WEST] == false) {
-        weight += homingReachedCount[x - 1][y] * 100;
+        weight = abs(location.x - 1) + abs(location.y) * 10 +
+                 homingReachedCount[x - 1][y] * 100;
 
     } else if (gyro.direction == EAST && tof.wallExists[NORTH] == false) {
-        weight += homingReachedCount[x][y + 1] * 100;
+        weight = abs(location.x) + abs(location.y + 1) * 10 +
+                 homingReachedCount[x][y + 1] * 100;
 
     } else if (gyro.direction == SOUTH && tof.wallExists[EAST] == false) {
-        weight += homingReachedCount[x + 1][y] * 100;
+        weight = abs(location.x + 1) + abs(location.y) * 10 +
+                 homingReachedCount[x + 1][y] * 100;
     }
 
     return weight;
