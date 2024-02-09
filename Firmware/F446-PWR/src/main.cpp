@@ -1,76 +1,67 @@
 #include <Arduino.h>
 
-#include <IO-Kit.h>
-Output ledBuiltin = Output(PB12);
-Output ledL = Output(PB14);
-// Output ledBuiltin = Output(PA0);
+// #include <IO-Kit.h>
+// Output ledBuiltin = Output(PB12);
+// Output ledL = Output(PB14);
+// // Output ledBuiltin = Output(PA0);
 
-Output encLED[3] = {Output(PB4), Output(PB5), Output(PB6)};
-Input enc[2] = {Input(PA14), Input(PA15)};
+// Output encLED[3] = {Output(PB4), Output(PB5), Output(PB6)};
+// Input enc[2] = {Input(PA14), Input(PA15)};
 
-HardwareSerial uart1(PA10, PA9);
+// HardwareSerial uart1(PA10, PA9);
 
-bool chickPeep(void) {
-    return (millis() / 20) % 2 == 0 && (millis() / 300) % 5 == 0;
-}
+// bool chickPeep(void) {
+//     return (millis() / 20) % 2 == 0 && (millis() / 300) % 5 == 0;
+// }
 
-void setup() {
-    uart1.begin(115200);
-    for (int i = 0; i < 3; i++) {
-        encLED[i] = 1;
+// void setup() {
+//     uart1.begin(115200);
+//     for (int i = 0; i < 3; i++) {
+//         encLED[i] = 1;
+//     }
+// }
+
+// void loop() {
+//     ledBuiltin = chickPeep();
+//     ledL = (millis() % 1000 < 500) * 1;
+// }
+
+#include <Wire.h>
+#include <Adafruit_TCS34725.h>
+
+/* Initialise with specific int time and gain values */
+Adafruit_TCS34725 tcs =
+    Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_614MS, TCS34725_GAIN_1X);
+
+void setup(void) {
+    Serial.begin(115200);
+
+    // I2Cピン設定 I2C0を使用する
+    Wire.setSDA(0);
+    Wire.setSCL(1);
+
+    if (tcs.begin()) {
+        Serial.println("Found sensor");
+    } else {
+        Serial.println("No TCS34725 found ... check your connections");
+        while (1)
+            ;
     }
 }
 
-void loop() {
-    // static bool encAState = true;
-    // static bool encBState = false;
-    // static int encData = 0;
-    // if (enc[1] == 1 && encAState == 0) {
-    //     if (enc[1] ^ enc[0]) {
-    //         encData--;
-    //     } else {
-    //         encData++;
-    //     }
-    // }
-    // encAState = enc[1];
+void loop(void) {
+    uint16_t r, g, b, c;
 
-    // delay(3);
+    tcs.getRawData(&r, &g, &b, &c);
 
-    // uart1.println(encData);
-
-    ledBuiltin = chickPeep();
-    ledL = (millis() % 1000 < 500) * 0.1 ;
-
-    // static bool ledState = false;
-    // ledState = !ledState;
-    // ledBuiltin = ledState * 0.3;
-
-    // delay(500);
-
-    // ledState = !ledState;
-    // int ledBright = encData * 10;
-    // ledBright = constrain(ledBright, 0, 255);
-
-    // ledBuiltin <<= ledBright;
-
-    // // delay(500);
-
-    // for (int i = 0; i < 3; i++) {
-    //     encLED[i] = 1;
-    // }
-    // ledBright = constrain(encData, 0, 255);
-    // ledBright = ledBright % 3;
-    // encLED[ledBright] = 0;
-
-    // for (int i = 0; i < 3; i++) {
-    //     encLED[i] = 0;
-    // }
-
-    // delay(500);
-
-    // for (int i = 0; i < 3; i++) {
-    //     encLED[i] = 1;
-    // }
-
-    // delay(500);
+    Serial.print("R: ");
+    Serial.print(r, DEC);
+    Serial.print(" ");
+    Serial.print("G: ");
+    Serial.print(g, DEC);
+    Serial.print(" ");
+    Serial.print("B: ");
+    Serial.print(b, DEC);
+    Serial.print(" ");
+    Serial.println(" ");
 }
