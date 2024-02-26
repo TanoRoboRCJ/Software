@@ -1,85 +1,59 @@
 #include <Arduino.h>
 #include <VL53L0X.h>
 
-#include <IO-Kit.h>
+#include "./kit/IO-Kit.h"
 
-VL53L0X distanceSensor[2];
-Output xshutPin[2] = {Output(PA5), Output(PA6)};
-const int addr[2] = {0x30, 0x31};
+
+Output encLED[3] = {Output(PB4), Output(PB5), Output(PB6)};
+Output ledL = Output(PA0);
+
+Input encSW(PB7);
 
 #include <Wire.h>
 #include <SPI.h>
-#include "./lib/Adafruit_TCS34725.h"
 
-Adafruit_TCS34725 tcs =
-    Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_60MS, TCS34725_GAIN_1X);
+#include "./device/distanceSensor.h"
+TwoWire wireForVL53L0X(PB9, PB8);
+DistanceSensor tof(&wireForVL53L0X);
 
 HardwareSerial uartForDebug(PA10, PA9);
-
-void invalidA(void) {
-    while (1) {
-        uartForDebug.println("invalid A: VL53L0X ERR");
-        delay(100);
-    }
-}
-
-void invalidB(void) {
-    while (1) {
-        uartForDebug.println("invalid B: TCS34725 ERR");
-        delay(100);
-    }
-}
-
-void* invalid[2];
 
 void setup(void) {
     uartForDebug.begin(115200);
 
-    Wire.setSDA(PB9);
-    Wire.setSCL(PB8);
-    Wire.begin();
+    wireForVL53L0X.setSCL(PB8);
+    wireForVL53L0X.setSDA(PB9);
+    wireForVL53L0X.begin();
 
-    for (int i = 0; i < 2; i++) {
-        xshutPin[i] = LOW;
+    bool status = tof.init();
+
+    if (!status) {
+        uartForDebug.println("Failed to detect and initialize VL53L0X");
+    }
+
+    for (int i = 0; i < 3; i++) {
+        encLED[i] = HIGH;
     }
 
     delay(100);
-
-    for (int i = 0; i < 2; i++) {
-        xshutPin[i] = HIGH;
-        delay(10);
-        distanceSensor[i].setTimeout(100);
-        distanceSensor[i].setAddress(addr[i]);
-        if (!distanceSensor[i].init()) {
-            invalidA();
-        }
-        distanceSensor[i].setSignalRateLimit(0.1);
-        distanceSensor[i].setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 18);
-        distanceSensor[i].setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange,
-                                              14);
-        distanceSensor[i].startContinuous();
-    }
-
-    if (!tcs.begin()) {
-        invalidB();
-    }
 }
 
 void loop(void) {
-    uint16_t color[3] = {0};
-    uint16_t brightness = 0;
+    encLED[2] = 0;
+    static bool state = 0;
+    if (encSW != state && encSW == false) {
+        state = !state;
 
-    tcs.getRawData(&color[0], &color[1], &color[2], &brightness);
-
-    // Print
-    uartForDebug.printf("TCS34725:");
-    for (int i = 0; i < 3; i++) {
-        uartForDebug.printf("%6d", color[i]);
+        ledL = !ledL * 0.3;
     }
-    uartForDebug.printf("%6d", brightness);
+    state = encSW;
 
-    int rawData = distanceSensor[0].readRangeContinuousMillimeters();
-    uartForDebug.printf(" | VL53L0X 1:%4d [mm]", rawData);
-    rawData = distanceSensor[1].readRangeContinuousMillimeters();
-    uartForDebug.printf(" | VL53L0X 2:%4d [mm]\n", rawData);
+    tof.read();
+
+    for (int i = 0; i < 2; i++) {
+        uartForDebug.print(tof.val[i]);
+        uartForDebug.print("\t");
+    }
+
+    uartForDebug.println();
 }
