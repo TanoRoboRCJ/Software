@@ -6,8 +6,6 @@ DistanceSensor::DistanceSensor(TwoWire* _wirePtr) {
     for (int i = 0; i < Quantity; i++) {
         xshutPin[i] = LOW;
     }
-
-    delay(10);
 }
 
 bool DistanceSensor::init(void) {
@@ -25,8 +23,7 @@ bool DistanceSensor::init(void) {
 
         vl53l0x[i].setSignalRateLimit(0.1);
         vl53l0x[i].setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 18);
-        vl53l0x[i].setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange,
-                                              14);
+        vl53l0x[i].setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 14);
         vl53l0x[i].startContinuous();
     }
 
@@ -40,4 +37,3 @@ bool DistanceSensor::read(void) {
 
     return true;
 }
-
