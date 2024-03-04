@@ -1,8 +1,18 @@
 #include <Arduino.h>
 
 #include "./kit/IO-Kit.h"
+Output ledToggle = Output(PA0);
+Output servoR = Output(PB2);
 
-Output ledL = Output(PA0);
+#include <Servo.h>
+// Servo servo[2];
+
+// #include "./servo/Servo.h"
+// Servo servoR;
+
+// #include <PWMServo.h>
+// PWMServo servoR;
+// Servo servoL;
 
 #include <Wire.h>
 TwoWire wireBus1(PB9, PB8);
@@ -30,18 +40,16 @@ void setup(void) {
     floorSensor[0].init();
     floorSensor[1].init();
 
-    enc.bootIllumination();    
+    enc.bootIllumination(2500);
+
+    pinMode(PB2, OUTPUT);
+
+    // servoR.attach(PB2);
+    // servoL.attach(PB1);
 }
 
 void loop(void) {
-    // encLED[2] = 0;
-    // static bool state = 0;
-    // if (encSW != state && encSW == false) {
-    //     state = !state;
-
-    //     ledL = !ledL * 0.3;
-    // }
-    // state = encSW;
+    enc.read();
 
     tof.read();
     floorSensor[0].read();
@@ -50,6 +58,28 @@ void loop(void) {
     if (!uartForDebugEnable) {
         return;
     }
+
+    ledToggle = enc.isPressed * 0.5;
+
+    uartForDebug.print("encA:");
+    uartForDebug.print(enc.encAB[0]);
+    uartForDebug.print("\tencB:");
+    uartForDebug.print(enc.encAB[1]);
+
+    int deg = (millis() / 1000) % 2;
+    deg *= 90;
+
+    // servoR.write(deg);
+    // // servoL.write(180 - deg);
+    // servoR.writeMicroseconds(1000);
+
+    servoR = HIGH;
+    delayMicroseconds(1000 + deg * 1000 / 180);
+    servoR = LOW;
+    delay(20);
+
+    uartForDebug.print("\tServoR:");
+    uartForDebug.print(deg);
 
     // uartForDebug.print("ToF|\t");
     // for (int i = 0; i < 2; i++) {
@@ -67,5 +97,5 @@ void loop(void) {
     //     }
     // }
 
-    // uartForDebug.println();
+    uartForDebug.println();
 }
