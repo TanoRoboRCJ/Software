@@ -17,7 +17,11 @@ void startDaemon(void) {
 
 void monitorApp(App) {
     while (1) {
-        uart3.print(gyro.deg);
+        uart3.print(tof.val[3]);
+        uart3.print("\t");
+        uart3.print(tof.val[4]);
+        uart3.print("\t");
+        uart3.print(tof.val[5]);
         uart3.println("\t");
         app.delay(10);
     }

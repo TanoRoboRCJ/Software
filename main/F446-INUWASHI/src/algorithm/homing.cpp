@@ -9,13 +9,13 @@ int Homing::homingWeighting(void) {
     weight[FRONT] += homingFrontWeight();
     weight[LEFT] += homingLeftWeight();
 
-    if (tof.rightWallExists == false) {
+    if (tof.rightWallExists == true) {
         weight[RIGHT] += DISABLE * 10;
     }
-    if (tof.frontWallExists == false){
+    if (tof.frontWallExists == true){
         weight[FRONT] += DISABLE * 10;
     }
-    if (tof.leftWallExists == false) {
+    if (tof.leftWallExists == true) {
         weight[LEFT] += DISABLE * 10;
     }
 

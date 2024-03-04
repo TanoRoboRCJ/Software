@@ -39,56 +39,8 @@ void rightWallApp(App) {
 void adjustmentApp(
     App) {  // NOTE::ハードコードだからmovement.hへ分割を検討してもいいかも
     while (1) {
-        static bool isHit = false;
-        if (tof.val[4] + tof.val[12] < 300) {
-            if (tof.val[4] > tof.val[12]) {
-                servo.isCorrectingAngle = 5;
-            }
-            if (tof.val[12] > tof.val[4]) {
-                servo.isCorrectingAngle = -5;
-            }
-            app.delay(50);
-        } else {
-            if (tof.val[12] < 120) {
-                servo.isCorrectingAngle = 5;
-            }
-            if (tof.val[4] < 120) {
-                servo.isCorrectingAngle = -5;
-            }
-        }
-
-        if (tof.val[4] > 300 && tof.val[12] < 300) {
-            if (tof.val[12] > 120) {
-                servo.isCorrectingAngle = -5;
-            }
-        }
-        if (tof.val[12] > 300 && tof.val[4] < 300) {
-            if (tof.val[4] > 120) {
-                servo.isCorrectingAngle = 5;
-            }
-        }
-
-        if (loadcell.status == RIGHT) {
-            app.stop(servoApp);
-            servo.driveAngularVelocity(-30, -45);
-            app.delay(500);
-            servo.driveAngularVelocity(-30, 45);
-            app.delay(500);
-            isHit = false;
-        }
-        if (loadcell.status == LEFT) {
-            app.stop(servoApp);
-            servo.driveAngularVelocity(-30, 45);
-            app.delay(500);
-            servo.driveAngularVelocity(-30, -45);
-            app.delay(500);
-            isHit = false;
-        }
-        if (!isHit) {
-            servo.velocity = servo.DefaultSpeed;
-            app.start(servoApp);
-            isHit = true;
-        }
+        movement.angleAdjustment();
+        movement.avoidBarrier();
         app.delay(Period);
     }
 }
@@ -105,7 +57,7 @@ void homingApp(App) {
                 isHoming = false;
             }
             if ((location.x == 0) &&
-                (location.y == 0)) {    //FIXME 1マス過ぎちゃう問題
+                (location.y == 0)) {  // FIXME 1マス過ぎちゃう問題
                 app.stop(adjustmentApp);
                 servo.suspend  = true;
                 servo.velocity = 0;
