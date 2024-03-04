@@ -34,7 +34,7 @@ void Movement::move_1tile(void) {
     _oldCoordinateY = location.coordinateY;
 
     while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
-           abs(location.coordinateY - _oldCoordinateY) < 300) {
+           abs(location.coordinateY - _oldCoordinateY) < 300) {//FIXME 誤差が蓄積される
         if (tof.frontWallExists == true) {
             break;
         }
@@ -109,7 +109,7 @@ void Movement::angleAdjustment(void) {
             servo.isCorrectingAngle = 3;
         }
     }
-    
+
     if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {
         if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] - 60)) {
             servo.isCorrectingAngle = -3;

@@ -17,12 +17,10 @@ void startDaemon(void) {
 
 void monitorApp(App) {
     while (1) {
-        uart3.print(tof.val[2]);
-        uart3.print("\t");
-        uart3.print(tof.val[4]);
-        uart3.print("\t");
-        uart3.print(tof.val[6]);
-        uart3.println("\t");
+        // uart3.print(location.x);
+        // uart3.print("\t");
+        // uart3.print(location.y);
+        // uart3.println("\t");
         app.delay(10);
     }
 }

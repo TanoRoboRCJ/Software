@@ -26,20 +26,21 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         static int camTimer = 0;
         while (1) {
             if (victim.isRightOrLeft != NONE && ui.toggle == true) {
-                if (victim.place[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN] == true) {
+                while (victim.place[location.x + FIELD_ORIGIN]
+                                   [location.y + FIELD_ORIGIN] == true) {//FIXME 座標の境目で2回検出される
                     victim.isRightOrLeft = NONE;
-                    camera[0].data = 'N';
-                    camera[1].data = 'N';
-                } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
-                            tof.val[3] < 240 && tof.val[5] < 240) ||
-                           (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
-                            tof.val[13] < 240 && tof.val[11] < 240)) {
+                    camera[0].data       = 'N';
+                    camera[1].data       = 'N';
+                }
+                if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
+                     tof.val[3] < 240 && tof.val[5] < 240) ||
+                    (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
+                     tof.val[13] < 240 && tof.val[11] < 240)) {
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data = 'N';
-                    camera[1].data = 'N';
+                    camera[0].data       = 'N';
+                    camera[1].data       = 'N';
                 }
             }
             app.delay(10);
@@ -53,7 +54,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         victim.isDetected = true;
 
         servo.velocity = 0;
-        servo.suspend = true;
+        servo.suspend  = true;
 
         switch (victim.id) {
             case VICTIM_H:
@@ -110,20 +111,20 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.rescueKit(rescueKitNum, victim.isRightOrLeft);
         app.delay(100);
 
-        servo.suspend = false;
+        servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
         app.start(rightWallApp);
         app.start(adjustmentApp);
 
-        victim.isDetected = false;
-        victim.id = 0;
+        victim.isDetected    = false;
+        victim.id            = 0;
         victim.isRightOrLeft = NONE;
-        camera[0].data = 'N';
-        camera[1].data = 'N';
+        camera[0].data       = 'N';
+        camera[1].data       = 'N';
 
         camTimer = millis();
         while (1) {
-            if (millis() - camTimer > 3000) {
+            if (millis() - camTimer > 2500) {
                 break;
             }
             app.delay(10);
@@ -131,10 +132,10 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             camera[1].flush();
         }
 
-        victim.isDetected = false;
-        victim.id = 0;
+        victim.isDetected    = false;
+        victim.id            = 0;
         victim.isRightOrLeft = NONE;
-        camera[0].data = 'N';
-        camera[1].data = 'N';
+        camera[0].data       = 'N';
+        camera[1].data       = 'N';
     }
 }

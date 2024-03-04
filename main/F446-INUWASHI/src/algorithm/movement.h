@@ -11,8 +11,8 @@ class Movement {
     double _oldCoordinateX = 0;
     double _oldCoordinateY = 0;
 
-    int _oldMidpointX = 0;
-    int _oldMidpointY = 0;
+    int _boundaryPointX = 0;
+    int _boundaryPointY = 0;
 
     bool isHit = false;
 
