@@ -1,32 +1,43 @@
 #include <Arduino.h>
 
 #include <Wire.h>
-#include <PCA95x5.h>
-#include <VL53L0X.h>
+#include <SPI.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include "img.h"
+// 画面のサイズの設定
+#define SCREEN_WIDTH (128)
+#define SCREEN_HEIGHT (64)
+
+// 画面のサイズ(データシートから)
+#define SCREEN_ADDRESS (0x3C)
+
+int loopCount = 0;
+
+// ディスプレイ変数の宣言
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
 
 #include <Adafruit_NeoPixel.h>
-
 #define NUMPIXELS 1
 #define NEO_PWR 11  // GPIO11
 #define NEOPIX 12   // GPIO12
-
 Adafruit_NeoPixel pixels(NUMPIXELS, NEOPIX, NEO_GRB + NEO_KHZ800);
 
+#include <VL53L0X.h>
 const int numOfSensors = 16;
-const char firstAddr = 0x30;
-
+const char firstAddr = 0x40;
 VL53L0X distanceSensor[numOfSensors];
 
+#include <PCA95x5.h>
+
 PCA9555 ioex;
-
 using namespace PCA95x5::Port;
-
 const int xshutPin[] = {P02, P01, P00, P17, P16, P11, P04, P03,
                         P05, P06, P07, P10, P15, P14, P13, P12};
-
 const bool disalbledSensor[16] = {false, false, false, false, false, true,
                                   true,  true,  true,  true,  true,  true,
-                                  false,  false, false, false};
+                                  false, false, false, false};
+
 bool deviceScanner(void);
 void ioexInit(void);
 void distanceSensorInit(void);
@@ -38,6 +49,20 @@ void setup() {
     Serial1.begin(1000000);
 
     Wire.begin();
+
+    if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+        Serial.println(F("SSD1306 can not allocate memory!"));
+        return;
+    }
+    display.setRotation(2);
+    display.clearDisplay();
+    display.setTextColor(WHITE);
+    display.drawBitmap(0, 0, BootImg, 128, 64, WHITE);
+    display.display();
+
+    // while (1) {
+    //     deviceScanner();
+    // }
 
     pixels.begin();
     pinMode(NEO_PWR, OUTPUT);
@@ -51,9 +76,50 @@ void setup() {
     flag = true;
 }
 
-int rawData[12] = {0};
+int rawData[16] = {0};
 
 void loop() {
+    // Display
+    static char upperText[40] = "";
+    static char middleText[40] = "";
+    static char lowerText[40] = "";
+
+    if (Serial.available() > 2) {
+        char buf[40] = {0};
+        char flag = Serial.read();
+        Serial.readBytesUntil('\0', buf, 40);
+
+        switch (flag) {
+            case 250:
+                strcpy(upperText, buf);
+                break;
+            case 251:
+                strcpy(middleText, buf);
+                break;
+            case 252:
+                strcpy(lowerText, buf);
+                break;
+        }
+
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setTextSize(2);
+        display.setCursor(0, 0);
+        display.println(upperText);
+
+        display.setTextSize(2);
+        display.setCursor(0, 20);
+        display.print(middleText);
+
+        display.drawFastHLine(0, 40, 128, WHITE);
+
+        display.setTextSize(1);
+        display.setCursor(0, 45);
+        display.println(lowerText);
+
+        display.display();
+    }
+
     for (int i = 0; i < numOfSensors; i++) {
         if (disalbledSensor[i]) {
             rawData[i] = 8190;
@@ -147,7 +213,6 @@ void distanceSensorInit(void) {
         distanceSensor[i].setTimeout(100);
 
         if (!distanceSensor[i].init()) {  // ERROR
-
             while (1) {
                 Serial.print(
                     "ERR1: Failed to detect and initialize sensor!\nPORT:");
