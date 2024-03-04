@@ -83,7 +83,7 @@ void Movement::turnWest(void) {
 }
 
 void Movement::angleAdjustment(void) {
-    if (tof.val[4] + tof.val[12] < 300) {
+    if (tof.rightWallExists == true && tof.leftWallExists == true) {
         if (tof.val[4] > tof.val[12]) {
             servo.isCorrectingAngle = 3;
         }
@@ -106,6 +106,15 @@ void Movement::angleAdjustment(void) {
     }
     if ((tof.rightWallExists == true) && (tof.leftWallExists == false)) {
         if (tof.val[4] > 120) {
+            servo.isCorrectingAngle = 3;
+        }
+    }
+    
+    if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {
+        if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] - 60)) {
+            servo.isCorrectingAngle = -3;
+        }
+        if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] + 60)) {
             servo.isCorrectingAngle = 3;
         }
     }

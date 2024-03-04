@@ -16,6 +16,7 @@ class Movement {
 
     bool isHit = false;
 
+    const int Radius = 20;
     const int _Wait = 500;
    public:
     void move_1tile(void);
