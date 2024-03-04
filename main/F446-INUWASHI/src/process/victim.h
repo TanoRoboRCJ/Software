@@ -6,11 +6,12 @@
 
 class VICTIM {
    public:
-    bool isDetected = false;
+    bool isDetected   = false;
     int isRightOrLeft = NONE;  // 0;NAN 1;right 2;left
-    int id = 0;
+    int id            = 0;
 
-    bool place[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {false};
+    bool place[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]       = {false};
+    int kindOfVictim[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
     void read(void) {
         static unsigned long timer = 0;
@@ -18,7 +19,7 @@ class VICTIM {
             camera[i].read();
             if (camera[i].data != 'N') {
                 this->id = camera[i].data;
-                timer = millis();
+                timer    = millis();
 
                 if (i == 0) {
                     this->isRightOrLeft = RIGHT;
