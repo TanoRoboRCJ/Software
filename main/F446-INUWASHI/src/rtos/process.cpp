@@ -28,23 +28,20 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         static int camTimer = 0;
         while (1) {
             if (victim.isRightOrLeft != NONE && ui.toggle == true) {
-                is_fundamental(
-                    (duplicate() == true) ||
-                    victim.place[location.x + FIELD_ORIGIN]
-                                [location.y +
-                                 FIELD_ORIGIN]) {  // FIXME
-                                                   // 座標の境目で2回検出される
+                if ((duplicate() == true) ||
+                    (victim.place[location.x + FIELD_ORIGIN]
+                                 [location.y + FIELD_ORIGIN] ==
+                     true)) {  // FIXME
+                               // 座標の境目で2回検出される
                     victim.isRightOrLeft = NONE;
                     camera[0].data       = 'N';
                     camera[1].data       = 'N';
-                }
-                else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
-                          tof.val[3] < 240 && tof.val[5] < 240) ||
-                         (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
-                          tof.val[13] < 240 && tof.val[11] < 240)) {
+                } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
+                            tof.val[3] < 240 && tof.val[5] < 240) ||
+                           (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
+                            tof.val[13] < 240 && tof.val[11] < 240)) {
                     break;
-                }
-                else {
+                } else {
                     victim.isRightOrLeft = NONE;
                     camera[0].data       = 'N';
                     camera[1].data       = 'N';
@@ -154,51 +151,38 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
     }
 }
 
-bool duplicate(
-    void) {  // 進行方向に対しての座標のずれ(1のみ)かつ同じ被災者の種類なら無視
+bool duplicate(void) {  // 進行方向に今見ているデータと同じデータがあれば破棄
     if (gyro.North) {
-        if (victim.place[location.x + FIELD_ORIGIN]
-                        [location.y + FIELD_ORIGIN + 1] == true &&
-            victim.kindOfVictim[location.x + FIELD_ORIGIN]
-                               [location.y + FIELD_ORIGIN] ==
-                victim.kindOfVictim[location.x + FIELD_ORIGIN]
-                                   [location.y + FIELD_ORIGIN + 1]) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
+                               [location.y + FIELD_ORIGIN + 1] == victim.id) {
+            uart3.println("Duplicate");
             return true;
         } else {
             return false;
         }
     }
     if (gyro.East) {
-        if (victim.place[location.x + FIELD_ORIGIN + 1]
-                        [location.y + FIELD_ORIGIN] == true &&
-            victim.kindOfVictim[location.x + FIELD_ORIGIN]
-                               [location.y + FIELD_ORIGIN] ==
-                victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
-                                   [location.y + FIELD_ORIGIN]) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
+                               [location.y + FIELD_ORIGIN] == victim.id) {
+            uart3.println("Duplicate");
             return true;
         } else {
             return false;
         }
     }
     if (gyro.South) {
-        if (victim.place[location.x + FIELD_ORIGIN]
-                        [location.y + FIELD_ORIGIN - 1] == true &&
-            victim.kindOfVictim[location.x + FIELD_ORIGIN]
-                               [location.y + FIELD_ORIGIN] ==
-                victim.kindOfVictim[location.x + FIELD_ORIGIN]
-                                   [location.y + FIELD_ORIGIN - 1]) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
+                               [location.y + FIELD_ORIGIN - 1] == victim.id) {
+            uart3.println("Duplicate");
             return true;
         } else {
             return false;
         }
     }
     if (gyro.West) {
-        if (victim.place[location.x + FIELD_ORIGIN - 1]
-                        [location.y + FIELD_ORIGIN] == true &&
-            victim.kindOfVictim[location.x + FIELD_ORIGIN]
-                               [location.y + FIELD_ORIGIN] ==
-                victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
-                                   [location.y + FIELD_ORIGIN]) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
+                               [location.y + FIELD_ORIGIN] == victim.id) {
+            uart3.println("Duplicate");
             return true;
         } else {
             return false;
