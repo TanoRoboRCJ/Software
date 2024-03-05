@@ -30,12 +30,14 @@ void Encoder::show(const uint8_t color1[3], const uint8_t color2[3],
 }
 
 void Encoder::read(void) {
-    static bool isFixed = true;
+    // NOTE: プログラムかけ
 
-    if (encAB[0] && encAB[1] && !isFixed) {
-        // encAB[0] = digitalRead(ENCODER_A);
-        if (encAB[0] == encAB[1]) {
-            isFixed = false;
-        }
-    }
+    // static bool isFixed = true;
+
+    // if (encAB[0] && encAB[1] && !isFixed) {
+    //     // encAB[0] = digitalRead(ENCODER_A);
+    //     if (encAB[0] == encAB[1]) {
+    //         isFixed = false;
+    //     }
+    // }
 }

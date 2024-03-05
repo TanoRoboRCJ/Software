@@ -80,45 +80,55 @@ int rawData[16] = {0};
 
 void loop() {
     // Display
-    static char upperText[40] = "";
-    static char middleText[40] = "";
-    static char lowerText[40] = "";
+    static char upperText[40] = {0};
+    static char middleText[40] = {0};
+    static char lowerText[40] = {0};
 
-    if (Serial.available() > 2) {
-        char buf[40] = {0};
-        char flag = Serial.read();
-        Serial.readBytesUntil('\0', buf, 40);
+    // if (Serial1.available() > 2) {
+    //     char buf[40] = {0};
+    //     char flag = Serial1.read();
+    //     Serial1.readBytesUntil('\0', buf, 40);
 
-        switch (flag) {
-            case 250:
-                strcpy(upperText, buf);
-                break;
-            case 251:
-                strcpy(middleText, buf);
-                break;
-            case 252:
-                strcpy(lowerText, buf);
-                break;
-        }
+    //     switch (flag) {
+    //         case 250:
+    //             for (int i = 0; i < 40; i++) {
+    //                 upperText[i] = 0;
+    //             }
 
-        display.clearDisplay();
-        display.setTextColor(WHITE);
-        display.setTextSize(2);
-        display.setCursor(0, 0);
-        display.println(upperText);
+    //             strcpy(upperText, buf);
+    //             break;
+    //         case 251:
+    //             for (int i = 0; i < 40; i++) {
+    //                 middleText[i] = 0;
+    //             }
+    //             strcpy(middleText, buf);
+    //             break;
+    //         case 252:
+    //             for (int i = 0; i < 40; i++) {
+    //                 lowerText[i] = 0;
+    //             }
+    //             strcpy(lowerText, buf);
+    //             break;
+    //     }
 
-        display.setTextSize(2);
-        display.setCursor(0, 20);
-        display.print(middleText);
+    //     display.clearDisplay();
+    //     display.setTextColor(WHITE);
+    //     display.setTextSize(2);
+    //     display.setCursor(0, 0);
+    //     display.println(upperText);
 
-        display.drawFastHLine(0, 40, 128, WHITE);
+    //     display.setTextSize(2);
+    //     display.setCursor(0, 20);
+    //     display.print(middleText);
 
-        display.setTextSize(1);
-        display.setCursor(0, 45);
-        display.println(lowerText);
+    //     display.drawFastHLine(0, 40, 128, WHITE);
 
-        display.display();
-    }
+    //     display.setTextSize(1);
+    //     display.setCursor(0, 45);
+    //     display.println(lowerText);
+
+    //     display.display();
+    // }
 
     for (int i = 0; i < numOfSensors; i++) {
         if (disalbledSensor[i]) {
