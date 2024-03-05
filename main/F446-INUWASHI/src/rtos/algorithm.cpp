@@ -57,7 +57,7 @@ void homingApp(App) {
                 isHoming = false;
             }
             if ((location.x == 0) &&
-                (location.y == 0)) {  // FIXME 帰還条件をもっと絞る
+                (location.y == 0)) {  // FIXME１１帰還条件をもっと絞る
                 app.stop(adjustmentApp);
                 servo.suspend  = true;
                 servo.velocity = 0;

@@ -85,28 +85,28 @@ void Movement::turnWest(void) {
 void Movement::angleAdjustment(void) {
     if (tof.rightWallExists == true && tof.leftWallExists == true) {
         if (tof.val[4] > tof.val[12]) {
-            servo.isCorrectingAngle = 3;
+            servo.isCorrectingAngle = 5;
         }
         if (tof.val[12] > tof.val[4]) {
-            servo.isCorrectingAngle = -3;
+            servo.isCorrectingAngle = -5;
         }
     } else {
         if (tof.val[12] < 120) {
-            servo.isCorrectingAngle = 3;
+            servo.isCorrectingAngle = 5;
         }
         if (tof.val[4] < 120) {
-            servo.isCorrectingAngle = -3;
+            servo.isCorrectingAngle = -5;
         }
     }
 
     if ((tof.rightWallExists == false) && (tof.leftWallExists == true)) {
         if (tof.val[12] > 120) {
-            servo.isCorrectingAngle = -3;
+            servo.isCorrectingAngle = -5;
         }
     }
     if ((tof.rightWallExists == true) && (tof.leftWallExists == false)) {
         if (tof.val[4] > 120) {
-            servo.isCorrectingAngle = 3;
+            servo.isCorrectingAngle = 5;
         }
     }
 
