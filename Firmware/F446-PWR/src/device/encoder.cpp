@@ -5,13 +5,15 @@ Encoder::Encoder(void) {
 }
 
 void Encoder::bootIllumination(int startupTime) {
-    while (millis() <= startupTime - 1000) {
-    }
+    // while (millis() <= startupTime - 1000) {
+    // }
 
-    for (double i = 1.0; i >= 0.0; i -= 0.01) {
-        show(White, Cyan, i, 255);
-        delay(10);
-    }
+    // for (double i = 1.0; i >= 0.0; i -= 0.01) {
+    //     show(White, Cyan, i, 255);
+    //     delay(5);
+    // }
+
+    show(White, 255);
 }
 
 void Encoder::show(const uint8_t color[3], const uint8_t brightness) {

@@ -52,20 +52,20 @@ void uartRead(void) {
                     data[i] = uart2.read();
                     checkDegit += data[i];
                 }
+
+                isPushing[RIGHT] = (data[0] == 1);
+                isPushing[LEFT] = (data[1] == 1);
+
+                ledToggle <<= data[2];
+
+                uint8_t color[3] = {0};
+                for (int i = 0; i < 3; i++) {
+                    color[i] = data[i + 3];
+                }
+
+                enc.show(color);
             }
         }
-        
-        isPushing[RIGHT] = (data[0] == 1);
-        isPushing[LEFT] = (data[1] == 1);
-
-        ledToggle <<= data[2];
-
-        uint8_t color[3] = {0};
-        for (int i = 0; i < 3; i++) {
-            color[i] = data[i + 3];
-        }
-
-        enc.show(color);
 
         while (uart2.available() > 0) {
             uart2.read();
@@ -81,14 +81,16 @@ void uartWrite(void) {
     uart2.write(lowByte(floorSensor[0].clear));
 
     for (int i = 0; i < 3; i++) {
-        uart2.write(floorSensor[0].rgb[i]);
+        uart2.write(highByte(floorSensor[0].rgb[i]));
+        uart2.write(lowByte(floorSensor[0].rgb[i]));
     }
 
     uart2.write(highByte(floorSensor[1].clear));
     uart2.write(lowByte(floorSensor[1].clear));
 
     for (int i = 0; i < 3; i++) {
-        uart2.write(floorSensor[1].rgb[i]);
+        uart2.write(highByte(floorSensor[1].rgb[i]));
+        uart2.write(lowByte(floorSensor[1].rgb[i]));
     }
 
     uart2.write(highByte(tof.val[RIGHT]));
@@ -109,14 +111,14 @@ void setup(void) {
     floorSensor[0].init();
     floorSensor[1].init();
 
-    enc.bootIllumination(2500);
+    enc.bootIllumination(0);
 
     analogWriteFrequency(PwmFreq);
 }
 
 void loop(void) {
     // status LED
-    bool chirp = ((millis() / 50) % 40 == 0);
+    bool chirp = ((millis() / 50) % 30 == 0);
     ledBuiltin = chirp;
 
     // read

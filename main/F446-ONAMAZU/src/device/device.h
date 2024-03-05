@@ -7,6 +7,10 @@
 #include "./sensor.h"
 #include "./actuator.h"
 
+#include "./bottom.h"
+
+extern Bottom bottom;
+
 extern HardwareSerial uart1;
 extern HardwareSerial uart3;
 
@@ -31,7 +35,6 @@ extern LED led;
 
 //SENSOR
 extern Adafruit_BNO055 bno;
-extern Adafruit_NeoPixel stripFloor;
 
 extern HardwareSerial uart4;
 extern DISTANCE_SENSOR tof;

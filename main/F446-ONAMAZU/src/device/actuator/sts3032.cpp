@@ -16,26 +16,14 @@ STS3032::STS3032(HardwareSerial *ptr) {
         serialServo.writeByte(i, SMS_STS_MODE, 1);
         serialServo.LockEprom(i);
     }
-
-    serialServo.unLockEprom(5);
-    serialServo.EnableTorque(5, 1);
-    serialServo.LockEprom(5);
 }
 
 void STS3032::directDrive(int id, int percent, int acceleration) {
-    if (id != 4) {
-        int sendData;
-        sendData = percent * maximumSpeed / 100;
-        sendData = constrain(sendData, -maximumSpeed, maximumSpeed);
+    int sendData;
+    sendData = percent * maximumSpeed / 100;
+    sendData = constrain(sendData, -maximumSpeed, maximumSpeed);
 
-        serialServo.WriteSpe(id + 1, sendData, acceleration);
-    } else {
-        int sendData;
-        sendData = percent * 80;
-        sendData = constrain(sendData, -8000, 8000);
-
-        serialServo.WriteSpe(5, sendData, acceleration);
-    }
+    serialServo.WriteSpe(id + 1, sendData, acceleration);
 }
 
 void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
@@ -57,7 +45,6 @@ void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
     for (int i = 2; i < 4; i++) {
         directDrive(i, data[1]);
     }
-    // directDrive(4, 10);
 }
 
 void STS3032::drive(int velocity, int angle) {
@@ -93,26 +80,4 @@ void STS3032::stop(void) {
 }
 
 void STS3032::rescueKit(int num, int position) {
-    sumOfRescueKit += num;
-    for (int i = 0; i < num; i++) {
-        if (position != 2) {  // 左
-            directDrive(4, 100);
-            delay(300);
-            directDrive(4, 0);
-            delay(50);
-            directDrive(4, -100);
-            delay(130);
-            directDrive(4, 0);
-            delay(200);
-        } else {
-            directDrive(4, -100);
-            delay(300);
-            directDrive(4, 0);
-            delay(50);
-            directDrive(4, 100);
-            delay(130);
-            directDrive(4, 0);
-            delay(200);
-        }
-    }
 }

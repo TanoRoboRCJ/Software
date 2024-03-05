@@ -8,6 +8,10 @@
 
 #include <Arduino.h>
 
+#include "../bottom.h"
+
+extern Bottom bottom;
+
 class DISTANCE_SENSOR {
    public:
     DISTANCE_SENSOR(HardwareSerial *p);

@@ -17,42 +17,56 @@ void startDaemon(void) {
 
 void monitorApp(App) {
     while (1) {
-        // uart3.print(gyro.deg);
-        // uart3.println("\t");
-        //tof
-        // uart1.println("Hello world");
-        uart1.print("tof: ");
-        for (int i = 0; i < 16; i++)
-        {
-            uart1.print(tof.val[i]);
-            uart1.print("\t");
-        }
+        //     uart1.print("tof: ");
+        //     for (int i = 0; i < 16; i++) {
+        //         uart1.print(tof.val[i]);
+        //         uart1.print("\t");
+        //     }
+
+        // floor
+        uart1.print("floor: ");
+        uart1.print(floorSensor.frontCRGB[0]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[1]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[2]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[3]);
+
+        uart1.print("\t");
+
+        uart1.print(floorSensor.backCRGB[0]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[1]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[2]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[3]);
+
         uart1.println();
-        
         app.delay(10);
     }
 }
 
 void sensorApp(App) {
     while (1) {
+        bottom.read();
+        bottom.write();
+
         ui.read();
+
         gyro.read();
+
         tof.read();
         tof.calc(gyro.deg);
 
         victim.read();
-
         loadcell.read();
 
-        floorSensor.setFloorColor(floorSensor.white);
-        app.delay(2);
-        floorSensor.redVal = analogRead(PC0);
-        app.delay(2);
-        floorSensor.blankVal = analogRead(PC0);
-        app.delay(2);
-        floorSensor.blueVal = analogRead(PC0);
-
+        floorSensor.read();
         floorSensor.colorJudgment();
+
+        app.delay(10);
     }
 }
 
@@ -75,8 +89,8 @@ void servoApp(App) {
 }
 
 void ledApp(App) {
-    int ledStatus           = 0;
-    int victimId            = 0;
+    int ledStatus = 0;
+    int victimId = 0;
     unsigned long startTime = millis();
     for (int i = 0; i < 4; i++) {
         led.setColor(i, led.cyan);
@@ -97,7 +111,7 @@ void ledApp(App) {
             }
             victimId = 0;
         } else {
-            ledStatus         = 2;
+            ledStatus = 2;
             static bool blink = true;
 
             int brightness;

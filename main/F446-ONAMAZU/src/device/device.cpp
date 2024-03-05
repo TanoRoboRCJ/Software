@@ -5,7 +5,10 @@ const int Period = 10;
 
 // COMMUNICATION
 HardwareSerial uart1(PA10, PA9);
+
+// BOTTOM UNIT
 HardwareSerial uart3(PC5, PB10);
+Bottom bottom(&uart3);
 
 // ACTUATOR
 Output buzzerPin = Output(PB6);
@@ -22,7 +25,6 @@ LED led(&rightLED, &topLED, &leftLED, &uiLED);
 
 // SENSOR
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
-Adafruit_NeoPixel stripFloor = Adafruit_NeoPixel(4, PB15, NEO_GRB + NEO_KHZ800);
 
 HardwareSerial uart4(PA1, PA0);
 DISTANCE_SENSOR tof(&uart4);
@@ -41,7 +43,6 @@ void initUART(void) {
     uart1.setRx(PA10);
     uart1.setTx(PA9);
     uart1.begin(115200);
-    uart3.begin(115200);
 }
 
 void initI2C(void) {
@@ -62,8 +63,6 @@ void initDevice(void) {
 
     gyro.init();
     gyro.setOffset();
-
-    floorSensor.init();
 
     led.initCompleteIllumination();
     delay(200);
