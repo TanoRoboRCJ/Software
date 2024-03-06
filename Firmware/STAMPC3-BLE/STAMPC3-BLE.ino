@@ -4,7 +4,7 @@
 CRGB led[1];
 
 #include "./BLE_Peripheral.h"
-BLE_PERIPHERAL BLE_Peripheral("INUWASHI BLE-Kit");
+BLE_PERIPHERAL BLE_Peripheral("ONAMAZU BLE-Kit");
 
 char sendDataArr[140] = { 0 };
 

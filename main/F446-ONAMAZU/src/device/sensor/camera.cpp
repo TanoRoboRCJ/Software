@@ -1,0 +1,29 @@
+#include "./camera.h"
+
+CAMERA::CAMERA(HardwareSerial *ptr, int _ledPin) : ledPin(_ledPin) {
+    serialPtr = ptr;
+    serialPtr->begin(115200);
+
+    led = 0;
+}
+
+void CAMERA::read(void) {
+    if (serialPtr->available() > 0) {
+        int temp = serialPtr->read();
+
+        if (temp == 'H' || temp == 'S' || temp == 'U' || temp == 'Y' ||
+            temp == 'R' || temp == 'G' || temp == 'N') {
+                this->data = temp;
+        }
+
+        while (serialPtr->available() > 0) {
+            serialPtr->read();
+        }
+    }
+}
+
+void CAMERA::flush(void) {
+    while (serialPtr->available() > 0) {
+        serialPtr->read();
+    }
+}
