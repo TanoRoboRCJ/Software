@@ -91,44 +91,38 @@ void servoApp(App) {
 void ledApp(App) {
     int ledStatus = 0;
     int victimId = 0;
-    unsigned long startTime = millis();
-    for (int i = 0; i < 4; i++) {
+
+    for (int i = 0; i < 3; i++) {
         led.setColor(i, led.cyan);
         led.setBrightness(i, 255);
     }
     led.showAll();
 
     while (ui.toggle == 0) {
-        app.delay(10);
+        app.delay(100);
     }
 
     while (1) {
-        if (!victim.isDetected) {
-            if (ledStatus != 1) {
-                ledStatus = 1;
-                led.setGlowColor();
-                led.showAll();
-            }
-            victimId = 0;
-        } else {
-            ledStatus = 2;
-            static bool blink = true;
+        if (victim.isDetected) {
+            int blink = ((millis() / 200) % 5 == 0) * 255;
 
-            int brightness;
-            if (blink) {
-                brightness = 255;
-            } else {
-                brightness = 0;
-            }
-
-            for (int i = 0; i < 4; i++) {
-                led.setBrightness(i, brightness);
+            for (int i = 0; i < 3; i++) {
+                led.setBrightness(i, blink);
                 led.setColor(i, victim.color(victimId));
             }
             led.showAll();
 
-            app.delay(500);
-            blink = !blink;
+            app.delay(10);
+        } else {
+            int blink = ((millis() / 200) % 5 == 0) * 255;
+
+            for (int i = 0; i < 3; i++) {
+                led.setBrightness(i, blink);
+                led.setColor(i, victim.color(victimId));
+            }
+            led.showAll();
+            
+            app.delay(10);
         }
 
         app.delay(10);

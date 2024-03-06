@@ -7,26 +7,24 @@
 #define TOP 1
 #define RIGHT 0
 #define LEFT 2
-#define UI 3
 
 class LED {
-   public:
-    LED(Adafruit_NeoPixel* top, Adafruit_NeoPixel* right,
-        Adafruit_NeoPixel* left, Adafruit_NeoPixel* ui);
-
-    Adafruit_NeoPixel* ptrArr[4];
-
+   private:
     // settings:
-    const int maxBrightness = 0;
-    const int normalBrightness = 0;
+    const int TopBrightness = 50;
+    const int SideBrightness = 20;
     const bool disableAll = false;
 
-    bool disableUI = false;
     bool disableTop = false;
     bool disableSide = false;
 
-    const bool* disablePtr[4] = {&disableSide, &disableTop, &disableSide,
-                                 &disableUI};
+    const bool* disablePtr[3] = {&disableSide, &disableTop, &disableSide};
+
+    Adafruit_NeoPixel* ptrArr[3];
+
+   public:
+    LED(Adafruit_NeoPixel* right, Adafruit_NeoPixel* top,
+        Adafruit_NeoPixel* left);
 
     // functions:
     void bootIllumination(void);
