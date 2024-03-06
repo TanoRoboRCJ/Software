@@ -1,8 +1,10 @@
 #include "./camera.h"
 
-CAMERA::CAMERA(HardwareSerial *ptr) {
+CAMERA::CAMERA(HardwareSerial *ptr, int _ledPin) : ledPin(_ledPin) {
     serialPtr = ptr;
     serialPtr->begin(115200);
+
+    led = 0;
 }
 
 void CAMERA::read(void) {

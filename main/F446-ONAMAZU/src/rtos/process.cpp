@@ -23,7 +23,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
     while (1) {
         int rescueKitNum = 0;
 
-        static int camTimer = 0;
         while (1) {
             if (victim.isRightOrLeft != NONE && ui.toggle == true) {
                 if (victim.place[location.x + FIELD_ORIGIN]
@@ -32,9 +31,9 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                     camera[0].data = 'N';
                     camera[1].data = 'N';
                 } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
-                            tof.val[3] < 240 && tof.val[5] < 240) ||
+                            tof.val[3] < 240) ||
                            (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
-                            tof.val[13] < 240 && tof.val[11] < 240)) {
+                            tof.val[13] < 240)) {
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;
@@ -44,6 +43,9 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             }
             app.delay(10);
         }
+
+        buzzer.bpm = 120;
+        buzzer.beat(FA_, 0.5);
 
         app.stop(rightWallApp);
         app.stop(adjustmentApp);
@@ -55,34 +57,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.velocity = 0;
         servo.suspend = true;
 
-        switch (victim.id) {
-            case VICTIM_H:
-                buzzer.sambaII();
-                break;
-
-            case VICTIM_S:
-                buzzer.tokyoOndo();
-                break;
-
-            case VICTIM_U:
-                buzzer.sakura();
-                break;
-
-            case VICTIM_RED:
-                buzzer.shoten();
-                break;
-
-            case VICTIM_YELLOW:
-                buzzer.shogun();
-                break;
-
-            case VICTIM_GREEN:
-                buzzer.yuyake();
-                break;
-
-            default:
-                break;
-        }
+        app.delay(5000);
 
         switch (victim.id) {
             case VICTIM_H:
@@ -121,11 +96,13 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         camera[0].data = 'N';
         camera[1].data = 'N';
 
+        static unsigned long camTimer = 0;
         camTimer = millis();
         while (1) {
             if (millis() - camTimer > 3000) {
                 break;
             }
+
             app.delay(10);
             camera[0].flush();
             camera[1].flush();

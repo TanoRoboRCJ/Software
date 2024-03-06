@@ -54,20 +54,14 @@ class BUZZER {
     void setFrequency(int freq);
     void mute(void);
 
-    void bootSound(void);
+    void beep(void);
+    void initCompleteSound(void);
     void beat(int freq, double beat);
 
     void rescueKit(int kit);
 
     void matsukenShogun(void);
     void matsukenSamba(void);
-
-    void sakura(void);
-    void tokyoOndo(void);
-    void sambaII(void);
-    void shoten(void);
-    void yuyake(void);
-    void shogun(void);
 };
 
 #endif

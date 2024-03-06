@@ -6,6 +6,7 @@
 #define _CAMERA_H_
 
 #include <Arduino.h>
+#include "../../kit/IO-Kit.h"
 
 #define VICTIM_H 'H'
 #define VICTIM_U 'U'
@@ -18,7 +19,11 @@
 class CAMERA {
    public:
     HardwareSerial *serialPtr;
-    CAMERA(HardwareSerial *ptr);
+    CAMERA(HardwareSerial *ptr, int _ledPin);
+
+    const int ledPin;
+
+    Output led = Output(ledPin);
 
     bool isVictimDetected = true;
     int data = NO_VICTIM;

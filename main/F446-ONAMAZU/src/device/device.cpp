@@ -35,7 +35,7 @@ FLOOR_SENSOR floorSensor;
 
 HardwareSerial uart2(PA3, PA2);
 HardwareSerial uart6(PC7, PC6);
-CAMERA camera[2] = {CAMERA(&uart6), CAMERA(&uart2)};  // 右左
+CAMERA camera[2] = {CAMERA(&uart2, PB15), CAMERA(&uart6, PB14)};  // 右左
 
 // FUNCTION
 void initUART(void) {
@@ -51,7 +51,7 @@ void initI2C(void) {
 }
 
 void initDevice(void) {
-    buzzer.bootSound();
+    buzzer.beep();
 
     led.bootIllumination();
 
@@ -65,5 +65,5 @@ void initDevice(void) {
 
     led.initCompleteIllumination();
 
-    buzzer.bootSound();
+    buzzer.initCompleteSound();
 }
