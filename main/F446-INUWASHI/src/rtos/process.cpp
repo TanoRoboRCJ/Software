@@ -30,7 +30,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
     while (1) {
         int rescueKitNum = 0;
 
-        static int camTimer = 0;
         while (1) {
             if (victim.isRightOrLeft != NONE && ui.toggle == true) {
                 if ((duplicate() == true) ||
@@ -131,16 +130,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         victim.isRightOrLeft = NONE;
         camera[0].data       = 'N';
         camera[1].data       = 'N';
-
-        camTimer = millis();
-        while (1) {
-            if (millis() - camTimer > 2500) {
-                break;
-            }
-            app.delay(10);
-            camera[0].flush();
-            camera[1].flush();
-        }
 
         victim.isDetected    = false;
         victim.id            = 0;
