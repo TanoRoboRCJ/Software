@@ -6,6 +6,11 @@
 
 #include "./RTOS.h"
 
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
+
 bool duplicate(void);
 
 void locationApp(App) {
@@ -31,15 +36,14 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                 if ((duplicate() == true) ||
                     (victim.place[location.x + FIELD_ORIGIN]
                                  [location.y + FIELD_ORIGIN] ==
-                     true)) {  // FIXME
-                               // 座標の境目で2回検出される
+                     true)) {  // NOTE 重複判定無視
                     victim.isRightOrLeft = NONE;
                     camera[0].data       = 'N';
                     camera[1].data       = 'N';
                 } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
-                            tof.val[3] < 240 && tof.val[5] < 240) ||
+                            tof.val[3] < 240) ||
                            (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
-                            tof.val[13] < 240 && tof.val[11] < 240)) {
+                            tof.val[13] < 240)) {
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;
@@ -52,11 +56,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         app.stop(rightWallApp);
         app.stop(adjustmentApp);
-
-        uart3.print(location.x);
-        uart3.print("\t");
-        uart3.print(location.y);
-        uart3.println("\t");
 
         victim.place[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN] =
             true;
@@ -152,7 +151,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 }
 
 bool duplicate(void) {  // 進行方向に今見ているデータと同じデータがあれば破棄
-    if (gyro.North) {
+    if (gyro.direction == NORTH) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
                                [location.y + FIELD_ORIGIN + 1] == victim.id) {
             uart3.println("Duplicate");
@@ -161,7 +160,7 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
             return false;
         }
     }
-    if (gyro.East) {
+    if (gyro.direction == EAST) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
                                [location.y + FIELD_ORIGIN] == victim.id) {
             uart3.println("Duplicate");
@@ -170,7 +169,7 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
             return false;
         }
     }
-    if (gyro.South) {
+    if (gyro.direction == SOUTH) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
                                [location.y + FIELD_ORIGIN - 1] == victim.id) {
             uart3.println("Duplicate");
@@ -179,7 +178,7 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
             return false;
         }
     }
-    if (gyro.West) {
+    if (gyro.direction == WEST) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
                                [location.y + FIELD_ORIGIN] == victim.id) {
             uart3.println("Duplicate");

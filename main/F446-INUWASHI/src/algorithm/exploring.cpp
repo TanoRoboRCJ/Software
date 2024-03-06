@@ -26,15 +26,25 @@ int Exploring::weighting(void) {
     weight[FRONT] += frontWeight();
     weight[LEFT] += leftWeight();
 
-    if (tof.rightWallExists == true){
+    if (tof.rightWallExists == true) {
         weight[RIGHT] = DISABLE;
     }
-    if (tof.frontWallExists == true){ 
+    if (tof.frontWallExists == true) {
         weight[FRONT] = DISABLE;
     }
     if (tof.leftWallExists == true) {
         weight[LEFT] = DISABLE;
     }
+
+    uart3.print(weight[RIGHT]);
+    uart3.print("\t");
+    uart3.print(weight[FRONT]);
+    uart3.print("\t");
+    uart3.print(weight[LEFT]);
+    uart3.print("\t");
+    uart3.println(reachedCount[location.x + FIELD_ORIGIN + 1]
+                               [location.y + FIELD_ORIGIN]);
+
     if (weight[RIGHT] <= weight[FRONT] && weight[RIGHT] <= weight[LEFT]) {
         return 0;  // right
     } else if (weight[FRONT] <= weight[RIGHT] &&
@@ -81,10 +91,10 @@ int Exploring::frontWeight(void) {
     } else if (gyro.direction == NORTH && tof.wallExists[NORTH] == false) {
         weight = reachedCount[x][y + 1];
 
-    } else if (gyro.direction == EAST && !tof.wallExists[EAST] == false) {
+    } else if (gyro.direction == EAST && tof.wallExists[EAST] == false) {
         weight = reachedCount[x + 1][y];
 
-    } else if (gyro.direction == SOUTH && !tof.wallExists[SOUTH] == false) {
+    } else if (gyro.direction == SOUTH && tof.wallExists[SOUTH] == false) {
         weight = reachedCount[x][y - 1];
     }
 

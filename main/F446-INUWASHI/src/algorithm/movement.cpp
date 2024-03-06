@@ -34,7 +34,8 @@ void Movement::move_1tile(void) {
     _oldCoordinateY = location.coordinateY;
 
     while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
-           abs(location.coordinateY - _oldCoordinateY) < 300) {//FIXME 誤差が蓄積される
+           abs(location.coordinateY - _oldCoordinateY) <
+               300) {  // FIXME 誤差が蓄積される
         if (tof.frontWallExists == true) {
             break;
         }

@@ -10,9 +10,8 @@
 #include "./RTOS.h"
 
 void rightWallApp(App) {
+    exploring.reachedCount[FIELD_ORIGIN][FIELD_ORIGIN]++;
     exploring.updateMap();
-    exploring
-        .reachedCount[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]++;
     while (1) {
         app.delay(Period);
         servo.suspend  = true;
@@ -29,15 +28,14 @@ void rightWallApp(App) {
                 break;
         }
         movement.move_1tile();
-        exploring.updateMap();
         exploring.reachedCount[location.x + FIELD_ORIGIN]
                               [location.y + FIELD_ORIGIN]++;
+        exploring.updateMap();
         app.delay(100);
     }
 }
 
-void adjustmentApp(
-    App) {  // NOTE::ハードコードだからmovement.hへ分割を検討してもいいかも
+void adjustmentApp(App) {  // NOTE movement.hに移行
     while (1) {
         movement.angleAdjustment();
         movement.avoidBarrier();
@@ -57,7 +55,7 @@ void homingApp(App) {
                 isHoming = false;
             }
             if ((location.x == 0) &&
-                (location.y == 0)) {  // FIXME１１帰還条件をもっと絞る
+                (location.y == 0)) {  // FIXME帰還条件をもっと絞る
                 app.stop(adjustmentApp);
                 servo.suspend  = true;
                 servo.velocity = 0;
