@@ -21,6 +21,7 @@ void locationApp(App) {
 void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるかな？
     victim.isRightOrLeft = NONE;
     while (1) {
+        unsigned long camTimer = 0;
         int rescueKitNum = 0;
 
         while (1) {
@@ -44,9 +45,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             app.delay(10);
         }
 
-        buzzer.bpm = 120;
-        buzzer.beat(FA_, 0.5);
-
         app.stop(rightWallApp);
         app.stop(adjustmentApp);
 
@@ -56,6 +54,9 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         servo.velocity = 0;
         servo.suspend = true;
+
+        buzzer.bpm = 120;
+        buzzer.beat(FA_, 0.5);
 
         app.delay(5000);
 
@@ -80,7 +81,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                 break;
         }
 
-        app.delay(100);
         buzzer.rescueKit(rescueKitNum);
         servo.rescueKit(rescueKitNum, victim.isRightOrLeft);
         app.delay(100);
@@ -96,7 +96,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         camera[0].data = 'N';
         camera[1].data = 'N';
 
-        static unsigned long camTimer = 0;
         camTimer = millis();
         while (1) {
             if (millis() - camTimer > 3000) {
