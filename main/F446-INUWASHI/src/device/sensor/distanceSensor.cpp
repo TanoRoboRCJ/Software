@@ -4,6 +4,11 @@
 
 extern GYRO gyro;
 
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
+
 DISTANCE_SENSOR::DISTANCE_SENSOR(HardwareSerial *p) {
     serialPtr = p;
     serialPtr->begin(1000000);
@@ -51,189 +56,54 @@ void DISTANCE_SENSOR::calc(int angle) {
         vecX[n] = val[n] * sin(radians(n * 22.5 + angle));
         vecY[n] = val[n] * cos(radians(n * 22.5 + angle));
     }
-    leftWall();
+    wallJudgment();
     direction();
-    rightWall();
-}
-
-void DISTANCE_SENSOR::rightWall(void) {
-    if (val[0] < 140 && val[4] < 180 && val[12] < 180) {
-        isNotFront = false;
-    } else {
-        isNotFront = true;
-    }
-    if (val[4] > 250 && val[5] > 265) {
-        isNotRight = true;
-    } else {
-        isNotRight = false;
-    }
-}
-
-void DISTANCE_SENSOR::leftWall(void) {
-    if (val[12] > 250 && val[11] > 265) {
-        isNotLeft = true;
-    } else {
-        isNotLeft = false;
-    }
 }
 
 void DISTANCE_SENSOR::direction(void) {
+    if (gyro.direction == NORTH) {
+        wallExists[NORTH] = frontWallExists;
+        wallExists[EAST]  = rightWallExists;
+        wallExists[SOUTH] = behindWallExists;
+        wallExists[WEST]  = leftWallExists;
+    } else if (gyro.direction == EAST) {
+        wallExists[NORTH] = leftWallExists;
+        wallExists[EAST]  = frontWallExists;
+        wallExists[SOUTH] = rightWallExists;
+        wallExists[WEST]  = behindWallExists;
+    } else if (gyro.direction == SOUTH) {
+        wallExists[NORTH] = behindWallExists;
+        wallExists[EAST]  = leftWallExists;
+        wallExists[SOUTH] = frontWallExists;
+        wallExists[WEST]  = rightWallExists;
+    } else if (gyro.direction == WEST) {
+        wallExists[NORTH] = rightWallExists;
+        wallExists[EAST]  = behindWallExists;
+        wallExists[SOUTH] = leftWallExists;
+        wallExists[WEST]  = frontWallExists;
+    }
+}
+
+void DISTANCE_SENSOR::wallJudgment(void) {
     gyro.read();
-    if (gyro.North) {
-        if (val[0] > 170) {
-            isNorthWall = false;
-        } else {
-            isNorthWall = true;
-        }
-
-        if (val[4] > 210) {
-            isEastWall = false;
-        } else {
-            isEastWall = true;
-        }
-
-        if (val[8] > 210) {
-            isSouthWall = false;
-        } else {
-            isSouthWall = true;
-        }
-
-        if (val[12] > 210) {
-            isWestWall = false;
-        } else {
-            isWestWall = true;
-        }
-    } else if (gyro.East) {
-        if (val[12] > 210) {
-            isNorthWall = false;
-        } else {
-            isNorthWall = true;
-        }
-
-        if (val[0] > 210) {
-            isEastWall = false;
-        } else {
-            isEastWall = true;
-        }
-
-        if (val[4] > 210) {
-            isSouthWall = false;
-        } else {
-            isSouthWall = true;
-        }
-
-        if (val[8] > 210) {
-            isWestWall = false;
-        } else {
-            isWestWall = true;
-        }
-    } else if (gyro.South) {
-        if (val[8] > 210) {
-            isNorthWall = false;
-        } else {
-            isNorthWall = true;
-        }
-
-        if (val[12] > 210) {
-            isEastWall = false;
-        } else {
-            isEastWall = true;
-        }
-
-        if (val[0] > 210) {
-            isSouthWall = false;
-        } else {
-            isSouthWall = true;
-        }
-
-        if (val[4] > 210) {
-            isWestWall = false;
-        } else {
-            isWestWall = true;
-        }
-    } else if (gyro.West) {
-        if (val[4] > 210) {
-            isNorthWall = false;
-        } else {
-            isNorthWall = true;
-        }
-
-        if (val[8] > 210) {
-            isEastWall = false;
-        } else {
-            isEastWall = true;
-        }
-
-        if (val[12] > 210) {
-            isSouthWall = false;
-        } else {
-            isSouthWall = true;
-        }
-
-        if (val[0] > 210) {
-            isWestWall = false;
-        } else {
-            isWestWall = true;
-        }
+    if (val[4] > 215) {
+        rightWallExists = false;
+    } else {
+        rightWallExists = true;
     }
-}
-
-void DISTANCE_SENSOR::relativeDirection(void){
-    if(val[0] < 150){
-        isFrontWall = true;
-    }else{
-        isFrontWall = false;
+    if (val[0] > 145) {
+        frontWallExists = false;
+    } else {
+        frontWallExists = true;
     }
-    if(val[4] < 150){
-        isRightWall = true;
-}else {
-        isRightWall = false;
+    if (val[8] > 215) {
+        behindWallExists = false;
+    } else {
+        behindWallExists = true;
     }
-    if(val[8] < 150){
-        isBehindWall = true;
-    }else{
-        isBehindWall = false;
-    }
-    if(val[12] < 150){
-        isLeftWall = true;
-    }else{
-        isLeftWall = false;
-    }
-}
-
-void DISTANCE_SENSOR::wallCondition(void) {
-
-    if (!isFrontWall && !isRightWall && !isBehindWall && !isLeftWall) {
-        wallStatus = 0;
-    } else if (isFrontWall && !isRightWall && !isBehindWall && !isLeftWall) {
-        wallStatus = 1;
-    } else if (!isFrontWall && isRightWall && !isBehindWall && !isLeftWall) {
-        wallStatus = 2;
-    } else if (!isFrontWall && !isRightWall && isBehindWall && !isLeftWall) {
-        wallStatus = 3;
-    } else if (!isFrontWall && !isRightWall && !isBehindWall && isLeftWall) {
-        wallStatus = 4;
-    }else if(isFrontWall && isRightWall && !isBehindWall && !isLeftWall){
-        wallStatus = 5;
-    }else if(isFrontWall && !isRightWall && isBehindWall && !isLeftWall){
-        wallStatus = 6;
-    }else if(isFrontWall && !isRightWall && !isBehindWall && isLeftWall){
-        wallStatus = 7;
-    }else if(!isFrontWall && isRightWall && isBehindWall && !isLeftWall){
-        wallStatus = 8;
-    }else if(!isFrontWall && isRightWall && !isBehindWall && isLeftWall){
-        wallStatus = 9;
-    }else if(!isFrontWall && !isRightWall && isBehindWall && isLeftWall){
-        wallStatus = 10;
-    }else if(isFrontWall && isRightWall && isBehindWall && !isLeftWall){
-        wallStatus = 11;
-    }else if(isFrontWall && isRightWall && !isBehindWall && isLeftWall){
-        wallStatus = 12;
-    }else if(isFrontWall && !isRightWall && isBehindWall && isLeftWall){
-        wallStatus = 13;
-    }else if(!isFrontWall && isRightWall && isBehindWall && isLeftWall){
-        wallStatus = 14;
-    }else if(isFrontWall && isRightWall && isBehindWall && isLeftWal){
-        wallStatus = 15;
+    if (val[12] > 210) {
+        leftWallExists = false;
+    } else {
+        leftWallExists = true;
     }
 }

@@ -1,12 +1,6 @@
-#ifndef _UI_KIT_H_
-#define _UI_KIT_H_
+#include "./LCD.h"
 
-#include <Arduino.h>
-
-#include "../device/device.h"
-#include "./rtosLocation.h"
-
-void settingWrite() {
+void LCD::begin() {
     // flag
     uart4.write('U');
     uart4.write('I');
@@ -41,7 +35,7 @@ void settingWrite() {
     uart4.write(0);
 }
 
-void runningWrite(void) {
+void LCD::writeRunningStatus(void) {
     // flag
     uart4.write('U');
     uart4.write('I');
@@ -53,8 +47,6 @@ void runningWrite(void) {
     uart4.write(highByte(gyro.deg));
     uart4.write(lowByte(gyro.deg));
 
-    // coordinate
-//send in 2 byte
     uart4.write(highByte((int)location.coordinateX));
     uart4.write(lowByte((int)location.coordinateX));
 
@@ -67,5 +59,3 @@ void runningWrite(void) {
     // check sum
     uart4.write(0);
 }
-
-#endif

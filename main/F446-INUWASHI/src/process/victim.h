@@ -1,16 +1,17 @@
 #ifndef _VICTIM_H_
 #define _VICTIM_H_
 
-#include "../../device/device.h"
+#include "../device/device.h"
+#include "./location.h"
 
 class VICTIM {
    public:
-    int isRightOrLeft = 0;  // 0;NAN 1;right 2;left
+    bool isDetected   = false;
+    int isRightOrLeft = NONE;  // 0;NAN 1;right 2;left
     int id            = 0;
 
-    bool isDetected = false;
-
-    bool place[20 * 2][20 * 2] = {false};
+    bool place[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]       = {false};
+    int kindOfVictim[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
     void read(void) {
         static unsigned long timer = 0;
@@ -56,7 +57,6 @@ class VICTIM {
 
         return returnColor;
     }
-
-} victim;
+};
 
 #endif

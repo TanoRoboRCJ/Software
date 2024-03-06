@@ -1,7 +1,6 @@
 #include "led.h"
 
 #include "../../kit/RTOS-Kit.h"
-extern RTOS_Kit app;
 
 LED::LED(Adafruit_NeoPixel* top, Adafruit_NeoPixel* right,
          Adafruit_NeoPixel* left, Adafruit_NeoPixel* ui) {

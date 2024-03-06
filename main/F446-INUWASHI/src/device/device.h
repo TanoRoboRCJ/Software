@@ -4,44 +4,45 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include "./sensor/sensor.h"
-#include "./actuator/actuator.h"
+#include "./sensor.h"
+#include "./actuator.h"
 
-HardwareSerial uart1(PA10, PA9);
-HardwareSerial uart3(PC5, PB10);
+extern HardwareSerial uart1;
+extern HardwareSerial uart3;
 
-void initUART(void) {
-    uart1.setRx(PA10);
-    uart1.setTx(PA9);
-    uart1.begin(115200);
-    uart3.begin(115200);
-}
+void initUART(void);
+void initI2C(void);
+void initDevice(void);
 
-void initI2C(void) {
-    Wire.setSDA(PB9);
-    Wire.setSCL(PB8);
-    Wire.begin();
-}
+extern const int Period;  // 制御周期
 
-void initDevice(void) {
-    buzzer.bootSound();
+//ACTUATOR
+extern Output buzzerPin;
+extern BUZZER buzzer;
 
-    led.bootIllumination();
+extern HardwareSerial uart5;
+extern STS3032 servo;
 
-    initI2C();
-    initUART();
+extern Adafruit_NeoPixel topLED;
+extern Adafruit_NeoPixel rightLED;
+extern Adafruit_NeoPixel leftLED;
+extern Adafruit_NeoPixel uiLED;
+extern LED led;
 
-    loadcell.init();
+//SENSOR
+extern Adafruit_BNO055 bno;
+extern Adafruit_NeoPixel stripFloor;
 
-    gyro.init();
-    gyro.setOffset();
+extern HardwareSerial uart4;
+extern DISTANCE_SENSOR tof;
 
-    led.initCompleteIllumination();
-    delay(200);
+extern GYRO gyro;
+extern SWITCH ui;
+extern LOADCELL loadcell;
+extern FLOOR_SENSOR floorSensor;
 
-    // // delay(1`)
-
-    buzzer.bootSound();
-}
+extern HardwareSerial uart2;
+extern HardwareSerial uart6;
+extern CAMERA camera[2];
 
 #endif

@@ -1,21 +1,31 @@
-#ifndef _RTOS_IO_H_
-#define _RTOS_IO_H_
+/**
+ * daemon.cpp
+ * 常に起動しているappを格納。ここにあるappはいかなる場合も停止されることはない。*
+ */
 
-#include "../device/device.h"
-#include "../kit/RTOS-Kit.h"
+#include "../algorithm/exploring.h"
+#include "../algorithm/homing.h"
+#include "../process/process.h"
+#include "./RTOS.h"
 
-#include "./algorithm/victim.h"
-#include "../device/device.h"
+void startDaemon(void) {
+    app.start(monitorApp);
+    app.start(sensorApp);
+    app.start(servoApp);
+    app.start(ledApp);
+}
 
-extern RTOS_Kit app;
-
-const int period = 10;  // 制御周期
-
-extern int robotStatus;
+void monitorApp(App) {
+    while (1) {
+        // uart3.print(location.x);
+        // uart3.print("\t");
+        // uart3.print(location.y);
+        // uart3.println("\t");
+        app.delay(10);
+    }
+}
 
 void sensorApp(App) {
-    floorSensor.init();
-
     while (1) {
         ui.read();
         gyro.read();
@@ -25,18 +35,16 @@ void sensorApp(App) {
         victim.read();
 
         loadcell.read();
-        
-        floorSensor.setFloorColor(floorSensor.red);
+
+        floorSensor.setFloorColor(floorSensor.white);
         app.delay(2);
         floorSensor.redVal = analogRead(PC0);
-
-        floorSensor.setFloorColor(floorSensor.blank);
         app.delay(2);
         floorSensor.blankVal = analogRead(PC0);
-
-        floorSensor.setFloorColor(floorSensor.blue);
         app.delay(2);
         floorSensor.blueVal = analogRead(PC0);
+
+        floorSensor.colorJudgment();
     }
 }
 
@@ -58,14 +66,9 @@ void servoApp(App) {
     }
 }
 
-double mapDouble(double x, double in_min, double in_max, double out_min,
-                 double out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
 void ledApp(App) {
-    int ledStatus = 0;
-    int victimId = 0;
+    int ledStatus           = 0;
+    int victimId            = 0;
     unsigned long startTime = millis();
     for (int i = 0; i < 4; i++) {
         led.setColor(i, led.cyan);
@@ -86,7 +89,7 @@ void ledApp(App) {
             }
             victimId = 0;
         } else {
-            ledStatus = 2;
+            ledStatus         = 2;
             static bool blink = true;
 
             int brightness;
@@ -109,5 +112,3 @@ void ledApp(App) {
         app.delay(10);
     }
 }
-
-#endif

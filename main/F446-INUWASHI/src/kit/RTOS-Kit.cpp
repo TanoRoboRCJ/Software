@@ -9,7 +9,7 @@ void RTOS_Kit::create(TaskFunction_t funcPtr, int priority) {
             funcPtrArray[i] = funcPtr;
             priorityArray[i] = priority;
 
-            xTaskCreate(funcPtrArray[i], "app", 256, NULL, priority,
+            xTaskCreate(funcPtrArray[i], "app", 512, NULL, priority,
                         &handlerArray[i]);
             vTaskSuspend(handlerArray[i]);
 
@@ -32,7 +32,7 @@ void RTOS_Kit::restart(TaskFunction_t funcPtr) {
     for (int i = 0; i < maximumAppCount; i++) {
         if (funcPtrArray[i] == funcPtr) {
             vTaskDelete(handlerArray[i]);
-            xTaskCreate(funcPtrArray[i], "app", 256, NULL, priorityArray[i],
+            xTaskCreate(funcPtrArray[i], "app", 512, NULL, priorityArray[i],
                         &handlerArray[i]);
             vTaskResume(handlerArray[i]);
 
@@ -58,3 +58,5 @@ void RTOS_Kit::startRTOS(void) {
 void RTOS_Kit::delay(unsigned long ms) {
     vTaskDelay(ms/portTICK_RATE_MS);
 }
+
+RTOS_Kit app;

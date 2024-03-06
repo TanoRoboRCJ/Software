@@ -32,4 +32,6 @@ class RTOS_Kit {
    private:
 };
 
+extern RTOS_Kit app;
+
 #endif

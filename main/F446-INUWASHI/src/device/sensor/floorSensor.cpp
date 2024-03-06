@@ -7,7 +7,7 @@ void FLOOR_SENSOR::init(void) {
     stripFloor.setBrightness(brightness);
     stripFloor.show();
 
-    pinMode(PC0, INPUT);
+    pinMode(PC0, INPUT_PULLUP);
 }
 
 unsigned long FLOOR_SENSOR::colorRGB(int red, int green, int blue) {
@@ -26,21 +26,18 @@ void FLOOR_SENSOR::setFloorColor(unsigned long color) {
 }
 
 void FLOOR_SENSOR::colorJudgment(void) {
-    if (blankVal > 400 && blueVal > 250) {
-        isBlack = true;
-        isWhite = false;
-        isBlue  = false;
+    if (redVal > 910 && blankVal > 910 && blueVal > 910) {
+        Color = 1;
         // 黒
-    } else if ( (blankVal > 100 && blankVal < 650) && blueVal < 300) {
-        isBlue  = true;
-        isWhite = false;
-        isBlack = false;
-        // 青
-    } else {
-        isWhite = true;
-        isBlue  = false;
-        isBlack = false;
-    }
+    }  else {
+        Color = 0;
+        // 白
+    }//FIXME ここに銀色の判定を入れる
+    // else if ( (blankVal > 100 && blankVal < 650) && blueVal < 300) {
+    //     color = 2;
+    //     // 青
+    // } 
+   
 }
 
 // void FLOOR_SENSOR::tof_of_bottom_read(void) {

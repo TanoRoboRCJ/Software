@@ -1,5 +1,10 @@
 #include "gyro.h"
 
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
+
 GYRO::GYRO(Adafruit_BNO055 *p) {
     sensorPtr = p;
 }
@@ -54,7 +59,7 @@ int GYRO::read(void) {
     if (abs(slope) <= 8) {
         slope = 0;
     }
-    direction();
+    directionDecision();
 
     return deg;
 }
@@ -73,28 +78,14 @@ void GYRO::setOffset(void) {
     slopeOffset = event.orientation.y;
 }
 
-void GYRO::direction(void) {
+void GYRO::directionDecision(void) {
     if (deg >= 350 || deg < 10) {
-        North = true;
-    } else {
-        North = false;
-    }
-
-    if (deg >= 80 && deg < 100) {
-        East = true;
-    } else {
-        East = false;
-    }
-
-    if (deg >= 170 && deg < 190) {
-        South = true;
-    } else {
-        South = false;
-    }
-
-    if (deg >= 260 && deg < 280) {
-        West = true;
-    } else {
-        West = false;
+       direction = NORTH;
+    } else if (deg >= 80 && deg < 100) {
+        direction = EAST;
+    } else if (deg >= 170 && deg < 190) {
+        direction = SOUTH;
+    } else if (deg >= 260 && deg < 280) {
+        direction = WEST;
     }
 }

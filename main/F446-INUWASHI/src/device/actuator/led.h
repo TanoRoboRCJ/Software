@@ -4,10 +4,11 @@
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
 
-#define TOP 0
-#define RIGHT 1
+#define TOP 1
+#define RIGHT 0
 #define LEFT 2
 #define UI 3
+
 class LED {
    public:
     LED(Adafruit_NeoPixel* top, Adafruit_NeoPixel* right,
@@ -16,15 +17,15 @@ class LED {
     Adafruit_NeoPixel* ptrArr[4];
 
     // settings:
-    const int maxBrightness = 255;
-    const int normalBrightness = 50;
+    const int maxBrightness = 0;
+    const int normalBrightness = 0;
     const bool disableAll = false;
 
     bool disableUI = false;
     bool disableTop = false;
     bool disableSide = false;
 
-    const bool* disablePtr[4] = {&disableTop, &disableSide, &disableSide,
+    const bool* disablePtr[4] = {&disableSide, &disableTop, &disableSide,
                                  &disableUI};
 
     // functions:
@@ -43,15 +44,15 @@ class LED {
     void show(int led);
 
     // colors:
-    unsigned long pink = colorHSV(0, 125, 255);
-    unsigned long red = colorHSV(0, 255, 255);
-    unsigned long yellow = colorHSV(45, 255, 255);
-    unsigned long green = colorHSV(90, 255, 255);
-    unsigned long cyan = colorHSV(140, 255, 255);
-    unsigned long blue = colorHSV(180, 255, 255);
-    unsigned long white = colorRGB(255, 255, 255);
-    unsigned long lowWhite = colorRGB(255, 255, 255);
-    unsigned long blank = colorHSV(0, 0, 0);
+    const unsigned long pink = colorHSV(0, 125, 255);
+    const unsigned long red = colorHSV(0, 255, 255);
+    const unsigned long yellow = colorHSV(45, 255, 255);
+    const unsigned long green = colorHSV(90, 255, 255);
+    const unsigned long cyan = colorHSV(140, 255, 255);
+    const unsigned long blue = colorHSV(180, 255, 255);
+    const unsigned long white = colorRGB(255, 255, 255);
+    const unsigned long lowWhite = colorRGB(255, 255, 255);
+    const unsigned long blank = colorHSV(0, 0, 0);
 
    private:
     // funcitons:
