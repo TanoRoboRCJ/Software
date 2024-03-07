@@ -88,22 +88,22 @@ void DISTANCE_SENSOR::direction(void) {
 
 void DISTANCE_SENSOR::wallJudgment(void) {
     gyro.read();
-    if (val[4] > 215) {
+    if (val[4] > 200) {
         rightWallExists = false;
     } else {
         rightWallExists = true;
     }
-    if (val[0] > 145) {
+    if (val[0] > 125) {
         frontWallExists = false;
     } else {
         frontWallExists = true;
     }
-    if (val[8] > 215) {
+    if (val[8] > 180) {
         behindWallExists = false;
     } else {
         behindWallExists = true;
     }
-    if (val[12] > 210) {
+    if (val[12] > 200) {
         leftWallExists = false;
     } else {
         leftWallExists = true;

@@ -81,10 +81,10 @@ int Exploring::frontWeight(void) {
     } else if (gyro.direction == NORTH && tof.wallExists[NORTH] == false) {
         weight = reachedCount[x][y + 1];
 
-    } else if (gyro.direction == EAST && !tof.wallExists[EAST] == false) {
+    } else if (gyro.direction == EAST && tof.wallExists[EAST] == false) {
         weight = reachedCount[x + 1][y];
 
-    } else if (gyro.direction == SOUTH && !tof.wallExists[SOUTH] == false) {
+    } else if (gyro.direction == SOUTH && tof.wallExists[SOUTH] == false) {
         weight = reachedCount[x][y - 1];
     }
 

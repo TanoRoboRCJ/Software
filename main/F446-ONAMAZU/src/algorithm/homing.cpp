@@ -69,11 +69,11 @@ int Homing::homingFrontWeight(void) {
         weight = abs(location.x) + abs(location.y + 1) * 10 +
                  homingReachedCount[x][y + 1] * 100;
 
-    } else if (gyro.direction == EAST && !tof.wallExists[EAST] == false) {
+    } else if (gyro.direction == EAST && tof.wallExists[EAST] == false) {
         weight = abs(location.x + 1) + abs(location.y) * 10 +
                  homingReachedCount[x + 1][y] * 100;
 
-    } else if (gyro.direction == SOUTH && !tof.wallExists[SOUTH] == false) {
+    } else if (gyro.direction == SOUTH && tof.wallExists[SOUTH] == false) {
         weight = abs(location.x) + abs(location.y - 1) * 10 +
                  homingReachedCount[x][y - 1] * 100;
     }

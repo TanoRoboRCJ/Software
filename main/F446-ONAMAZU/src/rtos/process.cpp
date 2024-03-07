@@ -55,6 +55,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         app.stop(rightWallApp);
         app.stop(adjustmentApp);
 
+        victim.kindOfVictim[location.x + FIELD_ORIGIN]
+                           [location.y + FIELD_ORIGIN] = victim.id;
         victim.place[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN] =
             true;
         victim.isDetected = true;
