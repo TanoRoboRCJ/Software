@@ -17,34 +17,37 @@ void startDaemon(void) {
 
 void monitorApp(App) {
     while (1) {
-        //     uart1.print("tof: ");
-        //     for (int i = 0; i < 16; i++) {
-        //         uart1.print(tof.val[i]);
-        //         uart1.print("\t");
-        //     }
+        //tof
+        uart1.print(tof.val[0]);
+        uart1.print("\t");
+        uart1.print(tof.val[4]);
+        uart1.print("\t");  
+        uart1.print(tof.val[8]);
+        uart1.print("\t");
+        uart1.println(tof.val[12]);
 
         // floor
-        uart1.print("floor: ");
-        uart1.print(floorSensor.frontCRGB[0]);
-        uart1.print("\t");
-        uart1.print(floorSensor.frontCRGB[1]);
-        uart1.print("\t");
-        uart1.print(floorSensor.frontCRGB[2]);
-        uart1.print("\t");
-        uart1.print(floorSensor.frontCRGB[3]);
+        // uart1.print("floor: ");
+        // uart1.print(floorSensor.frontCRGB[0]);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.frontCRGB[1]);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.frontCRGB[2]);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.frontCRGB[3]);
 
-        uart1.print("\t");
+        // uart1.print("\t");
 
-        uart1.print(floorSensor.backCRGB[0]);
-        uart1.print("\t");
-        uart1.print(floorSensor.backCRGB[1]);
-        uart1.print("\t");
-        uart1.print(floorSensor.backCRGB[2]);
-        uart1.print("\t");
-        uart1.print(floorSensor.backCRGB[3]);
+        // uart1.print(floorSensor.backCRGB[0]);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.backCRGB[1]);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.backCRGB[2]);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.backCRGB[3]);
 
-        uart1.println();
-        app.delay(10);
+        // uart1.println();
+        // app.delay(10);
     }
 }
 
