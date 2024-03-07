@@ -17,6 +17,7 @@ class Movement {
     const int _Wait = 500;
    public:
     void move_1tile(void);
+    void back(void);
     void turnRight(void);
     void turnLeft(void);
     void turnReverse(void);

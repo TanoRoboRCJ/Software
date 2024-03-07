@@ -10,9 +10,13 @@
 #include "./RTOS.h"
 
 void rightWallApp(App) {
-    exploring.reachedCount[FIELD_ORIGIN][FIELD_ORIGIN]++;
-    exploring.updateMap();
+    static bool originUpdate = true;
     while (1) {
+        if (originUpdate) {
+            exploring.reachedCount[FIELD_ORIGIN][FIELD_ORIGIN]++;
+            exploring.updateMap();
+            originUpdate = false;
+        }
         app.delay(Period);
         servo.suspend  = true;
         servo.velocity = 0;
@@ -39,6 +43,55 @@ void adjustmentApp(App) {  // NOTE movement.hに移行
     while (1) {
         movement.angleAdjustment();
         movement.avoidBarrier();
+        app.delay(Period);
+    }
+}
+
+void floorApp(App) {
+    int waitTime = 0;
+    while (1) {
+        if (floorSensor.frontColor == floorSensor.BLACK) {
+            app.stop(rightWallApp);
+            servo.suspend  = true;
+            servo.velocity = 0;
+            movement.back();
+            if (gyro.direction == NORTH) {
+                exploring.reachedCount[location.x + FIELD_ORIGIN]
+                                      [location.y + FIELD_ORIGIN + 1] = 50;
+                homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                         [location.y + FIELD_ORIGIN + 1] = 50;
+            }
+            if (gyro.direction == EAST) {
+                exploring.reachedCount[location.x + FIELD_ORIGIN + 1]
+                                      [location.y + FIELD_ORIGIN] = 50;
+                homing.homingReachedCount[location.x + FIELD_ORIGIN + 1]
+                                         [location.y + FIELD_ORIGIN] = 50;
+            }
+            if (gyro.direction == SOUTH) {
+                exploring.reachedCount[location.x + FIELD_ORIGIN]
+                                      [location.y + FIELD_ORIGIN - 1] = 50;
+                homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                         [location.y + FIELD_ORIGIN - 1] = 50;
+            }
+            if (gyro.direction == WEST) {
+                exploring.reachedCount[location.x + FIELD_ORIGIN - 1]
+                                      [location.y + FIELD_ORIGIN] = 50;
+                homing.homingReachedCount[location.x + FIELD_ORIGIN - 1]
+                                         [location.y + FIELD_ORIGIN] = 50;
+            }
+            app.restart(rightWallApp);
+        }
+        if (millis() - 4000 < waitTime) {
+            app.delay(Period);
+        } else if (floorSensor.frontColor == floorSensor.BLUE &&
+                   floorSensor.backColor == floorSensor.BLUE) {  // 5秒止まる
+            app.stop(rightWallApp);
+            servo.suspend  = true;
+            servo.velocity = 0;
+            app.delay(5000);
+            waitTime = millis();
+            app.start(rightWallApp);
+        }
         app.delay(Period);
     }
 }

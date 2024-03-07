@@ -15,7 +15,7 @@
 
 class GYRO {
    public:
-    const bool isGyroDisabled = false;
+    const bool isGyroDisabled = true;
 
     GYRO(Adafruit_BNO055 *p);
 

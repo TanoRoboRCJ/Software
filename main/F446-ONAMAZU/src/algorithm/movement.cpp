@@ -47,6 +47,19 @@ void Movement::move_1tile(void) {
     servo.velocity = 0;
 }
 
+void Movement::back(void) {
+    _oldCoordinateX = location.coordinateX;
+    _oldCoordinateY = location.coordinateY;
+
+    while (abs(location.coordinateX - _oldCoordinateX) < 50 &&
+           abs(location.coordinateY - _oldCoordinateY) <
+               50) {
+        servo.suspend  = false;
+        servo.velocity = -servo.DefaultSpeed;
+        app.delay(Period);
+    }  // 次のタイルまで前進
+}
+
 void Movement::turnNorth(void) {
     servo.suspend = true;
     app.delay(_Wait);

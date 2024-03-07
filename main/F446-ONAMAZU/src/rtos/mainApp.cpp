@@ -18,6 +18,7 @@ void mainApp(App) {
                 app.start(locationApp);
                 app.start(victimNotifyApp);
                 app.start(homingApp);
+                app.start(floorApp);
 
                 servo.suspend = false;
                 servo.velocity = servo.DefaultSpeed;
@@ -30,6 +31,7 @@ void mainApp(App) {
             app.stop(rightWallApp);
             app.stop(adjustmentApp);
             app.stop(locationApp);
+            app.stop(floorApp);
 
             servo.suspend = true;
             servo.velocity = 0;

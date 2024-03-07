@@ -2,6 +2,7 @@
 #define _FLOOR_SENSOR_H_
 
 #include <Arduino.h>
+
 #include "../bottom.h"
 
 extern Bottom bottom;
@@ -12,9 +13,15 @@ class FLOOR_SENSOR {
     int backCRGB[4];   // Claer R G B
 
     void read(void);
-    void colorJudgment(void);
+    void frontColorJudgment(void);
+    void backColorJudgment(void);
 
-    int Color = 0;
+    const int WHITE = 0;
+    const int BLACK = 1;
+    const int BLUE  = 2;
+
+    int frontColor = 0;
+    int backColor  = 0;
 
    private:
 };

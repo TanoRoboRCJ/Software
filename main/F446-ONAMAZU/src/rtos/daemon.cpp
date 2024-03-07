@@ -18,40 +18,68 @@ void startDaemon(void) {
 void monitorApp(App) {
     while (1) {
         //tof
-        uart1.print(tof.val[0]);
-        uart1.print("\t");
-        uart1.print(tof.val[4]);
-        uart1.print("\t");  
-        uart1.print(tof.val[8]);
-        uart1.print("\t");
-        uart1.println(tof.val[12]);
+        // uart1.print(tof.val[0]);
+        // uart1.print("\t");
+        // uart1.print(tof.val[4]);
+        // uart1.print("\t");  
+        // uart1.print(tof.val[8]);
+        // uart1.print("\t");
+        // uart1.print(tof.val[12]);
 
         // floor
-        // uart1.print("floor: ");
-        // uart1.print(floorSensor.frontCRGB[0]);
-        // uart1.print("\t");
-        // uart1.print(floorSensor.frontCRGB[1]);
-        // uart1.print("\t");
-        // uart1.print(floorSensor.frontCRGB[2]);
-        // uart1.print("\t");
-        // uart1.print(floorSensor.frontCRGB[3]);
+        uart1.print("floor: ");
+        uart1.print(floorSensor.frontCRGB[0]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[1]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[2]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[3]);
 
-        // uart1.print("\t");
+        uart1.print("\t");
 
-        // uart1.print(floorSensor.backCRGB[0]);
-        // uart1.print("\t");
-        // uart1.print(floorSensor.backCRGB[1]);
-        // uart1.print("\t");
-        // uart1.print(floorSensor.backCRGB[2]);
-        // uart1.print("\t");
-        // uart1.print(floorSensor.backCRGB[3]);
+        uart1.print(floorSensor.backCRGB[0]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[1]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[2]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[3]);
+
+        uart1.print("\t");
+
+        uart1.print("Color of floor: ");
+        switch(floorSensor.frontColor){
+            case 0:
+                uart1.print("white");
+                break;
+            case 1:
+                uart1.print("black");
+                break;
+            case 2:
+                uart1.print("Blue");
+                break;
+        }
+
+        uart1.print("\t");
+
+        switch(floorSensor.backColor){
+            case 0:
+                uart1.print("white");
+                break;
+            case 1:
+                uart1.print("black");
+                break;
+            case 2:
+                uart1.print("Blue");
+                break;
+        }
 
         // gyro
-        uart1.print("gyro: ");
-        uart1.print(gyro.deg);
+        // uart1.print("gyro: ");
+        // uart1.print(gyro.deg);
 
-        // uart1.println();
-        // app.delay(10);
+        uart1.println();
     }
 }
 
@@ -71,7 +99,6 @@ void sensorApp(App) {
         loadcell.read();
 
         floorSensor.read();
-        floorSensor.colorJudgment();
 
         app.delay(10);
     }

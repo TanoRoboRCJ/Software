@@ -8,7 +8,7 @@ void Exploring::updateMap(void) {
     location.route[i].x = location.x;
     location.route[i].y = location.y;
 
-    location.route[i].color  = floorSensor.Color;
+    // location.route[i].color  = floorSensor.Color;
     location.route[i].victim = victim.isDetected;
 
     location.route[i].wall[0] = tof.wallExists[NORTH];  // 北
@@ -26,10 +26,10 @@ int Exploring::weighting(void) {
     weight[FRONT] += frontWeight();
     weight[LEFT] += leftWeight();
 
-    if (tof.rightWallExists == true){
+    if (tof.rightWallExists == true) {
         weight[RIGHT] = DISABLE;
     }
-    if (tof.frontWallExists == true){ 
+    if (tof.frontWallExists == true) {
         weight[FRONT] = DISABLE;
     }
     if (tof.leftWallExists == true) {

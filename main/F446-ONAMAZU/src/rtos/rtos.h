@@ -25,6 +25,7 @@ extern void monitorApp(App);
 extern void rightWallApp(App);
 extern void adjustmentApp(App);
 extern void homingApp(App);
+extern void floorApp(App);
 
 // process.cpp
 extern void locationApp(App);

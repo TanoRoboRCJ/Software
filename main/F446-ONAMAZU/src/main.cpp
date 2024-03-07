@@ -26,7 +26,8 @@ void setup() {
     // 動作系統
     app.create(rightWallApp);
     app.create(adjustmentApp);
-    app.create(homingApp); //FIXME これはまだ動かない
+    app.create(homingApp);
+    app.create(floorApp);
 
     app.start(mainApp);
     app.startRTOS();
