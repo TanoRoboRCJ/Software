@@ -37,8 +37,8 @@ void rightWallApp(App) {
 
 void adjustmentApp(App) {  // NOTE movement.hに移行
     while (1) {
-        movement.angleAdjustment();
-        movement.avoidBarrier();
+        // movement.angleAdjustment();
+        // movement.avoidBarrier();
         app.delay(Period);
     }
 }

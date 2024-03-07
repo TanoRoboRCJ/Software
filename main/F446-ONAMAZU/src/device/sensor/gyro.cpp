@@ -5,6 +5,8 @@
 #define SOUTH 2
 #define WEST 3
 
+extern HardwareSerial uart1;
+
 GYRO::GYRO(Adafruit_BNO055 *p) {
     sensorPtr = p;
 }
@@ -22,13 +24,23 @@ void GYRO::init(void) {
     sensor_t sensor;
 
     sensorPtr->getSensor(&sensor);
+    if (bnoID != sensor.sensor_id) {
+        uart1.println(
+            "\nNo Calibration Data for this sensor exists in EEPROM");
+        delay(500);
+    } else {
+        uart1.println("\nFound Calibration for this sensor in EEPROM.");
+        eeAddress += sizeof(long);
+        EEPROM.get(eeAddress, calibrationData);
 
-    // if (bnoID == sensor.sensor_id) {
-    //     eeAddress += sizeof(long);
-    //     EEPROM.get(eeAddress, calibrationData);
-    //     sensorPtr->setSensorOffsets(calibrationData);
-    //     foundCalib = true;
-    // }
+        displaySensorOffsets(calibrationData);
+
+        uart1.println("\n\nRestoring Calibration data to the BNO055...");
+        sensorPtr->setSensorOffsets(calibrationData);
+
+        uart1.println("\n\nCalibration data loaded into BNO055");
+        foundCalib = true;
+    }
 
     uint8_t system_status, self_test_results, system_error;
     system_status = self_test_results = system_error = 0;
@@ -75,6 +87,8 @@ void GYRO::setOffset(void) {
         offset = event.orientation.x;
     }
 
+    // offset = 0;
+
     slopeOffset = event.orientation.y;
 }
 
@@ -88,4 +102,36 @@ void GYRO::directionDecision(void) {
     } else if (deg >= 260 && deg < 280) {
         direction = WEST;
     }
+}
+
+void GYRO::displaySensorOffsets(const adafruit_bno055_offsets_t &calibData) {
+    uart1.print("Accelerometer: ");
+    uart1.print(calibData.accel_offset_x);
+    uart1.print(" ");
+    uart1.print(calibData.accel_offset_y);
+    uart1.print(" ");
+    uart1.print(calibData.accel_offset_z);
+    uart1.print(" ");
+
+    uart1.print("\nGyro: ");
+    uart1.print(calibData.gyro_offset_x);
+    uart1.print(" ");
+    uart1.print(calibData.gyro_offset_y);
+    uart1.print(" ");
+    uart1.print(calibData.gyro_offset_z);
+    uart1.print(" ");
+
+    uart1.print("\nMag: ");
+    uart1.print(calibData.mag_offset_x);
+    uart1.print(" ");
+    uart1.print(calibData.mag_offset_y);
+    uart1.print(" ");
+    uart1.print(calibData.mag_offset_z);
+    uart1.print(" ");
+
+    uart1.print("\nAccel Radius: ");
+    uart1.print(calibData.accel_radius);
+
+    uart1.print("\nMag Radius: ");
+    uart1.print(calibData.mag_radius);
 }

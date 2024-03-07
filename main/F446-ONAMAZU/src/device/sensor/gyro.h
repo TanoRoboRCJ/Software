@@ -15,7 +15,7 @@
 
 class GYRO {
    public:
-    const bool isGyroDisabled = true;
+    const bool isGyroDisabled = false;
 
     GYRO(Adafruit_BNO055 *p);
 
@@ -23,6 +23,7 @@ class GYRO {
     void setOffset(void);
     int read(void);
     void directionDecision(void);
+    void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData);
 
     Adafruit_BNO055 *sensorPtr;
 
