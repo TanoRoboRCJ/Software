@@ -6,6 +6,13 @@
 
 #include "./RTOS.h"
 
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
+
+bool duplicate(void);
+
 void locationApp(App) {
     while (1) {
         for (int i = 0; i < 100; i++) {
@@ -21,16 +28,16 @@ void locationApp(App) {
 void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるかな？
     victim.isRightOrLeft = NONE;
     while (1) {
-        unsigned long camTimer = 0;
         int rescueKitNum = 0;
 
         while (1) {
             if (victim.isRightOrLeft != NONE && ui.toggle == true) {
-                if (victim.place[location.x + FIELD_ORIGIN]
+                if (duplicate() ||
+                    victim.place[location.x + FIELD_ORIGIN]
                                 [location.y + FIELD_ORIGIN] == true) {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data = 'N';
-                    camera[1].data = 'N';
+                    camera[0].data       = 'N';
+                    camera[1].data       = 'N';
                 } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
                             tof.val[3] < 240) ||
                            (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
@@ -38,8 +45,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data = 'N';
-                    camera[1].data = 'N';
+                    camera[0].data       = 'N';
+                    camera[1].data       = 'N';
                 }
             }
             app.delay(10);
@@ -53,7 +60,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         victim.isDetected = true;
 
         servo.velocity = 0;
-        servo.suspend = true;
+        servo.suspend  = true;
 
         buzzer.bpm = 120;
         buzzer.beat(FA_, 0.5);
@@ -85,32 +92,60 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.rescueKit(rescueKitNum, victim.isRightOrLeft);
         app.delay(100);
 
-        servo.suspend = false;
+        servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
         app.start(rightWallApp);
         app.start(adjustmentApp);
 
-        victim.isDetected = false;
-        victim.id = 0;
+        victim.isDetected    = false;
+        victim.id            = 0;
         victim.isRightOrLeft = NONE;
-        camera[0].data = 'N';
-        camera[1].data = 'N';
+        camera[0].data       = 'N';
+        camera[1].data       = 'N';
 
-        camTimer = millis();
-        while (1) {
-            if (millis() - camTimer > 3000) {
-                break;
-            }
+        victim.isDetected    = false;
+        victim.id            = 0;
+        victim.isRightOrLeft = NONE;
+        camera[0].data       = 'N';
+        camera[1].data       = 'N';
+    }
+}
 
-            app.delay(10);
-            camera[0].flush();
-            camera[1].flush();
+bool duplicate(void) {  // 進行方向に今見ているデータと同じデータがあれば破棄
+    if (gyro.direction == NORTH) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
+                               [location.y + FIELD_ORIGIN + 1] == victim.id) {
+            uart3.println("Duplicate");
+            return true;
+        } else {
+            return false;
         }
-
-        victim.isDetected = false;
-        victim.id = 0;
-        victim.isRightOrLeft = NONE;
-        camera[0].data = 'N';
-        camera[1].data = 'N';
+    }
+    if (gyro.direction == EAST) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
+                               [location.y + FIELD_ORIGIN] == victim.id) {
+            uart3.println("Duplicate");
+            return true;
+        } else {
+            return false;
+        }
+    }
+    if (gyro.direction == SOUTH) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
+                               [location.y + FIELD_ORIGIN - 1] == victim.id) {
+            uart3.println("Duplicate");
+            return true;
+        } else {
+            return false;
+        }
+    }
+    if (gyro.direction == WEST) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
+                               [location.y + FIELD_ORIGIN] == victim.id) {
+            uart3.println("Duplicate");
+            return true;
+        } else {
+            return false;
+        }
     }
 }
