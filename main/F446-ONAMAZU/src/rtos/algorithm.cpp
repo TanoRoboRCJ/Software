@@ -81,10 +81,9 @@ void floorApp(App) {
             }
             app.restart(rightWallApp);
         }
-        if (millis() - 4000 < waitTime) {
+        if (millis() - 2000 < waitTime) {
             app.delay(Period);
-        } else if (floorSensor.frontColor == floorSensor.BLUE &&
-                   floorSensor.backColor == floorSensor.BLUE) {  // 5秒止まる
+        } else if (floorSensor.backColor == floorSensor.BLUE) {  // 5秒止まる
             app.stop(rightWallApp);
             servo.suspend  = true;
             servo.velocity = 0;
