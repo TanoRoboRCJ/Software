@@ -110,27 +110,26 @@ void Movement::angleAdjustment(void) {  // FIXME もっと理にかなった補�
         if (tof.val[12] > tof.val[4]) {
             servo.isCorrectingAngle--;
         }
-    } else {//FIXME これだめ
-        if (tof.val[12] < 120) {
-            servo.isCorrectingAngle++;
-        }
+    }
+    if (tof.rightWallExists == true && tof.leftWallExists == false) {
         if (tof.val[4] < 120) {
             servo.isCorrectingAngle--;
         }
-    }
-
-    if ((tof.rightWallExists == false) && (tof.leftWallExists == true)) {
-        if (tof.val[12] > 120) {
-            servo.isCorrectingAngle--;
-        }
-    }
-    if ((tof.rightWallExists == true) && (tof.leftWallExists == false)) {
-        if (tof.val[4] > 120) {
+        if (tof.val[4] > 160) {
             servo.isCorrectingAngle++;
         }
     }
+    if (tof.rightWallExists == false && tof.leftWallExists == true) {
+        if (tof.val[12] < 120) {
+            servo.isCorrectingAngle++;
+        }
+        if (tof.val[12] > 160) {
+            servo.isCorrectingAngle--;
+        }
+    }
 
-    if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {//FIXME 上手く補正出来てない
+    if ((tof.rightWallExists == false) &&
+        (tof.leftWallExists == false)) {  // FIXME 上手く補正出来てない
         if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] - 60)) {
             servo.isCorrectingAngle--;
         }
