@@ -42,7 +42,7 @@ void rightWallApp(App) {
 void adjustmentApp(App) {  // NOTE movement.hに移行
     while (1) {
         movement.angleAdjustment();
-        movement.avoidBarrier();
+        // movement.avoidBarrier();
         app.delay(Period);
     }
 }
@@ -104,11 +104,23 @@ void homingApp(App) {
                 app.stop(victimNotifyApp);
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                          [location.y + FIELD_ORIGIN]++;
-                buzzer.beat(440,1);
+                buzzer.beat(440, 2);
                 isHoming = false;
             }
+            // NOTE 座標曖昧壁判定モード
+            // if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
+            //         location.route[0].wall[0] =
+            //         tof.wallExists[NORTH] && location.route[0].wall[1] =
+            //             tof.wallExists[EAST] && location.route[0].wall[2] =
+            //                 tof.wallExists[SOUTH] && location.route[0].wall[3] =
+            //                     tof.wallExists[WEST]) {
+            //     app.stop(adjustmentApp);
+            //     servo.suspend  = true;
+            //     servo.velocity = 0;
+            //     buzzer.matsukenSamba();
+            // }
             if ((location.x == 0) &&
-                (location.y == 0)) {  // FIXME帰還条件をもっと絞る
+                (location.y == 0)) {  // NOTE 座標厳密モード
                 app.stop(adjustmentApp);
                 servo.suspend  = true;
                 servo.velocity = 0;
