@@ -112,7 +112,7 @@ void Movement::angleAdjustment(void) {  // FIXME もっと理にかなった補�
         }
     }
     if (tof.rightWallExists == true && tof.leftWallExists == false) {
-        if (tof.val[4] < 120) {
+        if (tof.val[4] < 130) {
             servo.isCorrectingAngle--;
         }
         if (tof.val[4] > 160) {
@@ -120,7 +120,7 @@ void Movement::angleAdjustment(void) {  // FIXME もっと理にかなった補�
         }
     }
     if (tof.rightWallExists == false && tof.leftWallExists == true) {
-        if (tof.val[12] < 120) {
+        if (tof.val[12] < 130) {
             servo.isCorrectingAngle++;
         }
         if (tof.val[12] > 160) {
@@ -130,11 +130,11 @@ void Movement::angleAdjustment(void) {  // FIXME もっと理にかなった補�
 
     if ((tof.rightWallExists == false) &&
         (tof.leftWallExists == false)) {  // FIXME 上手く補正出来てない
-        if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] - 60)) {
-            servo.isCorrectingAngle--;
+        if (sqrt(2) * (Radius + tof.val[4]) < (Radius + tof.val[2] - 60)) {
+            servo.isCorrectingAngle = 3;
         }
         if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] + 60)) {
-            servo.isCorrectingAngle++;
+            servo.isCorrectingAngle = -3;
         }
     }
 }
