@@ -98,12 +98,14 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.velocity = servo.DefaultSpeed;
         app.start(rightWallApp);
         app.start(adjustmentApp);
-
-        victim.isDetected    = false;
-        victim.id            = 0;
-        victim.isRightOrLeft = NONE;
-        camera[0].data       = 'N';
-        camera[1].data       = 'N';
+        int camTimer = millis();
+        while (millis() - camTimer < 1000) {
+            victim.isDetected    = false;
+            victim.id            = 0;
+            victim.isRightOrLeft = NONE;
+            camera[0].data       = 'N';
+            camera[1].data       = 'N';
+        }
 
         victim.isDetected    = false;
         victim.id            = 0;

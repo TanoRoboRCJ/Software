@@ -104,6 +104,7 @@ void homingApp(App) {
                 app.stop(victimNotifyApp);
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                          [location.y + FIELD_ORIGIN]++;
+                buzzer.beat(440,1);
                 isHoming = false;
             }
             if ((location.x == 0) &&
