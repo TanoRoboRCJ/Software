@@ -108,24 +108,24 @@ void homingApp(App) {
                 isHoming = false;
             }
             // NOTE 座標曖昧壁判定モード
-            // if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
-            //         location.route[0].wall[0] =
-            //         tof.wallExists[NORTH] && location.route[0].wall[1] =
-            //             tof.wallExists[EAST] && location.route[0].wall[2] =
-            //                 tof.wallExists[SOUTH] && location.route[0].wall[3] =
-            //                     tof.wallExists[WEST]) {
+            if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
+                (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
+                (location.route[0].wall[1] == tof.wallExists[EAST]) &&
+                (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
+                (location.route[0].wall[3] == tof.wallExists[WEST])) {
+                app.stop(adjustmentApp);
+                servo.suspend  = true;
+                servo.velocity = 0;
+                buzzer.matsukenSamba();
+            }
+            // if ((location.x == 0) &&
+            //     (location.y == 0)) {  // NOTE 座標厳密モード
             //     app.stop(adjustmentApp);
             //     servo.suspend  = true;
             //     servo.velocity = 0;
             //     buzzer.matsukenSamba();
             // }
-            if ((location.x == 0) &&
-                (location.y == 0)) {  // NOTE 座標厳密モード
-                app.stop(adjustmentApp);
-                servo.suspend  = true;
-                servo.velocity = 0;
-                buzzer.matsukenSamba();
-            } else {
+            else {
                 servo.suspend  = true;
                 servo.velocity = 0;
                 switch (homing.homingWeighting()) {
