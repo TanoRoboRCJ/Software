@@ -52,8 +52,7 @@ void Movement::back(void) {
     _oldCoordinateY = location.coordinateY;
 
     while (abs(location.coordinateX - _oldCoordinateX) < 50 &&
-           abs(location.coordinateY - _oldCoordinateY) <
-               50) {
+           abs(location.coordinateY - _oldCoordinateY) < 50) {
         servo.suspend  = false;
         servo.velocity = -servo.DefaultSpeed;
         app.delay(Period);
@@ -96,40 +95,47 @@ void Movement::turnWest(void) {
     app.delay(_Wait * 3);
 }
 
-void Movement::angleAdjustment(void) {
+void Movement::angleAdjustment(void) {  // FIXME もっと理にかなった補正したい
+
+    if (servo.isCorrectingAngle > 0) {
+        servo.isCorrectingAngle %= 10;
+    }
+    if (servo.isCorrectingAngle < 0) {
+        servo.isCorrectingAngle %= -10;
+    }
     if (tof.rightWallExists == true && tof.leftWallExists == true) {
         if (tof.val[4] > tof.val[12]) {
-            servo.isCorrectingAngle = 5;
+            servo.isCorrectingAngle++;
         }
         if (tof.val[12] > tof.val[4]) {
-            servo.isCorrectingAngle = -5;
+            servo.isCorrectingAngle--;
         }
-    } else {
+    } else {//FIXME これだめ
         if (tof.val[12] < 120) {
-            servo.isCorrectingAngle = 5;
+            servo.isCorrectingAngle++;
         }
         if (tof.val[4] < 120) {
-            servo.isCorrectingAngle = -5;
+            servo.isCorrectingAngle--;
         }
     }
 
     if ((tof.rightWallExists == false) && (tof.leftWallExists == true)) {
         if (tof.val[12] > 120) {
-            servo.isCorrectingAngle = -5;
+            servo.isCorrectingAngle--;
         }
     }
     if ((tof.rightWallExists == true) && (tof.leftWallExists == false)) {
         if (tof.val[4] > 120) {
-            servo.isCorrectingAngle = 5;
+            servo.isCorrectingAngle++;
         }
     }
 
-    if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {
+    if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {//FIXME 上手く補正出来てない
         if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] - 60)) {
-            servo.isCorrectingAngle = -3;
+            servo.isCorrectingAngle--;
         }
         if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] + 60)) {
-            servo.isCorrectingAngle = 3;
+            servo.isCorrectingAngle++;
         }
     }
 }
