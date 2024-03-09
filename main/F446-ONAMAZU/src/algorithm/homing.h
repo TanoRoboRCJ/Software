@@ -9,6 +9,7 @@
 class Homing{
     public:
         const int HomingTime = 120000;
+        bool started = false;
 
         int homingWeighting(void);
         int homingRightWeight(void);

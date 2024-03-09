@@ -10,6 +10,7 @@
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
 #include "../process/process.h"
+#include "../algorithm/homing.h"
 
 // mainApp.cpp
 extern void mainApp(App);

@@ -52,7 +52,11 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             app.delay(10);
         }
 
-        app.stop(rightWallApp);
+        if (homing.started == true) {
+            app.stop(homingApp);
+        } else {
+            app.stop(rightWallApp);
+        }
         app.stop(adjustmentApp);
 
         victim.kindOfVictim[location.x + FIELD_ORIGIN]
@@ -96,7 +100,11 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
-        app.start(rightWallApp);
+        if (homing.started == true) {
+            app.start(homingApp);
+        } else {
+            app.start(rightWallApp);
+        }
         app.start(adjustmentApp);
         int camTimer = millis();
         while (millis() - camTimer < 1000) {
