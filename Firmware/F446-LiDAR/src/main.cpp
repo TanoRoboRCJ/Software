@@ -1,7 +1,12 @@
 #include <Arduino.h>
 
+#include "./lidar.h"
+HardwareSerial uart2(PA3, PA2);
+LIDAR lidar(&uart2, PA6);
+
 #include <IO-Kit.h>
 Output ledBuiltin = Output(PB12);
+Output BOOT1 = Output(PB2);
 
 HardwareSerial uartForDebug(PA10, PA9);
 
@@ -17,6 +22,8 @@ void setup() {
 
     uart4.begin(1000000);
     uart5.begin(1000000);
+
+    BOOT1 = LOW;
 }
 
 void loop() {
@@ -51,5 +58,31 @@ void loop() {
             uart5.write(lowByte(val[i]) & 0xFF);
         }
         uart5.write(checkDegit);
+    }
+
+    lidar.read();
+    lidar.updateHistogram();
+
+    if (uartForDebug.available() > 0) {
+        while (uartForDebug.available() != 0) {
+            uartForDebug.read();
+        }
+
+        // for (int i = 0; i < LIDAR::DataBuffLength; i++) {
+        //     uartForDebug.print(i);
+        //     uartForDebug.print("\t");
+        //     uartForDebug.print(lidar.point[i].x);
+        //     uartForDebug.print("\t");
+        //     uartForDebug.println(lidar.point[i].y);
+        // }
+        // uartForDebug.println();
+
+        // show histogram
+        uartForDebug.println("histogram");
+        for (int i = 0; i < LIDAR::HistogramLength; i++) {
+            // uartForDebug.print(lidar.histogarm[i].x);
+            uartForDebug.print(lidar.refWave[i]);
+            uartForDebug.println(",");
+        }
     }
 }
