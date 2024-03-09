@@ -32,7 +32,7 @@ class LOADCELL {
 
         }
 
-        if (load[0] > 8 || load[1] > 8) {
+        if (load[0] > 15 || load[1] > 15) {
             moment = degrees(atan2(load[0], load[1]));
 
             if (moment < 45) {

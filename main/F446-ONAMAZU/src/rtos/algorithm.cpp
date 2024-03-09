@@ -42,7 +42,7 @@ void rightWallApp(App) {
 void adjustmentApp(App) {  // NOTE movement.hに移行
     while (1) {
         movement.angleAdjustment();
-        // movement.avoidBarrier();
+        movement.avoidBarrier();
         app.delay(Period);
     }
 }
@@ -51,7 +51,7 @@ void floorApp(App) {
     int waitTime = 0;
     while (1) {
         if (floorSensor.frontColor == floorSensor.BLACK) {
-            if(homing.started == true) {
+            if (homing.started == true) {
                 app.stop(homingApp);
             } else {
                 app.stop(rightWallApp);
@@ -83,7 +83,7 @@ void floorApp(App) {
                 homing.homingReachedCount[location.x + FIELD_ORIGIN - 1]
                                          [location.y + FIELD_ORIGIN] = 50;
             }
-            if(homing.started == true) {
+            if (homing.started == true) {
                 app.restart(homingApp);
             } else {
                 app.restart(rightWallApp);
@@ -92,16 +92,16 @@ void floorApp(App) {
         if (millis() - 2000 < waitTime) {
             app.delay(Period);
         } else if (floorSensor.backColor == floorSensor.BLUE) {  // 5秒止まる
-            if(homing.started == true) {
+            if (homing.started == true) {
                 app.stop(homingApp);
             } else {
-            app.stop(rightWallApp);
+                app.stop(rightWallApp);
             }
             servo.suspend  = true;
             servo.velocity = 0;
             app.delay(5000);
             waitTime = millis();
-            if(homing.started == true) {
+            if (homing.started == true) {
                 app.start(homingApp);
             } else {
                 app.start(rightWallApp);
@@ -111,10 +111,10 @@ void floorApp(App) {
     }
 }
 
-void homingApp(App) {
+void homingApp(App) {  // CHECK 最適化されてない
     while (1) {
-        if (millis() > homing.HomingTime && victim.isDetected == false) {
-            if (homing.started == false) {
+        if (millis() > homing.HomingTime) {
+            if (homing.started == false && servo.suspend == true) {
                 app.stop(rightWallApp);
                 app.stop(victimNotifyApp);
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
@@ -122,43 +122,46 @@ void homingApp(App) {
                 buzzer.beat(440, 2);
                 homing.started = true;
             }
-            // NOTE 座標曖昧壁判定モード
-            // if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
-            //     (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
-            //     (location.route[0].wall[1] == tof.wallExists[EAST]) &&
-            //     (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
-            //     (location.route[0].wall[3] == tof.wallExists[WEST])) {
-            //     app.stop(adjustmentApp);
-            //     servo.suspend  = true;
-            //     servo.velocity = 0;
-            //     buzzer.matsukenSamba();
-        // }
-        if ((location.x == 0) && (location.y == 0)) {  // NOTE 座標厳密モード
-            app.stop(adjustmentApp);
-            servo.suspend  = true;
-            servo.velocity = 0;
-            buzzer.matsukenSamba();
-        } else {
-            servo.suspend  = true;
-            servo.velocity = 0;
-            switch (homing.homingWeighting()) {
-                case 0:  // right
-                    movement.turnRight();
-                    break;
-                case 1:  // front
-                    break;
-                case 2:  // left
-                    movement.turnLeft();
-                    break;
+            if (homing.started == true) {
+                // NOTE 座標曖昧壁判定モード
+                // if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
+                //     (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
+                //     (location.route[0].wall[1] == tof.wallExists[EAST]) &&
+                //     (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
+                //     (location.route[0].wall[3] == tof.wallExists[WEST])) {
+                //     app.stop(adjustmentApp);
+                //     servo.suspend  = true;
+                //     servo.velocity = 0;
+                //     buzzer.matsukenSamba();
+                // }
+
+                if ((location.x == 0) &&
+                    (location.y == 0)) {  // NOTE 座標厳密モード
+                    app.stop(adjustmentApp);
+                    servo.suspend  = true;
+                    servo.velocity = 0;
+                    buzzer.matsukenSamba();
+                } else {
+                    servo.suspend  = true;
+                    servo.velocity = 0;
+                    switch (homing.homingWeighting()) {
+                        case 0:  // right
+                            movement.turnRight();
+                            break;
+                        case 1:  // front
+                            break;
+                        case 2:  // left
+                            movement.turnLeft();
+                            break;
+                    }
+                    movement.move_1tile();
+                    homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                             [location.y + FIELD_ORIGIN]++;
+                }
             }
-            movement.move_1tile();
-            homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                     [location.y + FIELD_ORIGIN]++;
+            app.delay(Period);
+        } else {
+            app.delay(Period);
         }
-        app.delay(100);
     }
-    else {
-        app.delay(Period);
-    }
-}
 }

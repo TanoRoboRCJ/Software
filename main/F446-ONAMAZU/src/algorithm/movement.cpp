@@ -97,26 +97,32 @@ void Movement::turnWest(void) {
 
 void Movement::angleAdjustment(void) {  // NOTE y = ax + b
     if (tof.rightWallExists == true && tof.leftWallExists == true) {
-        servo.isCorrectingAngle = (tof.val[4] / 13) - 10;
+        if (tof.val[4] < tof.val[12]) {
+            servo.isCorrectingAngle = 2 * (tof.val[4] / 15) - 20;
+        } else {
+            servo.isCorrectingAngle = -2 * (tof.val[12] / 15) + 20;
+        }
     }
 
     if (tof.rightWallExists == true && tof.leftWallExists == false) {
-        servo.isCorrectingAngle = (tof.val[4] / 13) - 10;
+        servo.isCorrectingAngle = 2 * (tof.val[4] / 15) - 20;
     }
 
     if (tof.rightWallExists == false && tof.leftWallExists == true) {
-        servo.isCorrectingAngle = -(tof.val[12] / 13) + 10;
+        servo.isCorrectingAngle = -2 * (tof.val[12] / 15) + 20;
     }
 
-    // if ((tof.rightWallExists == false) &&
-    //     (tof.leftWallExists == false)) {  // FIXME 上手く補正出来てない
-    //     if (sqrt(2) * (Radius + tof.val[4]) < (Radius + tof.val[2] - 60)) {
-    //         servo.isCorrectingAngle = 3;
-    //     }
-    //     if (sqrt(2) * (Radius + tof.val[4]) > (Radius + tof.val[2] + 60)) {
-    //         servo.isCorrectingAngle = -3;
-    //     }
-    // }
+    if ((tof.rightWallExists == false) &&
+        (tof.leftWallExists == false)) {  // FIXME 上手く補正出来てない
+        if (gyro.direction == NORTH || gyro.direction == SOUTH) {
+            servo.isCorrectingAngle = map(
+                location.coordinateX - 300 * location.x, 150, -150, 10, -10);
+        }
+        if (gyro.direction == EAST || gyro.direction == WEST) {
+            servo.isCorrectingAngle = map(
+                location.coordinateY - 300 * location.y, 150, -150, 10, -10);
+        }
+    }
 }
 
 void Movement::avoidBarrier(void) {

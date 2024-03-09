@@ -18,13 +18,14 @@ void startDaemon(void) {
 void monitorApp(App) {
     while (1) {
         //tof
-        uart1.print(tof.val[0]);
-        uart1.print("\t");
-        uart1.print(tof.val[4]);
-        uart1.print("\t");  
-        uart1.print(tof.val[8]);
-        uart1.print("\t");
-        uart1.print(tof.val[12]);
+        // uart1.print(tof.val[0]);
+        // uart1.print("\t");
+        // uart1.print(tof.val[4]);
+        // uart1.print("\t");  
+        // uart1.print(tof.val[8]);
+        // uart1.print("\t");
+        // uart1.print(tof.val[12]);
+        uart1.print(loadcell.load[1]);
 
         // floor
         // uart1.print("floor: ");
