@@ -43,7 +43,7 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
         servo.velocity = servo.DefaultSpeed;
         app.delay(Period);
     }  // 次のタイルまで前進
-    while (140 < tof.val[0] && tof.val[0] < 300) {
+    while (140 < tof.val[0] && tof.val[0] < 270) {
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
         app.delay(Period);
@@ -102,30 +102,27 @@ void Movement::turnWest(void) {
 
 void Movement::angleAdjustment(void) {  // NOTE y = ax + b
     if (tof.rightWallExists == true && tof.leftWallExists == true) {
-        if (tof.val[4] < tof.val[12]) {
-            servo.isCorrectingAngle = 2 * (tof.val[4] / 15) - 20;
-        } else {
-            servo.isCorrectingAngle = -2 * (tof.val[12] / 15) + 20;
-        }
+        servo.isCorrectingAngle =
+            map(tof.val[4] - tof.val[12], -100, 100, -20, 20);
     }
 
     if (tof.rightWallExists == true && tof.leftWallExists == false) {
-        servo.isCorrectingAngle = 2 * (tof.val[4] / 15) - 20;
+        servo.isCorrectingAngle = map(tof.val[4] - 130, -100, 100, -20, 20);
     }
 
     if (tof.rightWallExists == false && tof.leftWallExists == true) {
-        servo.isCorrectingAngle = -2 * (tof.val[12] / 15) + 20;
+        servo.isCorrectingAngle = map(130 - tof.val[12], -100, 100, -20, 20);
     }
 
     if ((tof.rightWallExists == false) &&
         (tof.leftWallExists == false)) {  // FIXME 上手く補正出来てない
         if (gyro.direction == NORTH || gyro.direction == SOUTH) {
             servo.isCorrectingAngle = map(
-                location.coordinateX - 300 * location.x, 150, -150, 10, -10);
+                location.coordinateX - 300 * location.x, -150, 150, -10, 10);
         }
         if (gyro.direction == EAST || gyro.direction == WEST) {
             servo.isCorrectingAngle = map(
-                location.coordinateY - 300 * location.y, 150, -150, 10, -10);
+                location.coordinateY - 300 * location.y, -150, 150, -10, 10);
         }
     }
 }
