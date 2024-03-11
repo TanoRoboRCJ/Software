@@ -29,7 +29,7 @@ void Movement::turnReverse(void) {
     app.delay(_Wait * 3);
 }
 
-void Movement::move_1tile(void) {
+void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
 
@@ -43,6 +43,11 @@ void Movement::move_1tile(void) {
         servo.velocity = servo.DefaultSpeed;
         app.delay(Period);
     }  // 次のタイルまで前進
+    while(140 < tof.val[0] && tof.val[0] < 300) {
+        servo.suspend  = false;
+        servo.velocity = servo.DefaultSpeed;
+        app.delay(Period);
+    }
     servo.suspend  = true;
     servo.velocity = 0;
 }
@@ -56,7 +61,7 @@ void Movement::back(void) {
         servo.suspend  = false;
         servo.velocity = -servo.DefaultSpeed;
         app.delay(Period);
-    }  // 次のタイルまで前進
+    }  // 黒タイルから後退
 }
 
 void Movement::turnNorth(void) {
@@ -128,7 +133,11 @@ void Movement::angleAdjustment(void) {  // NOTE y = ax + b
 void Movement::avoidBarrier(void) {
     if (loadcell.status == RIGHT) {
         app.stop(servoApp);
-        app.stop(rightWallApp);
+        if(homing.started == true) {
+            app.stop(homingApp);
+        } else {
+            app.stop(rightWallApp);
+        }
         servo.driveAngularVelocity(-30, -45);
         app.delay(500);
         servo.driveAngularVelocity(-30, 45);
@@ -137,7 +146,11 @@ void Movement::avoidBarrier(void) {
     }
     if (loadcell.status == LEFT) {
         app.stop(servoApp);
+        if(homing.started == true) {
+            app.stop(homingApp);
+        } else {
         app.stop(rightWallApp);
+        }
         servo.driveAngularVelocity(-30, 45);
         app.delay(500);
         servo.driveAngularVelocity(-30, -45);
@@ -147,7 +160,11 @@ void Movement::avoidBarrier(void) {
     if (!isHit) {
         servo.velocity = servo.DefaultSpeed;
         app.start(servoApp);
-        app.start(rightWallApp);
+        if (homing.started == true) {
+            app.restart(homingApp);
+        } else {
+        app.restart(rightWallApp);
+        }
         isHit = true;
     }
 }

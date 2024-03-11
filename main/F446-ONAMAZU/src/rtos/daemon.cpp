@@ -18,18 +18,6 @@ void startDaemon(void) {
 void monitorApp(App) {
     while (1) {
         //tof
-        // uart1.print(tof.val[0]);
-        // uart1.print("\t");
-        // uart1.print(tof.val[4]);
-        // uart1.print("\t");  
-        // uart1.print(tof.val[8]);
-        // uart1.print("\t");
-        // uart1.print(tof.val[12]);
-        uart1.print(tof.val[15]);
-        uart1.print("\t");
-        uart1.print(tof.val[0]);
-        uart1.print("\t");
-        uart1.print(tof.val[1]);
 
         // floor
         // uart1.print("floor: ");
@@ -83,6 +71,11 @@ void monitorApp(App) {
         // gyro
         // uart1.print("gyro: ");
         // uart1.print(gyro.deg);
+
+        // location
+        uart1.print(location.x);
+        uart1.print(",");
+        uart1.print(location.y);
 
         uart1.println();
         app.delay(Period);
