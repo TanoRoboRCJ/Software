@@ -30,7 +30,10 @@ class LIDAR {
     HISTOGRAM histogarm[HistogramLength];
 
     void updateHistogram(void);
-    double calcCov(const int _phase);
+    void calcCov(const int _phase = 0);
+
+    double covX = 0;
+    double covY = 0;
 
    private:
     HardwareSerial *uartPtr;

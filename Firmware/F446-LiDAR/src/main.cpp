@@ -49,7 +49,7 @@ void loop() {
         }
         checkDegit = uart4.read();
 
-        uartForDebug.println(checkDegit);
+        // uartForDebug.println(checkDegit);
 
         uart5.write('V');
         uart5.write('L');
@@ -61,28 +61,14 @@ void loop() {
     }
 
     lidar.read();
+
     lidar.updateHistogram();
+    lidar.calcCov();
 
-    if (uartForDebug.available() > 0) {
-        while (uartForDebug.available() != 0) {
-            uartForDebug.read();
-        }
-
-        // for (int i = 0; i < LIDAR::DataBuffLength; i++) {
-        //     uartForDebug.print(i);
-        //     uartForDebug.print("\t");
-        //     uartForDebug.print(lidar.point[i].x);
-        //     uartForDebug.print("\t");
-        //     uartForDebug.println(lidar.point[i].y);
-        // }
-        // uartForDebug.println();
-
-        // show histogram
-        uartForDebug.println("histogram");
-        for (int i = 0; i < LIDAR::HistogramLength; i++) {
-            // uartForDebug.print(lidar.histogarm[i].x);
-            uartForDebug.print(lidar.refWave[i]);
-            uartForDebug.println(",");
-        }
-    }
+    uartForDebug.print("cov | X:");
+    uartForDebug.print("\t");
+    uartForDebug.print(lidar.covX);
+    uartForDebug.print("\t");
+    uartForDebug.print(" Y:");
+    uartForDebug.println(lidar.covY);
 }

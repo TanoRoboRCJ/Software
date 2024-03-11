@@ -96,13 +96,18 @@ void LIDAR::updateHistogram(void) {
     return;
 }
 
-double LIDAR::calcCov(const int _phase) {
-    int average = 0;
-    for (int i = 0; i < HistogramLength; i++) {
-        average += histogarm[i].x;
-    }
-    average /= HistogramLength;
-
+void LIDAR::calcCov(const int _phase) {
     double cov = 0;
-    
+    for (int i = 0; i < HistogramLength; i++) {
+        cov += histogarm[i].x * refWave[(i + _phase) % HistogramLength];
+    }
+    cov /= HistogramLength;
+    this-> covX = cov;
+
+    cov = 0;
+    for (int i = 0; i < HistogramLength; i++) {
+        cov += histogarm[i].y * refWave[(i + _phase) % HistogramLength];
+    }
+    cov /= HistogramLength;
+    this->covY = cov;
 }
