@@ -25,7 +25,11 @@ void monitorApp(App) {
         // uart1.print(tof.val[8]);
         // uart1.print("\t");
         // uart1.print(tof.val[12]);
-        uart1.print(loadcell.load[1]);
+        uart1.print(tof.val[15]);
+        uart1.print("\t");
+        uart1.print(tof.val[0]);
+        uart1.print("\t");
+        uart1.print(tof.val[1]);
 
         // floor
         // uart1.print("floor: ");
@@ -81,6 +85,7 @@ void monitorApp(App) {
         // uart1.print(gyro.deg);
 
         uart1.println();
+        app.delay(Period);
     }
 }
 

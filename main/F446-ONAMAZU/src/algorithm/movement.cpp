@@ -128,6 +128,7 @@ void Movement::angleAdjustment(void) {  // NOTE y = ax + b
 void Movement::avoidBarrier(void) {
     if (loadcell.status == RIGHT) {
         app.stop(servoApp);
+        app.stop(rightWallApp);
         servo.driveAngularVelocity(-30, -45);
         app.delay(500);
         servo.driveAngularVelocity(-30, 45);
@@ -136,6 +137,7 @@ void Movement::avoidBarrier(void) {
     }
     if (loadcell.status == LEFT) {
         app.stop(servoApp);
+        app.stop(rightWallApp);
         servo.driveAngularVelocity(-30, 45);
         app.delay(500);
         servo.driveAngularVelocity(-30, -45);
@@ -145,6 +147,7 @@ void Movement::avoidBarrier(void) {
     if (!isHit) {
         servo.velocity = servo.DefaultSpeed;
         app.start(servoApp);
+        app.start(rightWallApp);
         isHit = true;
     }
 }
