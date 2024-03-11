@@ -84,51 +84,63 @@ void loop() {
     static char middleText[40] = {0};
     static char lowerText[40] = {0};
 
-    // if (Serial1.available() > 2) {
-    //     char buf[40] = {0};
-    //     char flag = Serial1.read();
-    //     Serial1.readBytesUntil('\0', buf, 40);
+    static int coordinateX = 0;
+    static int coordinateY = 0;
+    static int gyro = 0;
 
-    //     switch (flag) {
-    //         case 250:
-    //             for (int i = 0; i < 40; i++) {
-    //                 upperText[i] = 0;
-    //             }
+    if (Serial1.available() >= 8) {
+        if (Serial1.read() == 'L') {
+            if (Serial1.read() == 'C') {
+                gyro = Serial1.read() << 8 | Serial1.read();
+                coordinateX = Serial1.read() << 8 | Serial1.read();
+                coordinateY = Serial1.read() << 8 | Serial1.read();
 
-    //             strcpy(upperText, buf);
-    //             break;
-    //         case 251:
-    //             for (int i = 0; i < 40; i++) {
-    //                 middleText[i] = 0;
-    //             }
-    //             strcpy(middleText, buf);
-    //             break;
-    //         case 252:
-    //             for (int i = 0; i < 40; i++) {
-    //                 lowerText[i] = 0;
-    //             }
-    //             strcpy(lowerText, buf);
-    //             break;
-    //     }
+                if (coordinateX >= 32768) {
+                    coordinateX -= 65536;
+                }
 
-    //     display.clearDisplay();
-    //     display.setTextColor(WHITE);
-    //     display.setTextSize(2);
-    //     display.setCursor(0, 0);
-    //     display.println(upperText);
+                if (coordinateY >= 32768) {
+                    coordinateY -= 65536;
+                }
 
-    //     display.setTextSize(2);
-    //     display.setCursor(0, 20);
-    //     display.print(middleText);
+                int x = round(coordinateX / 300.0);
+                int y = round(coordinateY / 300.0);
 
-    //     display.drawFastHLine(0, 40, 128, WHITE);
+                display.clearDisplay();
+                display.setTextColor(WHITE);
+                display.setTextSize(2);
+                display.setCursor(0, 0);
+                display.print("X: ");
+                display.print(x);
+                display.setCursor(0, 18);
+                display.print("Y: ");
+                display.println(y);
 
-    //     display.setTextSize(1);
-    //     display.setCursor(0, 45);
-    //     display.println(lowerText);
+                display.drawFastHLine(0, 36, 128, WHITE);
 
-    //     display.display();
-    // }
+                display.setTextSize(1);
+                display.setCursor(0, 43);
+                display.print("X[mm]:");
+                display.print(coordinateX);
+
+                display.setCursor(0, 55);
+                display.print("Y[mm]:");
+                display.print(coordinateY);
+
+                display.setCursor(80, 55);
+                display.print("Deg:");
+                display.print(gyro);
+                const char DegSymbol[] = {0xF7, 0};
+                display.print(DegSymbol);
+
+                display.display();
+            }
+        }
+
+        while (Serial1.available() > 0) {
+            Serial1.read();
+        }
+    }
 
     for (int i = 0; i < numOfSensors; i++) {
         if (disalbledSensor[i]) {

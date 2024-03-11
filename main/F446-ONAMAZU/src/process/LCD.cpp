@@ -2,19 +2,29 @@
 
 void LCD::begin() {
     // flag
-    char upper[15] = "Hello world";
+    uart4.write('L');
+    uart4.write('C');
 
-    uart4.write(250);
-    // for (int i = 0; i < 40; i++) {
-    //     uart4.write(upper[i]);
-    // }
+    uart4.write(highByte((int)gyro.deg));
+    uart4.write(lowByte((int)gyro.deg));
+
+    uart4.write(highByte((int)location.coordinateX));
+    uart4.write(lowByte((int)location.coordinateX));
+
+    uart4.write(highByte((int)location.coordinateY));
+    uart4.write(lowByte((int)location.coordinateY));
 }
 
 void LCD::writeRunningStatus(void) {
-    char upper[15] = "Hello world";
+    uart4.write('L');
+    uart4.write('C');
 
-    uart4.write(250);
-    // for (int i = 0; i < 40; i++) {
-    //     uart4.write(upper[i]);
-    // }
+    uart4.write(highByte((int)gyro.deg));
+    uart4.write(lowByte((int)gyro.deg));
+
+    uart4.write(highByte((int)location.coordinateX));
+    uart4.write(lowByte((int)location.coordinateX));
+
+    uart4.write(highByte((int)location.coordinateY));
+    uart4.write(lowByte((int)location.coordinateY));
 }
