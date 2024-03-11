@@ -65,8 +65,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             true;
         victim.isDetected = true;
 
-        servo.velocity = 0;
         servo.suspend  = true;
+        servo.velocity = 0;
 
         buzzer.bpm = 120;
         buzzer.beat(FA_, 0.5);
@@ -127,7 +127,6 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
     if (gyro.direction == NORTH) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
                                [location.y + FIELD_ORIGIN + 1] == victim.id) {
-            uart3.println("Duplicate");
             return true;
         } else {
             return false;
@@ -136,7 +135,6 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
     if (gyro.direction == EAST) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
                                [location.y + FIELD_ORIGIN] == victim.id) {
-            uart3.println("Duplicate");
             return true;
         } else {
             return false;
@@ -145,7 +143,6 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
     if (gyro.direction == SOUTH) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
                                [location.y + FIELD_ORIGIN - 1] == victim.id) {
-            uart3.println("Duplicate");
             return true;
         } else {
             return false;
@@ -154,7 +151,6 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
     if (gyro.direction == WEST) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
                                [location.y + FIELD_ORIGIN] == victim.id) {
-            uart3.println("Duplicate");
             return true;
         } else {
             return false;

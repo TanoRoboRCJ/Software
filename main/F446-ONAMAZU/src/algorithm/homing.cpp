@@ -40,15 +40,15 @@ int Homing::homingRightWeight(void) {
                  homingReachedCount[x][y + 1] * 10;
 
     } else if (gyro.direction == NORTH && tof.wallExists[EAST] == false) {
-        weight = (abs(location.x + 1) + abs(location.y)) * 10 +
+        weight = (abs(location.x + 1) + abs(location.y)) +
                  homingReachedCount[x + 1][y] * 10;
 
     } else if (gyro.direction == EAST && tof.wallExists[SOUTH] == false) {
-        weight = (abs(location.x) + abs(location.y - 1)) * 10 +
+        weight = (abs(location.x) + abs(location.y - 1)) +
                  homingReachedCount[x][y - 1] * 10;
 
     } else if (gyro.direction == SOUTH && tof.wallExists[WEST] == false) {
-        weight = (abs(location.x - 1) + abs(location.y)) * 10 +
+        weight = (abs(location.x - 1) + abs(location.y)) +
                  homingReachedCount[x - 1][y] * 10;
     }
 

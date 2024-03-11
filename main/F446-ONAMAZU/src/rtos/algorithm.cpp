@@ -35,7 +35,7 @@ void rightWallApp(App) {
         exploring.reachedCount[location.x + FIELD_ORIGIN]
                               [location.y + FIELD_ORIGIN]++;
         exploring.updateMap();
-        app.delay(100);
+        app.delay(300);
     }
 }
 
@@ -114,29 +114,28 @@ void floorApp(App) {
 void homingApp(App) {  // CHECK 最適化されてない
     while (1) {
         if (millis() > homing.HomingTime) {
-            if (homing.started == false && servo.suspend == true) {
+            if (homing.started == false && servo.suspend == true &&
+                victim.isDetected == false) {
                 app.stop(rightWallApp);
-                app.stop(victimNotifyApp);
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                          [location.y + FIELD_ORIGIN]++;
                 buzzer.beat(440, 2);
                 homing.started = true;
             }
             if (homing.started == true) {
-                // NOTE 座標曖昧壁判定モード
-                // if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
-                //     (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
-                //     (location.route[0].wall[1] == tof.wallExists[EAST]) &&
-                //     (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
-                //     (location.route[0].wall[3] == tof.wallExists[WEST])) {
+                // if ((location.x == 0) &&
+                //     (location.y == 0)) {  // NOTE 座標厳密モード
                 //     app.stop(adjustmentApp);
                 //     servo.suspend  = true;
                 //     servo.velocity = 0;
                 //     buzzer.matsukenSamba();
                 // }
 
-                if ((location.x == 0) &&
-                    (location.y == 0)) {  // NOTE 座標厳密モード
+                if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
+                    (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
+                    (location.route[0].wall[1] == tof.wallExists[EAST]) &&
+                    (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
+                    (location.route[0].wall[3] == tof.wallExists[WEST])) {// NOTE 座標曖昧壁判定モード
                     app.stop(adjustmentApp);
                     servo.suspend  = true;
                     servo.velocity = 0;
@@ -158,7 +157,7 @@ void homingApp(App) {  // CHECK 最適化されてない
                     movement.move_1tile();
                     homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                              [location.y + FIELD_ORIGIN]++;
-                    app.delay(100); 
+                    app.delay(300);
                 }
             }
             app.delay(Period);
