@@ -5,7 +5,7 @@ import lidar
 from sklearn.preprocessing import StandardScaler
 
 freq = 6
-samples = 181  # 90 + 90 + 0
+samples = 180  # 90 + 90 + 0
 
 t = np.arange(samples) / samples
 

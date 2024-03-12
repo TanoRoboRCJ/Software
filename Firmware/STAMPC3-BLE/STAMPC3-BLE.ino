@@ -20,6 +20,7 @@ void setup() {
 void loop() {
   if (BLE_Peripheral.checkConnection()) {
     if (Serial.available() != 0) {
+      delay(5);
       int dataSize = 0;
       char sendDataArr[140] = { 0 };
       while (Serial.available() != 0) {
