@@ -58,6 +58,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             app.stop(rightWallApp);
         }
         app.stop(adjustmentApp);
+        app.stop(floorApp);
 
         victim.kindOfVictim[location.x + FIELD_ORIGIN]
                            [location.y + FIELD_ORIGIN] = victim.id;
@@ -106,6 +107,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             app.start(rightWallApp);
         }
         app.start(adjustmentApp);
+        app.start(floorApp);
         int camTimer = millis();
         while (millis() - camTimer < 1000) {
             victim.isDetected    = false;
@@ -124,32 +126,20 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 }
 
 bool duplicate(void) {  // 進行方向に今見ているデータと同じデータがあれば破棄
-    if (gyro.direction == NORTH) {
+    if (gyro.direction == NORTH || gyro.direction == SOUTH) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
-                               [location.y + FIELD_ORIGIN + 1] == victim.id) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    if (gyro.direction == EAST) {
-        if (victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
-                               [location.y + FIELD_ORIGIN] == victim.id) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    if (gyro.direction == SOUTH) {
-        if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
+                               [location.y + FIELD_ORIGIN + 1] == victim.id ||
+            victim.kindOfVictim[location.x + FIELD_ORIGIN]
                                [location.y + FIELD_ORIGIN - 1] == victim.id) {
             return true;
         } else {
             return false;
         }
     }
-    if (gyro.direction == WEST) {
-        if (victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
+    if (gyro.direction == EAST || gyro.direction == WEST) {
+        if (victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
+                               [location.y + FIELD_ORIGIN] == victim.id ||
+            victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
                                [location.y + FIELD_ORIGIN] == victim.id) {
             return true;
         } else {
