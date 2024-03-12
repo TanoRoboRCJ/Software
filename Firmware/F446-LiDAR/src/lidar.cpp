@@ -15,7 +15,7 @@ LIDAR::LIDAR(HardwareSerial *_uartPtr, int _pwmPin) {
     return;
 }
 
-void LIDAR::read(void) {
+void LIDAR::read(const int _gyro) {
     // データの読み取りのために開始文字を検索
     static const int UartDataLength = 47;
     static const int UartDataStartChar = 0x54;
@@ -58,9 +58,9 @@ void LIDAR::read(void) {
         if (distance < 1200 && distance >= 200) {
             // NOTE:動径は時計周り
             point[circularBufferIndex].x =
-                (double)distance * sin(radians(angle));
+                (double)distance * sin(radians(angle + _gyro));
             point[circularBufferIndex].y =
-                (double)distance * cos(radians(angle));
+                (double)distance * cos(radians(angle + _gyro));
 
             circularBufferIndex++;
             circularBufferIndex %= DataBuffLength;

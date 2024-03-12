@@ -24,7 +24,7 @@ class LIDAR {
 
     LIDAR(HardwareSerial *_uartPtr, int _pwmPin);
 
-    void read(void);
+    void read(const int _gyro);
 
     POINT point[DataBuffLength];
     HISTOGRAM histogarm[HistogramLength];
