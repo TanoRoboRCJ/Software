@@ -54,7 +54,7 @@ void floorApp(App) {
     while (1) {
         int blueTileX = FIELD_ORIGIN;
         int blueTileY = FIELD_ORIGIN;
-        if (floorSensor.frontColor == floorSensor.BLACK) {
+        if (floorSensor.frontColor == floorSensor.BLACK && gyro.slope == 0) {
             if (homing.started == true) {
                 app.stop(homingApp);
             } else {
@@ -65,27 +65,27 @@ void floorApp(App) {
             movement.back();
             if (gyro.direction == NORTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
-                                      [location.y + FIELD_ORIGIN + 1] = DISABLE;
+                                      [location.y + FIELD_ORIGIN + 1] = 200;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN + 1] = DISABLE;
+                                         [location.y + FIELD_ORIGIN + 1] = 200;
             }
             if (gyro.direction == EAST) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN + 1]
-                                      [location.y + FIELD_ORIGIN] = DISABLE;
+                                      [location.y + FIELD_ORIGIN] = 200;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN + 1]
-                                         [location.y + FIELD_ORIGIN] = DISABLE;
+                                         [location.y + FIELD_ORIGIN] = 200;
             }
             if (gyro.direction == SOUTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
-                                      [location.y + FIELD_ORIGIN - 1] = DISABLE;
+                                      [location.y + FIELD_ORIGIN - 1] = 200;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN - 1] = DISABLE;
+                                         [location.y + FIELD_ORIGIN - 1] = 200;
             }
             if (gyro.direction == WEST) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN - 1]
-                                      [location.y + FIELD_ORIGIN] = DISABLE;
+                                      [location.y + FIELD_ORIGIN] = 200;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN - 1]
-                                         [location.y + FIELD_ORIGIN] = DISABLE;
+                                         [location.y + FIELD_ORIGIN] = 200;
             }
             if (homing.started == true) {
                 app.restart(homingApp);
@@ -93,7 +93,8 @@ void floorApp(App) {
                 app.restart(rightWallApp);
             }
         }
-        if (floorSensor.backColor == floorSensor.BLUE) {  // 5秒止まる
+        if (floorSensor.backColor == floorSensor.BLUE &&
+            gyro.slope == 0) {  // 5秒止まる
             if (homing.started == true) {
                 app.stop(homingApp);
             } else {

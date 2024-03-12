@@ -68,6 +68,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         servo.suspend  = true;
         servo.velocity = 0;
+        servo.driveAngularVelocity(0, 0);
 
         buzzer.bpm = 120;
         buzzer.beat(FA_, 0.5);
