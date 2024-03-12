@@ -12,13 +12,16 @@
 void rightWallApp(App) {
     static bool originUpdate = true;
     while (1) {
+        bottom.LED_color[0] = 0;
+        bottom.LED_color[1] = 255;
+        bottom.LED_color[2] = 150;
         if (originUpdate) {
             exploring.reachedCount[FIELD_ORIGIN][FIELD_ORIGIN]++;
             exploring.updateMap();
             originUpdate = false;
         }
         app.delay(Period);
-        servo.suspend  = true;
+        servo.suspend = true;
         servo.velocity = 0;
 
         switch (exploring.weighting()) {
@@ -56,7 +59,7 @@ void floorApp(App) {
             } else {
                 app.stop(rightWallApp);
             }
-            servo.suspend  = true;
+            servo.suspend = true;
             servo.velocity = 0;
             movement.back();
             if (gyro.direction == NORTH) {
@@ -97,7 +100,7 @@ void floorApp(App) {
             } else {
                 app.stop(rightWallApp);
             }
-            servo.suspend  = true;
+            servo.suspend = true;
             servo.velocity = 0;
             app.delay(5000);
             waitTime = millis();
@@ -114,6 +117,9 @@ void floorApp(App) {
 void homingApp(App) {  // CHECK 最適化されてない
     while (1) {
         if (millis() > homing.HomingTime) {
+            bottom.LED_color[0] = 255;
+            bottom.LED_color[1] = 120;
+            bottom.LED_color[2] = 0;
             if (homing.started == false && servo.suspend == true &&
                 victim.isDetected == false) {
                 app.stop(rightWallApp);
@@ -135,14 +141,15 @@ void homingApp(App) {  // CHECK 最適化されてない
                     (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
                     (location.route[0].wall[1] == tof.wallExists[EAST]) &&
                     (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
-                    (location.route[0].wall[3] == tof.wallExists[WEST])) {// NOTE 座標曖昧壁判定モード
+                    (location.route[0].wall[3] ==
+                     tof.wallExists[WEST])) {  // NOTE 座標曖昧壁判定モード
                     app.stop(adjustmentApp);
-                    servo.suspend  = true;
+                    servo.suspend = true;
                     servo.velocity = 0;
                     buzzer.matsukenSamba();
                 } else {
                     app.delay(Period);
-                    servo.suspend  = true;
+                    servo.suspend = true;
                     servo.velocity = 0;
                     switch (homing.homingWeighting()) {
                         case 0:  // right

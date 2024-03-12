@@ -51,7 +51,8 @@ class Route {
 class Location {
    private:
     // CONSTANT
-    double _VelocityConstant = 0.00225;//0.00159
+    // 小さいと距離が長くなる
+    double _VelocityConstant = 0.0023;//0.00159
 
    public:
     // CONSTANT

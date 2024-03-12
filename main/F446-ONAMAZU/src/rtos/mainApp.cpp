@@ -8,9 +8,14 @@ void mainApp(App) {
     startDaemon();
 
     static bool status = false;
+    static bool hasGameStarted = false;
 
     while (1) {
         if (ui.toggle) {
+            if (hasGameStarted == false) {
+                hasGameStarted = true;
+                gyro.setOffset();
+            }
             if (status) {
                 app.start(servoApp);
                 app.start(rightWallApp);

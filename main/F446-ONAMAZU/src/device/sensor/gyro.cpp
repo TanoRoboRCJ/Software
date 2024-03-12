@@ -23,24 +23,24 @@ void GYRO::init(void) {
     adafruit_bno055_offsets_t calibrationData;
     sensor_t sensor;
 
-    sensorPtr->getSensor(&sensor);
-    if (bnoID != sensor.sensor_id) {
-        uart1.println(
-            "\nNo Calibration Data for this sensor exists in EEPROM");
-        delay(500);
-    } else {
-        uart1.println("\nFound Calibration for this sensor in EEPROM.");
-        eeAddress += sizeof(long);
-        EEPROM.get(eeAddress, calibrationData);
+    // sensorPtr->getSensor(&sensor);
+    // if (bnoID != sensor.sensor_id) {
+    //     uart1.println(
+    //         "\nNo Calibration Data for this sensor exists in EEPROM");
+    //     delay(500);
+    // } else {
+    //     uart1.println("\nFound Calibration for this sensor in EEPROM.");
+    //     eeAddress += sizeof(long);
+    //     EEPROM.get(eeAddress, calibrationData);
 
-        displaySensorOffsets(calibrationData);
+    //     displaySensorOffsets(calibrationData);
 
-        uart1.println("\n\nRestoring Calibration data to the BNO055...");
-        sensorPtr->setSensorOffsets(calibrationData);
+    //     uart1.println("\n\nRestoring Calibration data to the BNO055...");
+    //     sensorPtr->setSensorOffsets(calibrationData);
 
-        uart1.println("\n\nCalibration data loaded into BNO055");
-        foundCalib = true;
-    }
+    //     uart1.println("\n\nCalibration data loaded into BNO055");
+    //     foundCalib = true;
+    // }
 
     uint8_t system_status, self_test_results, system_error;
     system_status = self_test_results = system_error = 0;
@@ -72,6 +72,18 @@ int GYRO::read(void) {
         slope = 0;
     }
     directionDecision();
+
+    // static int prevDeg = 0;
+    // // 前回と±10度以上変わったらエラー
+    // // ただし360と0とかは許容
+
+    // if (abs(deg - prevDeg) > 10 && abs(deg - prevDeg) < 350) {
+    //     setOffset();
+    //     offset += prevDeg;
+    //     offset %= 360;
+    // }
+
+    // prevDeg = deg;
 
     return deg;
 }
