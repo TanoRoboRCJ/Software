@@ -35,6 +35,14 @@ int Exploring::weighting(void) {
     if (tof.leftWallExists == true) {
         weight[LEFT] = DISABLE * 10;
     }
+
+    uart1.print(weight[RIGHT]);
+    uart1.print("\t");
+    uart1.print(weight[FRONT]);
+    uart1.print("\t");
+    uart1.print(weight[LEFT]);
+    uart1.println();
+
     if (weight[RIGHT] <= weight[FRONT] && weight[RIGHT] <= weight[LEFT]) {
         return 0;  // right
     } else if (weight[FRONT] <= weight[RIGHT] &&
@@ -92,10 +100,10 @@ int Exploring::frontWeight(void) {
 }
 
 int Exploring::leftWeight(void) {
-    int weight = 0;
-
     int x = location.x + FIELD_ORIGIN;
     int y = location.y + FIELD_ORIGIN;
+
+    int weight = 0;
 
     if (gyro.direction == WEST && tof.wallExists[SOUTH] == false) {
         weight = reachedCount[x][y - 1];

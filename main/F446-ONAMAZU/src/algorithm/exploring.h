@@ -25,7 +25,7 @@ class Exploring {
     int leftWeight(void);
     int weighting(void);
 
-    int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
+    int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 };
 
 extern Exploring exploring;
