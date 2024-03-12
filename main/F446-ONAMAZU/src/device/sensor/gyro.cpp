@@ -25,8 +25,7 @@ void GYRO::init(void) {
 
     sensorPtr->getSensor(&sensor);
     if (bnoID != sensor.sensor_id) {
-        uart1.println(
-            "\nNo Calibration Data for this sensor exists in EEPROM");
+        uart1.println("\nNo Calibration Data for this sensor exists in EEPROM");
         delay(500);
     } else {
         uart1.println("\nFound Calibration for this sensor in EEPROM.");
@@ -93,13 +92,13 @@ void GYRO::setOffset(void) {
 }
 
 void GYRO::directionDecision(void) {
-    if (deg >= 350 || deg < 10) {
-       direction = NORTH;
-    } else if (deg >= 80 && deg < 100) {
+    if (deg >= 315 || deg < 45) {
+        direction = NORTH;
+    } else if (deg >= 45 && deg < 135) {
         direction = EAST;
-    } else if (deg >= 170 && deg < 190) {
+    } else if (deg >= 135 && deg < 225) {
         direction = SOUTH;
-    } else if (deg >= 260 && deg < 280) {
+    } else if (deg >= 225 && deg < 315) {
         direction = WEST;
     }
 }

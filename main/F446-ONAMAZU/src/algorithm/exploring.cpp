@@ -30,7 +30,7 @@ int Exploring::weighting(void) {
         weight[RIGHT] = DISABLE;
     }
     if (tof.frontWallExists == true) {
-        weight[FRONT] = DISABLE * 2;
+        weight[FRONT] = DISABLE;
     }
     if (tof.leftWallExists == true) {
         weight[LEFT] = DISABLE;
