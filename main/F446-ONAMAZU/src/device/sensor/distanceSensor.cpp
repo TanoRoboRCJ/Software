@@ -15,7 +15,7 @@ DISTANCE_SENSOR::DISTANCE_SENSOR(HardwareSerial *p) {
 }
 
 int DISTANCE_SENSOR::read(void) {
-    if (serialPtr->available() >= 35) {
+    if (serialPtr->available() >= 35 + 8) {
         int checkDegit = 0;
 
         if (serialPtr->read() == 'V') {
@@ -39,6 +39,21 @@ int DISTANCE_SENSOR::read(void) {
                 }
             }
         }
+
+        uint8_t receivedBytesX[sizeof(float)];
+        for (size_t i = 0; i < sizeof(float); i++) {
+            receivedBytesX[i] = serialPtr->read();
+        }
+        float covX_float = *reinterpret_cast<float *>(receivedBytesX);
+
+        uint8_t receivedBytesY[sizeof(float)];
+        for (size_t i = 0; i < sizeof(float); i++) {
+            receivedBytesY[i] = serialPtr->read();
+        }
+        float covY_float = *reinterpret_cast<float *>(receivedBytesY);
+
+        covX = covX_float;
+        covY = covY_float;
 
         while (serialPtr->available() > 0) {
             serialPtr->read();
@@ -65,24 +80,24 @@ void DISTANCE_SENSOR::calc(int angle) {
 void DISTANCE_SENSOR::direction(void) {
     if (gyro.direction == NORTH) {
         wallExists[NORTH] = frontWallExists;
-        wallExists[EAST]  = rightWallExists;
+        wallExists[EAST] = rightWallExists;
         wallExists[SOUTH] = behindWallExists;
-        wallExists[WEST]  = leftWallExists;
+        wallExists[WEST] = leftWallExists;
     } else if (gyro.direction == EAST) {
         wallExists[NORTH] = leftWallExists;
-        wallExists[EAST]  = frontWallExists;
+        wallExists[EAST] = frontWallExists;
         wallExists[SOUTH] = rightWallExists;
-        wallExists[WEST]  = behindWallExists;
+        wallExists[WEST] = behindWallExists;
     } else if (gyro.direction == SOUTH) {
         wallExists[NORTH] = behindWallExists;
-        wallExists[EAST]  = leftWallExists;
+        wallExists[EAST] = leftWallExists;
         wallExists[SOUTH] = frontWallExists;
-        wallExists[WEST]  = rightWallExists;
+        wallExists[WEST] = rightWallExists;
     } else if (gyro.direction == WEST) {
         wallExists[NORTH] = rightWallExists;
-        wallExists[EAST]  = behindWallExists;
+        wallExists[EAST] = behindWallExists;
         wallExists[SOUTH] = leftWallExists;
-        wallExists[WEST]  = frontWallExists;
+        wallExists[WEST] = frontWallExists;
     }
 }
 

@@ -33,6 +33,9 @@ class DISTANCE_SENSOR {
     bool behindWallExists = false;
     bool leftWallExists = false;
 
+    double covX = 0;
+    double covY = 0;
+
    private:
     int _valTemp[16] = {0};
 };
