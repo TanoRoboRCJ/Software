@@ -64,27 +64,27 @@ void floorApp(App) {
             movement.back();
             if (gyro.direction == NORTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
-                                      [location.y + FIELD_ORIGIN + 1] = 50;
+                                      [location.y + FIELD_ORIGIN + 1] = 5;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN + 1] = 50;
+                                         [location.y + FIELD_ORIGIN + 1] = 5;
             }
             if (gyro.direction == EAST) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN + 1]
-                                      [location.y + FIELD_ORIGIN] = 50;
+                                      [location.y + FIELD_ORIGIN] = 5;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN + 1]
-                                         [location.y + FIELD_ORIGIN] = 50;
+                                         [location.y + FIELD_ORIGIN] = 5;
             }
             if (gyro.direction == SOUTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
-                                      [location.y + FIELD_ORIGIN - 1] = 50;
+                                      [location.y + FIELD_ORIGIN - 1] = 5;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN - 1] = 50;
+                                         [location.y + FIELD_ORIGIN - 1] = 5;
             }
             if (gyro.direction == WEST) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN - 1]
-                                      [location.y + FIELD_ORIGIN] = 50;
+                                      [location.y + FIELD_ORIGIN] = 5;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN - 1]
-                                         [location.y + FIELD_ORIGIN] = 50;
+                                         [location.y + FIELD_ORIGIN] = 5;
             }
             if (homing.started == true) {
                 app.restart(homingApp);
