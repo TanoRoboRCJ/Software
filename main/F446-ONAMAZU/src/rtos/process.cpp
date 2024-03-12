@@ -135,8 +135,7 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
         } else {
             return false;
         }
-    }
-    if (gyro.direction == EAST || gyro.direction == WEST) {
+    } else if (gyro.direction == EAST || gyro.direction == WEST) {
         if (victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
                                [location.y + FIELD_ORIGIN] == victim.id ||
             victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
@@ -145,5 +144,7 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
         } else {
             return false;
         }
+    }else{
+        return false;
     }
 }

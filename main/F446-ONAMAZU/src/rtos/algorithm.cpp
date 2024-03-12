@@ -35,10 +35,10 @@ void rightWallApp(App) {
                 break;
         }
         movement.move_1tile();
+        app.delay(100);
         exploring.reachedCount[location.x + FIELD_ORIGIN]
                               [location.y + FIELD_ORIGIN]++;
         exploring.updateMap();
-        app.delay(100);
     }
 }
 
@@ -167,7 +167,7 @@ void homingApp(App) {  // CHECK 最適化されてない
                     movement.move_1tile();
                     homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                              [location.y + FIELD_ORIGIN]++;
-                    app.delay(100);
+                    app.delay(200);
                 }
             }
             app.delay(Period);
