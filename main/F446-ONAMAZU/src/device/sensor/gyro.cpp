@@ -23,7 +23,6 @@ void GYRO::init(void) {
     adafruit_bno055_offsets_t calibrationData;
     sensor_t sensor;
 
-<<<<<<< HEAD
     // sensorPtr->getSensor(&sensor);
     // if (bnoID != sensor.sensor_id) {
     //     uart1.println(
@@ -33,16 +32,6 @@ void GYRO::init(void) {
     //     uart1.println("\nFound Calibration for this sensor in EEPROM.");
     //     eeAddress += sizeof(long);
     //     EEPROM.get(eeAddress, calibrationData);
-=======
-    sensorPtr->getSensor(&sensor);
-    if (bnoID != sensor.sensor_id) {
-        uart1.println("\nNo Calibration Data for this sensor exists in EEPROM");
-        delay(500);
-    } else {
-        uart1.println("\nFound Calibration for this sensor in EEPROM.");
-        eeAddress += sizeof(long);
-        EEPROM.get(eeAddress, calibrationData);
->>>>>>> 0850ae5c9dd6380dbfb8cc67eb19b255362ff4e5
 
     //     displaySensorOffsets(calibrationData);
 
