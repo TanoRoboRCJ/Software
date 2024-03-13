@@ -44,13 +44,17 @@ int DISTANCE_SENSOR::read(void) {
         for (size_t i = 0; i < sizeof(float); i++) {
             receivedBytesX[i] = serialPtr->read();
         }
-        float covX_float = *reinterpret_cast<float *>(receivedBytesX);
+        // float covX_float = *reinterpret_cast<float *>(receivedBytesX);
+        float covX_float;
+        memcpy(&covX_float, receivedBytesX, sizeof(covX_float));
 
         uint8_t receivedBytesY[sizeof(float)];
         for (size_t i = 0; i < sizeof(float); i++) {
             receivedBytesY[i] = serialPtr->read();
         }
-        float covY_float = *reinterpret_cast<float *>(receivedBytesY);
+        // float covY_float = *reinterpret_cast<float *>(receivedBytesY);
+        float covY_float;
+        memcpy(&covY_float, receivedBytesY, sizeof(covY_float));
 
         covX = covX_float;
         covY = covY_float;
@@ -59,7 +63,7 @@ int DISTANCE_SENSOR::read(void) {
             serialPtr->read();
         }
 
-        val[8] = bottom.tof[0];
+        val[8] = bottom.tof[1];
 
         return 0;
 
@@ -76,11 +80,11 @@ void DISTANCE_SENSOR::calc(int angle) {
     wallJudgment();
     direction();
 
-    if (covX > 60 && covY > 60) {
-        canCorrect = true;
-    } else {
-        canCorrect = false;
-    }
+    // if (covX > 60 && covY > 60) {
+    //     canCorrect = true;
+    // } else {
+    //     canCorrect = false;
+    // }
 }
 
 void DISTANCE_SENSOR::direction(void) {

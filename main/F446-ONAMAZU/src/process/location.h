@@ -51,8 +51,7 @@ class Route {
 class Location {
    private:
     // CONSTANT
-    // 小さいと距離が長くなる
-    double _VelocityConstant = 0.0023;//0.00159
+    double _VelocityConstant = 0.0023;  // 0.00159 小さいと距離が長くなる
 
    public:
     // CONSTANT
@@ -65,7 +64,7 @@ class Location {
     void updateMap(void);
 
     // VARIABLE
-    Field field[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
+    Field field[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]; 
     Route route[200];
 
     int x = 0;
@@ -73,8 +72,6 @@ class Location {
 
     double coordinateX = 0;  // 絶対座標 [mm]
     double coordinateY = 0;  // 絶対座標 [mm]
-
-    int IndexOfSensorFacingNorth = 0;
 
     unsigned long lastTrustX = 0;
     unsigned long lastTrustY = 0;

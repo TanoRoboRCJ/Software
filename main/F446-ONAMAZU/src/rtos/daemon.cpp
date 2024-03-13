@@ -127,7 +127,7 @@ void servoApp(App) {
 }
 
 void ledApp(App) {
-    int ledStatus = 0;
+    // int ledStatus = 0;
     int victimId = 0;
 
     for (int i = 0; i < 3; i++) {

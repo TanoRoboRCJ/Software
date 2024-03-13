@@ -36,12 +36,12 @@ int Exploring::weighting(void) {
         weight[LEFT] = DISABLE * 10;
     }
 
-    uart1.print(weight[RIGHT]);
-    uart1.print("\t");
-    uart1.print(weight[FRONT]);
-    uart1.print("\t");
-    uart1.print(weight[LEFT]);
-    uart1.println();
+    // uart1.print(weight[RIGHT]);
+    // uart1.print("\t");
+    // uart1.print(weight[FRONT]);
+    // uart1.print("\t");
+    // uart1.print(weight[LEFT]);
+    // uart1.println();
 
     if (weight[RIGHT] <= weight[FRONT] && weight[RIGHT] <= weight[LEFT]) {
         return 0;  // right

@@ -6,7 +6,7 @@
 #include "./LCD.h"
 
 extern Location location;
-extern Route Map[200];
+// extern Route Map[200];
 
 extern VICTIM victim;
 

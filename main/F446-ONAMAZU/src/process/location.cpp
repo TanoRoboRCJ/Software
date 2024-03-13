@@ -8,106 +8,166 @@ Location::Location(/* args */) {
 
 void Location::updateOdometory(void) {
     static unsigned long lastTime = millis();
-    
+
     double vec = (servo.rightWheelSpeed + servo.leftWheelSpeed) / 2.0;
     double vecX = vec * sin(radians(gyro.deg));
     double vecY = vec * cos(radians(gyro.deg));
 
-    coordinateX += vecX * (millis() - lastTime) * _VelocityConstant * cos(radians(gyro.slope));
-    coordinateY += vecY * (millis() - lastTime) * _VelocityConstant * cos(radians(gyro.slope));
+    coordinateX += vecX * Period * _VelocityConstant * cos(radians(gyro.slope));
+    coordinateY += vecY * Period * _VelocityConstant * cos(radians(gyro.slope));
 
     lastTime = millis();
 }
 
 void Location::updateObservationData(void) {
-    static bool trustX = false;
-    static bool trustY = false;
+    bool trustX = false;
+    bool trustY = false;
 
     int sensorX = 0;
     int sensorY = 0;
 
-    int minY = 360;  // 0°に一番近いセンサの誤差
-
-    for (int i = 0; i < 16; i++) {
-        if (min(abs((360 - round(i * 22.5)) - gyro.deg),
-                360 - abs((360 - round(i * 22.5)) - gyro.deg)) < minY) {
-            minY = min(abs((360 - round(i * 22.5)) - gyro.deg),
-                       360 - abs((360 - round(i * 22.5)) - gyro.deg));
-            IndexOfSensorFacingNorth = i;
-        }
-    }
-
     static int widthY = 0;
     static int widthX = 0;
 
-    widthX = abs(tof.vecX[(IndexOfSensorFacingNorth + 4) % 16]) +
-             abs(tof.vecX[(IndexOfSensorFacingNorth + 12) % 16]) + 55;
-    widthY = abs(tof.vecY[IndexOfSensorFacingNorth]) +
-             abs(tof.vecY[(IndexOfSensorFacingNorth + 8) % 16]) + 55;
+    const int SensorRadius = 23;
 
-    trustX = false;
-    trustY = false;
+    // 北か南　誤差10°
+    const int allowanceDegError = 10;
+    const int allowanceWidthError = 20;
+    const int range = 4;  // 信用するマス数
 
-    if (290 < widthX && widthX < 310) {
-        trustX = true;
-        coordinateX = round(coordinateX / 300.0) * 300.0 +
-                      abs(tof.vecX[(IndexOfSensorFacingNorth + 12) % 16]) - 130;
+    if ((gyro.deg < 0 + allowanceDegError ||
+         gyro.deg > 360 - allowanceDegError) ||
+        (180 - allowanceDegError < gyro.deg &&
+         gyro.deg < 180 + allowanceDegError)) {
+        bool isNorth = (gyro.deg < 0 + allowanceDegError ||
+                        gyro.deg > 360 - allowanceDegError);
+        // width
+        widthX = abs(tof.vecX[4]) + abs(tof.vecX[12]) + SensorRadius * 2;
+        widthY = abs(tof.vecY[0]) + abs(tof.vecY[8]) + 76 + 30 + SensorRadius;
 
-        lastCorrection = millis();
-        lastTrustX = millis();
+        for (int i = 1; i <= range; i++) {
+            if ((i * 300 - allowanceWidthError) < widthX &&
+                widthX < (i * 300 + allowanceWidthError)) {
+                trustX = true;
+                int oldCoordinateX = coordinateX;
+                coordinateX = round(coordinateX / 300.0) * 300.0;
+
+                if (isNorth) {
+                    coordinateX +=
+                        (abs(tof.vecX[12]) % 300) - (150 - SensorRadius);
+                } else {
+                    coordinateX +=
+                        (abs(tof.vecX[4]) % 300) - (150 - SensorRadius);
+                }
+
+                while (abs(coordinateX - oldCoordinateX) > 150) {
+                    if (coordinateX - oldCoordinateX > 150) {
+                        coordinateX -= 300;
+                    } else if (coordinateX - oldCoordinateX < -150) {
+                        coordinateX += 300;
+                    }
+                }
+                break;
+            }
+        }
+
+        for (int i = 1; i <= range; i++) {
+            if ((i * 300 - allowanceWidthError) < widthY &&
+                widthY < (i * 300 + allowanceWidthError)) {
+                trustY = true;
+
+                int oldCoordinateY = coordinateY;
+                coordinateY = round(coordinateY / 300.0) * 300.0;
+
+                if (isNorth) {
+                    coordinateY += (abs(tof.vecY[8]) % 300) - (150 - 76);
+                } else {
+                    coordinateY +=
+                        (abs(tof.vecY[0]) % 300) - (150 - SensorRadius - 30);
+                }
+
+                while (abs(coordinateY - oldCoordinateY) > 150) {
+                    if (coordinateY - oldCoordinateY > 150) {
+                        coordinateY -= 300;
+                    } else if (coordinateY - oldCoordinateY < -150) {
+                        coordinateY += 300;
+                    }
+                }
+
+                break;
+            }
+        }
+
+    } else if ((90 - allowanceDegError < gyro.deg &&
+                gyro.deg < 90 + allowanceDegError) ||
+               (270 - allowanceDegError < gyro.deg &&
+                gyro.deg < 270 + allowanceDegError)) {
+        bool isEast = (90 - allowanceDegError < gyro.deg &&
+                       gyro.deg < 90 + allowanceDegError);
+        widthX = abs(tof.vecX[0]) + abs(tof.vecX[8]) + 76 + 30 + SensorRadius;
+        widthY = abs(tof.vecY[4]) + abs(tof.vecY[12]) + SensorRadius * 2;
+        for (int i = 1; i <= range; i++) {
+            if ((i * 300 - allowanceWidthError) < widthX &&
+                widthX < (i * 300 + allowanceWidthError)) {
+                trustX = true;
+                int oldCoordinateX = coordinateX;
+                coordinateX = round(coordinateX / 300.0) * 300.0;
+
+                if (isEast) {
+                    coordinateX += (abs(tof.vecX[8]) % 300) - (150 - 76);
+                } else {
+                    coordinateX +=
+                        (abs(tof.vecX[0]) % 300) - (150 - SensorRadius - 30);
+                }
+
+                while (abs(coordinateX - oldCoordinateX) > 150) {
+                    if (coordinateX - oldCoordinateX > 150) {
+                        coordinateX -= 300;
+                    } else if (coordinateX - oldCoordinateX < -150) {
+                        coordinateX += 300;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        for (int i = 1; i <= range; i++) {
+            if ((i * 300 - allowanceWidthError) < widthY &&
+                widthY < (i * 300 + allowanceWidthError)) {
+                trustY = true;
+
+                int oldCoordinateY = coordinateY;
+                coordinateY = round(coordinateY / 300.0) * 300.0;
+
+                if (isEast) {
+                    coordinateY +=
+                        (abs(tof.vecY[4]) % 300) - (150 - SensorRadius);
+                } else {
+                    coordinateY +=
+                        (abs(tof.vecY[12]) % 300) - (150 - SensorRadius);
+                }
+
+                while (abs(coordinateY - oldCoordinateY) > 150) {
+                    if (coordinateY - oldCoordinateY > 150) {
+                        coordinateY -= 300;
+                    } else if (coordinateY - oldCoordinateY < -150) {
+                        coordinateY += 300;
+                    }
+                }
+
+                break;
+            }
+        }
     }
-    if (590 < widthX && widthX < 610) {
-        trustX = true;
 
-        int temp;
+    // uart1.println(widthX);
 
-        if (abs(tof.vecX[(IndexOfSensorFacingNorth + 4) % 16]) <
-            abs(tof.vecX[(IndexOfSensorFacingNorth + 12) % 16])) {
-            temp = round(coordinateX / 300.0) * 300.0 +
-                   (300 - abs(tof.vecX[(IndexOfSensorFacingNorth + 3) % 16]) -
-                    40) -
-                   130;
-        } else {
-            temp = round(coordinateX / 300.0) * 300.0 +
-                   abs(tof.vecX[(IndexOfSensorFacingNorth + 12) % 16]) - 130;
-        }
-
-        if (abs(coordinateX - temp) < 150) {
-            coordinateX = temp;
-        }
-
-        lastCorrection = millis();
-        lastTrustX = millis();
-    }
-
-    if (290 < widthY && widthY < 310) {
-        trustY = true;
-        coordinateY = round(coordinateY / 300.0) * 300.0 +
-                      abs(tof.vecY[(IndexOfSensorFacingNorth + 8) % 16]) - 130;
-        lastCorrection = millis();
-        lastTrustY = millis();
-    }
-
-    if (590 < widthY && widthY < 610) {
-        trustY = true;
-
-        int temp;
-
-        if (abs(tof.vecY[IndexOfSensorFacingNorth]) <
-            abs(tof.vecY[(IndexOfSensorFacingNorth + 8) % 16])) {
-            temp = round(coordinateY / 300.0) * 300.0 +
-                   (300 - abs(tof.vecY[IndexOfSensorFacingNorth]) - 40) - 130;
-        } else {
-            temp = round(coordinateY / 300.0) * 300.0 +
-                   abs(tof.vecY[(IndexOfSensorFacingNorth + 8) % 16]) - 130;
-        }
-
-        if (abs(coordinateY - temp) < 150) {
-            coordinateY = temp;
-        }
-
-        lastCorrection = millis();
-        lastTrustY = millis();
+    if (trustX || trustY) {
+        tof.canCorrect = true;
+    } else {
+        tof.canCorrect = false;
     }
 
     x = round(coordinateX / 300.0);
@@ -115,46 +175,4 @@ void Location::updateObservationData(void) {
 }
 
 void Location::updateMap(void) {
-    int tempX = constrain(x + FIELD_ORIGIN, 3, FIELD_ORIGIN * 2 - 3);
-
-    int tempY = constrain(y + FIELD_ORIGIN, 3, FIELD_ORIGIN * 2 - 3);
-
-    if (field[tempX][tempY].isPassed == false) {
-        field[tempX][tempY].isPassed = true;
-        field[tempX][tempY].isDetected = true;
-        field[tempX][tempY].firstPassedTime = millis();
-    }
-
-    if ((millis() - field[tempX][tempY].firstPassedTime) < 3000 &&
-        (millis() - field[tempX][tempY].firstPassedTime) > 1000 &&
-        abs(gyro.slope) == 0) {
-        int judgeGain[2] = {400, 240};
-
-        if (millis() - lastTrustY <= 20000) {
-            if (tof.val[IndexOfSensorFacingNorth] > judgeGain[0] &&
-                tof.val[(IndexOfSensorFacingNorth + 1) % 16] > judgeGain[1] &&
-                tof.val[(IndexOfSensorFacingNorth + 15) % 16] > judgeGain[1]) {
-                field[tempX][tempY + 1].isDetected = true;
-            }
-
-            if (tof.val[(IndexOfSensorFacingNorth + 6) % 16] > judgeGain[0] &&
-                tof.val[(IndexOfSensorFacingNorth + 5) % 16] > judgeGain[1] &&
-                tof.val[(IndexOfSensorFacingNorth + 7) % 16] > judgeGain[1]) {
-                field[tempX][tempY - 1].isDetected = true;
-            }
-        }
-
-        if (millis() - lastTrustX <= 20000) {
-            if (tof.val[(IndexOfSensorFacingNorth + 3) % 16] > judgeGain[0] &&
-                tof.val[(IndexOfSensorFacingNorth + 4) % 16] > judgeGain[1] &&
-                tof.val[(IndexOfSensorFacingNorth + 2) % 16] > judgeGain[1]) {
-                field[tempX + 1][tempY].isDetected = true;
-            }
-            if (tof.val[(IndexOfSensorFacingNorth + 9) % 16] > judgeGain[0] &&
-                tof.val[(IndexOfSensorFacingNorth + 10) % 16] > judgeGain[1] &&
-                tof.val[(IndexOfSensorFacingNorth + 8) % 16] > judgeGain[1]) {
-                field[tempX - 1][tempY].isDetected = true;
-            }
-        }
-    }
 }

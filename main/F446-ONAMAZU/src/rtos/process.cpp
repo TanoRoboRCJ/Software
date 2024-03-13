@@ -15,7 +15,7 @@ bool duplicate(void);
 
 void locationApp(App) {
     while (1) {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             location.updateOdometory();
             app.delay(location.Period);
             location.updateMap();

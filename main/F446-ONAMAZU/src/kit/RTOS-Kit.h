@@ -25,7 +25,7 @@ class RTOS_Kit {
     void delay(unsigned long ms);
 
     int mainAppNumber  = 0;
-    int priorityArray[maximumAppCount];
+    int priorityArray[maximumAppCount] = {0};
 
     TaskFunction_t funcPtrArray[maximumAppCount];
     TaskHandle_t handlerArray[maximumAppCount];
