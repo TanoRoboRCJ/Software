@@ -17,12 +17,12 @@ void mpuCalib();
 void meansensors();
 void calibration();
 
-#define Accel_X  -5518
-#define Accel_Y  442
-#define Accel_Z  757
-#define Gyro_X  30
-#define Gyro_Y  52
-#define Gyro_Z  14
+#define Accel_X -5518
+#define Accel_Y 442
+#define Accel_Z 757
+#define Gyro_X 30
+#define Gyro_Y 52
+#define Gyro_Z 14
 
 MPU6050 mpu;
 static uint8_t mpuIntStatus;
@@ -35,8 +35,7 @@ uint8_t fifoBuffer[64];  // FIFO storage buffer                 //
                          // orientation/motion vars
 Quaternion q;            // [w, x, y, z]         quaternion container
 VectorFloat gravity;     // [x, y, z]            gravity vector
-float
-    ypr[3];  // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
+float ypr[3];
 
 void setup() {
     Wire.setSDA(PB9);
@@ -44,7 +43,7 @@ void setup() {
     Wire.begin();
     Serial.begin(115200);
 
-    // mpuCalib();
+    mpuCalib();
 
     GyroStart();
 }
@@ -149,7 +148,6 @@ int acel_deadzone = 8;  // Acelerometer error allowed, make it lower to get more
 int giro_deadzone = 1;  // Giro error allowed, make it lower to get more
                         // precision, but sketch may not converge  (default:1)
 
-
 int16_t ax, ay, az, gx, gy, gz;
 
 int mean_ax, mean_ay, mean_az, mean_gx, mean_gy, mean_gz, state = 0;
@@ -206,8 +204,6 @@ void mpuCalib() {
         Serial.println(gy_offset);
         Serial.print("#define Gyro_Z ");
         Serial.println(gz_offset);
-        
-
 
         // Serial.print(ax_offset);
         // Serial.print("\t");

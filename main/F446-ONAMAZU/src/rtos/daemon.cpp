@@ -156,6 +156,13 @@ void ledApp(App) {
                 led.setBrightness(i, 0);
                 led.setColor(i, led.white);
             }
+            if(tof.canCorrect) {
+                led.setBrightness(RIGHT, 255);
+
+                led.setColor(RIGHT, led.white);
+                led.setBrightness(LEFT, 255);
+                led.setColor(LEFT, led.white);
+            }
             led.showAll();
 
             app.delay(10);
