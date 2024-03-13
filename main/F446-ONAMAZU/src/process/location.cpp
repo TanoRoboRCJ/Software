@@ -7,12 +7,16 @@ Location::Location(/* args */) {
 }
 
 void Location::updateOdometory(void) {
+    static unsigned long lastTime = millis();
+    
     double vec = (servo.rightWheelSpeed + servo.leftWheelSpeed) / 2.0;
     double vecX = vec * sin(radians(gyro.deg));
     double vecY = vec * cos(radians(gyro.deg));
 
-    coordinateX += vecX * Period * _VelocityConstant * cos(radians(gyro.slope));
-    coordinateY += vecY * Period * _VelocityConstant * cos(radians(gyro.slope));
+    coordinateX += vecX * (millis() - lastTime) * _VelocityConstant * cos(radians(gyro.slope));
+    coordinateY += vecY * (millis() - lastTime) * _VelocityConstant * cos(radians(gyro.slope));
+
+    lastTime = millis();
 }
 
 void Location::updateObservationData(void) {
