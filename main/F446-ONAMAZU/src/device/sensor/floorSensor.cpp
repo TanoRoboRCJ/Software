@@ -21,7 +21,7 @@ void FLOOR_SENSOR::frontColorJudgment(void) {
     } else if (frontCRGB[0] > 75 && frontCRGB[0] < 120 && frontCRGB[1] < 45 &&
                frontCRGB[2] < 50 && frontCRGB[3] < 60) {
         frontColor = BLUE;
-    } else {
+    } else {//NOTE ここにSILVERの判定を追加
         frontColor = WHITE;
     }
 }
@@ -33,7 +33,7 @@ void FLOOR_SENSOR::backColorJudgment(void) {
     } else if (backCRGB[0] > 80 && backCRGB[0] < 120 && backCRGB[1] < 45 &&
                backCRGB[2] < 50 && backCRGB[3] < 70) {
         backColor = BLUE;
-    } else {
+    } else {//NOTE ここにSILVERの判定を追加
         backColor = WHITE;
     }
 }
