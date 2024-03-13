@@ -63,29 +63,30 @@ void floorApp(App) {
             servo.suspend  = true;
             servo.velocity = 0;
             movement.back();
+            app.delay(100);
             if (gyro.direction == NORTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
-                                      [location.y + FIELD_ORIGIN + 1] = 200;
+                                      [location.y + FIELD_ORIGIN + 1] = 20;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN + 1] = 200;
+                                         [location.y + FIELD_ORIGIN + 1] = 50;
             }
             if (gyro.direction == EAST) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN + 1]
-                                      [location.y + FIELD_ORIGIN] = 200;
+                                      [location.y + FIELD_ORIGIN] = 20;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN + 1]
-                                         [location.y + FIELD_ORIGIN] = 200;
+                                         [location.y + FIELD_ORIGIN] = 50;
             }
             if (gyro.direction == SOUTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
-                                      [location.y + FIELD_ORIGIN - 1] = 200;
+                                      [location.y + FIELD_ORIGIN - 1] = 20;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN - 1] = 200;
+                                         [location.y + FIELD_ORIGIN - 1] = 50;
             }
             if (gyro.direction == WEST) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN - 1]
-                                      [location.y + FIELD_ORIGIN] = 200;
+                                      [location.y + FIELD_ORIGIN] = 20;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN - 1]
-                                         [location.y + FIELD_ORIGIN] = 200;
+                                         [location.y + FIELD_ORIGIN] = 50;
             }
             if (homing.started == true) {
                 app.restart(homingApp);
@@ -168,7 +169,7 @@ void homingApp(App) {  // CHECK 最適化されてない
                     movement.move_1tile();
                     homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                              [location.y + FIELD_ORIGIN]++;
-                    app.delay(200);
+                    app.delay(100);
                 }
             }
             app.delay(Period);

@@ -56,8 +56,8 @@ void Movement::back(void) {
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
 
-    while (abs(location.coordinateX - _oldCoordinateX) < 50 &&
-           abs(location.coordinateY - _oldCoordinateY) < 50) {
+    while (abs(location.coordinateX - _oldCoordinateX) < 100 &&
+           abs(location.coordinateY - _oldCoordinateY) < 100) {
         servo.suspend  = false;
         servo.velocity = -servo.DefaultSpeed;
         app.delay(Period);

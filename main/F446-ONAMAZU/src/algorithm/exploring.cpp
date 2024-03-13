@@ -20,20 +20,20 @@ void Exploring::updateMap(void) {
 }
 
 int Exploring::weighting(void) {
-    int weight[3] = {1, 2, 3};  // {right, front, left}
+    int weight[3] = {0};
 
-    weight[RIGHT] += rightWeight();
-    weight[FRONT] += frontWeight();
-    weight[LEFT] += leftWeight();
+    weight[RIGHT] = rightWeight();
+    weight[FRONT] = frontWeight();
+    weight[LEFT]  = leftWeight();
 
     if (tof.rightWallExists == true) {
-        weight[RIGHT] = DISABLE * 10;
+        weight[RIGHT] = DISABLE;
     }
     if (tof.frontWallExists == true) {
-        weight[FRONT] = DISABLE * 10;
+        weight[FRONT] = DISABLE;
     }
     if (tof.leftWallExists == true) {
-        weight[LEFT] = DISABLE * 10;
+        weight[LEFT] = DISABLE;
     }
 
     uart1.print(weight[RIGHT]);
@@ -43,8 +43,9 @@ int Exploring::weighting(void) {
     uart1.print(weight[LEFT]);
     uart1.println();
 
-    if (weight[RIGHT] <= weight[FRONT] && weight[RIGHT] <= weight[LEFT]) {
-        return 0;  // right
+    if (weight[RIGHT] <= weight[FRONT] &&
+        weight[RIGHT] <= weight[LEFT]) {  // NOTE 同列の場合は右優先
+        return 0;                         // right
     } else if (weight[FRONT] <= weight[RIGHT] &&
                weight[FRONT] <= weight[LEFT]) {
         return 1;  // front
@@ -73,6 +74,9 @@ int Exploring::rightWeight(void) {
     } else if (gyro.direction == SOUTH && tof.wallExists[WEST] == false) {
         weight = reachedCount[x - 1][y];
     }
+    if (weight > 1000) {
+        weight = 1000;
+    }
 
     return weight * PASSED_WEIGHT;
 }
@@ -95,6 +99,9 @@ int Exploring::frontWeight(void) {
     } else if (gyro.direction == SOUTH && tof.wallExists[SOUTH] == false) {
         weight = reachedCount[x][y - 1];
     }
+    if (weight > 1000) {
+        weight = 1000;
+    }
 
     return weight * PASSED_WEIGHT;
 }
@@ -116,6 +123,9 @@ int Exploring::leftWeight(void) {
 
     } else if (gyro.direction == SOUTH && tof.wallExists[EAST] == false) {
         weight = reachedCount[x + 1][y];
+    }
+    if (weight > 1000) {
+        weight = 1000;
     }
 
     return weight * PASSED_WEIGHT;
