@@ -75,6 +75,12 @@ void DISTANCE_SENSOR::calc(int angle) {
     }
     wallJudgment();
     direction();
+
+    if (covX > 60 && covY > 60) {
+        canCorrect = true;
+    } else {
+        canCorrect = false;
+    }
 }
 
 void DISTANCE_SENSOR::direction(void) {
