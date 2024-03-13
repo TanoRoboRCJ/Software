@@ -56,8 +56,8 @@ void Movement::back(void) {
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
 
-    while (abs(location.coordinateX - _oldCoordinateX) < 50 &&
-           abs(location.coordinateY - _oldCoordinateY) < 50) {
+    while (abs(location.coordinateX - _oldCoordinateX) < 100 &&
+           abs(location.coordinateY - _oldCoordinateY) < 100) {
         servo.suspend  = false;
         servo.velocity = -servo.DefaultSpeed;
         app.delay(Period);
@@ -114,8 +114,7 @@ void Movement::angleAdjustment(void) {  // NOTE y = ax + b
         servo.isCorrectingAngle = map(130 - tof.val[12], -100, 100, -20, 20);
     }
 
-    if ((tof.rightWallExists == false) &&
-        (tof.leftWallExists == false)) {  // FIXME 上手く補正出来てない
+    if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {
         if (gyro.direction == NORTH || gyro.direction == SOUTH) {
             servo.isCorrectingAngle = map(
                 location.coordinateX - 300 * location.x, -150, 150, -10, 10);
@@ -135,10 +134,10 @@ void Movement::avoidBarrier(void) {
         } else {
             app.stop(rightWallApp);
         }
-        servo.driveAngularVelocity(-30, -45);
-        app.delay(500);
-        servo.driveAngularVelocity(-30, 45);
-        app.delay(500);
+        servo.driveAngularVelocity(-90, -90);
+        app.delay(300);
+        servo.driveAngularVelocity(-90, 90);
+        app.delay(300);
         isHit = false;
     }
     if (loadcell.status == LEFT) {
@@ -148,10 +147,10 @@ void Movement::avoidBarrier(void) {
         } else {
             app.stop(rightWallApp);
         }
-        servo.driveAngularVelocity(-30, 45);
-        app.delay(500);
-        servo.driveAngularVelocity(-30, -45);
-        app.delay(500);
+        servo.driveAngularVelocity(-90, 90);
+        app.delay(300);
+        servo.driveAngularVelocity(-90, -90);
+        app.delay(300);
         isHit = false;
     }
     if (!isHit) {

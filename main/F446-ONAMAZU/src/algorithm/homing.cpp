@@ -3,11 +3,11 @@
 Homing homing;
 
 int Homing::homingWeighting(void) {
-    int weight[3] = {1, 2, 3};  // {right, front, left}
+    int weight[3] = {0};
 
-    weight[RIGHT] += homingRightWeight();
-    weight[FRONT] += homingFrontWeight();
-    weight[LEFT] += homingLeftWeight();
+    weight[RIGHT] = homingRightWeight();
+    weight[FRONT] = homingFrontWeight();
+    weight[LEFT] = homingLeftWeight();
 
     if (tof.rightWallExists == true) {
         weight[RIGHT] = DISABLE * 10;
@@ -19,8 +19,9 @@ int Homing::homingWeighting(void) {
         weight[LEFT] = DISABLE * 10;
     }
 
-    if (weight[RIGHT] <= weight[FRONT] && weight[RIGHT] <= weight[LEFT]) {
-        return 0;  // right
+    if (weight[RIGHT] <= weight[FRONT] &&
+        weight[RIGHT] <= weight[LEFT]) {  // NOTE 同列の場合は右優先
+        return 0;                         // right
     } else if (weight[FRONT] <= weight[RIGHT] &&
                weight[FRONT] <= weight[LEFT]) {
         return 1;  // front
@@ -44,14 +45,16 @@ int Homing::homingRightWeight(void) {
                  homingReachedCount[x + 1][y] * 20;
 
     } else if (gyro.direction == EAST && tof.wallExists[SOUTH] == false) {
-        weight = (abs(location.x) + abs(location.y - 1)) * 5+
+        weight = (abs(location.x) + abs(location.y - 1)) * 5 +
                  homingReachedCount[x][y - 1] * 20;
 
     } else if (gyro.direction == SOUTH && tof.wallExists[WEST] == false) {
         weight = (abs(location.x - 1) + abs(location.y)) * 5 +
                  homingReachedCount[x - 1][y] * 20;
     }
-
+    if (weight > 1000) {
+        weight = 1000;
+    }
     return weight;
 }
 
@@ -76,6 +79,9 @@ int Homing::homingFrontWeight(void) {
     } else if (gyro.direction == SOUTH && tof.wallExists[SOUTH] == false) {
         weight = (abs(location.x) + abs(location.y - 1)) * 5 +
                  homingReachedCount[x][y - 1] * 100;
+    }
+    if (weight > 1000) {
+        weight = 1000;
     }
 
     return weight;
@@ -102,6 +108,9 @@ int Homing::homingLeftWeight(void) {
     } else if (gyro.direction == SOUTH && tof.wallExists[EAST] == false) {
         weight = (abs(location.x + 1) + abs(location.y)) * 5 +
                  homingReachedCount[x + 1][y] * 100;
+    }
+    if (weight > 1000) {
+        weight = 1000;
     }
 
     return weight;

@@ -112,7 +112,7 @@ void DISTANCE_SENSOR::direction(void) {
 }
 
 void DISTANCE_SENSOR::wallJudgment(void) {
-    gyro.read();
+    gyro.read();    //  NOTE これを消すと動かない
     if (val[4] > 215) {
         rightWallExists = false;
     } else {

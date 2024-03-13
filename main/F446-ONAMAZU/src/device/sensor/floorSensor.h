@@ -19,6 +19,10 @@ class FLOOR_SENSOR {
     const int WHITE = 0;
     const int BLACK = 1;
     const int BLUE  = 2;
+    const int SILVER = 3;
+
+    int checkPointX = 0;
+    int checkPointY = 0;;
 
     int frontColor = 0;
     int backColor  = 0;
