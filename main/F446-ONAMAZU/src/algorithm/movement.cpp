@@ -114,8 +114,7 @@ void Movement::angleAdjustment(void) {  // NOTE y = ax + b
         servo.isCorrectingAngle = map(130 - tof.val[12], -100, 100, -20, 20);
     }
 
-    if ((tof.rightWallExists == false) &&
-        (tof.leftWallExists == false)) { 
+    if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {
         if (gyro.direction == NORTH || gyro.direction == SOUTH) {
             servo.isCorrectingAngle = map(
                 location.coordinateX - 300 * location.x, -150, 150, -10, 10);
