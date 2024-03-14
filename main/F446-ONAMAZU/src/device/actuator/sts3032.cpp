@@ -31,6 +31,11 @@ void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
     data[0] = angularVelocity - velocity;
     data[1] = angularVelocity + velocity;
 
+    if (gyro.slope < -15) {
+        data[0] *= SlopeSpeed;
+        data[1] *= SlopeSpeed;
+    }
+
     rightWheelSpeed = -data[0];
     leftWheelSpeed = data[1];
 
