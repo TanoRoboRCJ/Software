@@ -14,6 +14,7 @@
 #define RIGHT 0
 #define FRONT 1
 #define LEFT 2
+#define BACK 3
 #define DISABLE 100
 
 class Exploring {

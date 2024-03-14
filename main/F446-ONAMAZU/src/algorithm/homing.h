@@ -15,6 +15,7 @@ class Homing{
         int homingRightWeight(void);
         int homingFrontWeight(void);
         int homingLeftWeight(void);
+        int homingBackWeight(void);
 
         int homingReachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
     private:

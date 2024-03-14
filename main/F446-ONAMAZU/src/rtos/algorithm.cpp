@@ -171,6 +171,9 @@ void homingApp(App) {  // CHECK 最適化されてない
                         case 2:  // left
                             movement.turnLeft();
                             break;
+                        case 3:  // back
+                            movement.turnReverse();
+                            break;
                     }
                     movement.move_1tile();
                     homing.homingReachedCount[location.x + FIELD_ORIGIN]
