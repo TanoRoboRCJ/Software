@@ -70,7 +70,7 @@ int GYRO::read(void) {
     }
     slope *= -1;
 
-    if (abs(slope) <= 8) {
+    if (abs(slope) <= 4) {
         slope = 0;
     }
     directionDecision();
