@@ -33,8 +33,8 @@ void Location::updateObservationData(void) {
 
     // 北か南　誤差10°
     const int allowanceDegError = 10;
-    const int allowanceWidthError = 20;
-    const int range = 4;  // 信用するマス数
+    const int allowanceWidthError = 15;
+    const int range = 3;  // 信用するマス数
 
     if ((gyro.deg < 0 + allowanceDegError ||
          gyro.deg > 360 - allowanceDegError) ||
