@@ -128,7 +128,7 @@ void servoApp(App) {
             servo.stop();
         }
         servo.angle %= 360;
-        app.delay(1);
+        app.delay(10);
     }
 }
 

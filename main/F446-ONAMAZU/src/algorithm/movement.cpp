@@ -43,11 +43,13 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
         servo.velocity = servo.DefaultSpeed;
         app.delay(Period);
     }  // 次のタイルまで前進
-    while (140 < tof.val[0] && tof.val[0] < 270) {
+    while (140 < tof.val[0] && tof.val[0] < 220) {
+        app.stop(locationApp);
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
         app.delay(Period);
     }
+    app.start(locationApp);
     servo.suspend  = true;
     servo.velocity = 0;
 }

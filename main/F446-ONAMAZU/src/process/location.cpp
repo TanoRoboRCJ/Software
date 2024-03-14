@@ -13,8 +13,8 @@ void Location::updateOdometory(void) {
     double vecX = vec * sin(radians(gyro.deg));
     double vecY = vec * cos(radians(gyro.deg));
 
-    coordinateX += vecX * Period * _VelocityConstant * cos(radians(gyro.slope));
-    coordinateY += vecY * Period * _VelocityConstant * cos(radians(gyro.slope));
+    coordinateX += vecX * constrain((millis() - lastTime), 0, 20) * _VelocityConstant * cos(radians(gyro.slope));
+    coordinateY += vecY * constrain((millis() - lastTime), 0, 20) * _VelocityConstant * cos(radians(gyro.slope));
 
     lastTime = millis();
 }
@@ -29,11 +29,11 @@ void Location::updateObservationData(void) {
     static int widthY = 0;
     static int widthX = 0;
 
-    const int SensorRadius = 23;
+    const int SensorRadius = 25;
 
     // 北か南　誤差10°
     const int allowanceDegError = 10;
-    const int allowanceWidthError = 15;
+    const int allowanceWidthError = 10;
     const int range = 3;  // 信用するマス数
 
     if ((gyro.deg < 0 + allowanceDegError ||

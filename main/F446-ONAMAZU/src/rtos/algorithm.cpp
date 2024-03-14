@@ -35,7 +35,7 @@ void rightWallApp(App) {
                 break;
         }
         movement.move_1tile();
-        app.delay(100);
+        // app.delay(100);
         exploring.reachedCount[location.x + FIELD_ORIGIN]
                               [location.y + FIELD_ORIGIN]++;
         exploring.updateMap();

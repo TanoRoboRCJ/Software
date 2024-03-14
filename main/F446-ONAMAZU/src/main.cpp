@@ -21,7 +21,7 @@ void setup() {
     app.create(victimNotifyApp);
     app.create(ledApp);
     app.create(sensorApp, secondPriority);
-    app.create(servoApp, secondPriority);
+    app.create(servoApp, firstPriority);
 
     // 動作系統
     app.create(rightWallApp);
