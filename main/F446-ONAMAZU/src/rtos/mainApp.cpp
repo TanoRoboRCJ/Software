@@ -18,7 +18,11 @@ void mainApp(App) {
             }
             if (status) {
                 app.start(servoApp);
-                app.start(rightWallApp);
+                if (homing.started == true) {
+                    app.start(homingApp);
+                } else {
+                    app.start(rightWallApp);
+                }
                 app.start(adjustmentApp);
                 app.start(locationApp);
                 app.start(victimNotifyApp);
@@ -43,7 +47,7 @@ void mainApp(App) {
             servo.driveAngularVelocity(0, 0);
             // location.coordinateX = floorSensor.checkPointX * 300;
             // location.coordinateY = floorSensor.checkPointY * 300;
-            status               = true;
+            status = true;
 
             lcd.begin();
         }
