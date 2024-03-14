@@ -27,14 +27,13 @@ int Homing::homingWeighting(void) {
         weight[RIGHT] <= weight[BACK]) {  // NOTE 同列の場合は右優先
         return 0;                         // right
     } else if (weight[FRONT] <= weight[RIGHT] &&
-               weight[FRONT] <= weight[LEFT]
-               && weight[FRONT] <= weight[BACK]) {
+               weight[FRONT] <= weight[LEFT] && weight[FRONT] <= weight[BACK]) {
         return 1;  // front
-    } else if (weight[LEFT] <= weight[RIGHT] && weight[LEFT] <= weight[FRONT]
-               && weight[LEFT] <= weight[BACK]) {
+    } else if (weight[LEFT] <= weight[RIGHT] && weight[LEFT] <= weight[FRONT] &&
+               weight[LEFT] <= weight[BACK]) {
         return 2;  // left
-    }else if (weight[BACK] <= weight[RIGHT] && weight[BACK] <= weight[FRONT]
-               && weight[BACK] <= weight[LEFT]) {
+    } else if (weight[BACK] <= weight[RIGHT] && weight[BACK] <= weight[FRONT] &&
+               weight[BACK] <= weight[LEFT]) {
         return 3;  // back
     }
 }
