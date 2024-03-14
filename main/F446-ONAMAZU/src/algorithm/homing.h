@@ -8,7 +8,7 @@
 
 class Homing {
    public:
-    const int HomingTime = 60000;
+    const int HomingTime = 600000;
     bool started         = false;
 
     int homingWeighting(void);

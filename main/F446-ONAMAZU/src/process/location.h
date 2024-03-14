@@ -48,6 +48,13 @@ class Route {
     };
 };
 
+class Wall {
+   public:
+    // |_ の壁があるかどうか
+    bool vertical = true;
+    bool horizontal = true;
+};
+
 class Location {
    private:
     // CONSTANT
@@ -64,8 +71,10 @@ class Location {
     void updateMap(void);
 
     // VARIABLE
-    Field field[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]; 
+    Field field[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
     Route route[200];
+
+    Wall wall[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
 
     int x = 0;
     int y = 0;

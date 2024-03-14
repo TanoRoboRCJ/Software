@@ -13,8 +13,10 @@ void Location::updateOdometory(void) {
     double vecX = vec * sin(radians(gyro.deg));
     double vecY = vec * cos(radians(gyro.deg));
 
-    coordinateX += vecX * constrain((millis() - lastTime), 0, 20) * _VelocityConstant * cos(radians(gyro.slope));
-    coordinateY += vecY * constrain((millis() - lastTime), 0, 20) * _VelocityConstant * cos(radians(gyro.slope));
+    coordinateX += vecX * constrain((millis() - lastTime), 0, 20) *
+                   _VelocityConstant * cos(radians(gyro.slope));
+    coordinateY += vecY * constrain((millis() - lastTime), 0, 20) *
+                   _VelocityConstant * cos(radians(gyro.slope));
 
     lastTime = millis();
 }
@@ -170,8 +172,28 @@ void Location::updateObservationData(void) {
         tof.canCorrect = false;
     }
 
+    int oldX = x;
+    int oldY = y;
+
     x = round(coordinateX / 300.0);
     y = round(coordinateY / 300.0);
+
+    // 通った経路をはさみで切るイメージ
+    if (oldX < x) {  // 東に移動
+        wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN].vertical = false;
+    }
+
+    if (oldX > x) {  // 西に移動
+        wall[oldX + FIELD_ORIGIN][y + FIELD_ORIGIN].vertical = false;
+    }
+
+    if (oldY < y) {  // 北に移動
+        wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN].horizontal = false;
+    }
+
+    if (oldY > y) {  // 南に移動
+        wall[x + FIELD_ORIGIN][oldY + FIELD_ORIGIN].horizontal = false;
+    }
 }
 
 void Location::updateMap(void) {
