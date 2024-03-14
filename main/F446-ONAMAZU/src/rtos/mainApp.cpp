@@ -7,7 +7,7 @@
 void mainApp(App) {
     startDaemon();
 
-    static bool status = false;
+    static bool status         = false;
     static bool hasGameStarted = false;
 
     while (1) {
@@ -25,9 +25,9 @@ void mainApp(App) {
                 app.start(homingApp);
                 app.start(floorApp);
 
-                servo.suspend = false;
+                servo.suspend  = false;
                 servo.velocity = servo.DefaultSpeed;
-                status = false;
+                status         = false;
             }
             lcd.writeRunningStatus();
 
@@ -38,10 +38,12 @@ void mainApp(App) {
             app.stop(locationApp);
             app.stop(floorApp);
 
-            servo.suspend = true;
+            servo.suspend  = true;
             servo.velocity = 0;
             servo.driveAngularVelocity(0, 0);
-            status = true;
+            location.coordinateX = floorSensor.checkPointX * 300;
+            location.coordinateY = floorSensor.checkPointY * 300;
+            status               = true;
 
             lcd.begin();
         }
