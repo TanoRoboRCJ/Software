@@ -18,8 +18,8 @@ void FLOOR_SENSOR::frontColorJudgment(void) {
     if (frontCRGB[0] < 70 && frontCRGB[1] < 35 && frontCRGB[2] < 35 &&
         frontCRGB[3] < 35) {
         frontColor = BLACK;
-    } else if (frontCRGB[0] > 75 && frontCRGB[0] < 120 && frontCRGB[1] < 45 &&
-               frontCRGB[2] < 50 && frontCRGB[3] < 60) {
+    } else if (frontCRGB[0] > 100 && frontCRGB[0] < 180 && frontCRGB[1] < 50 &&
+               frontCRGB[2] < 60 && frontCRGB[3] < 70) {
         frontColor = BLUE;
     } else if (frontCRGB[0] > 150 && frontCRGB[0] < 250 && frontCRGB[1] < 100 &&
                frontCRGB[2] < 100 && frontCRGB[3] < 100) {

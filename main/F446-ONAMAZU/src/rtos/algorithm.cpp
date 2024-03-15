@@ -54,7 +54,7 @@ void floorApp(App) {
     while (1) {
         int blueTileX = FIELD_ORIGIN;
         int blueTileY = FIELD_ORIGIN;
-        if (floorSensor.frontColor == floorSensor.BLACK && gyro.slope == 0) {
+        if (floorSensor.frontColor == floorSensor.BLACK && abs(gyro.slope) <= 5) {
             if (homing.started == true) {
                 app.stop(homingApp);
             } else {
@@ -95,7 +95,8 @@ void floorApp(App) {
             }
         }
         if (floorSensor.backColor == floorSensor.BLUE &&
-            gyro.slope == 0) {  // 5秒止まる
+            floorSensor.frontColor == floorSensor.BLUE &&
+            abs(gyro.slope) <= 5) {  // 5秒止まる
             if (homing.started == true) {
                 app.stop(homingApp);
             } else {
