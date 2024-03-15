@@ -84,27 +84,43 @@ void monitorApp(App) {
         uart1.print(loadcell.load[1]);
 
         // 壁の状況を表示(location.wall)
+        // if (uart1.available() > 0) {
+        //     while (uart1.available() > 0) {
+        //         char trash = uart1.read();
+        //     }
+
+        //     uart1.println("wall:");
+        //     for (int y = FIELD_ORIGIN * 2 - 1; y >= 0; y--) {
+        //         for (int x = 0; x < FIELD_ORIGIN * 2; x++) {
+        //             if (location.wall[x][y].vertical &&
+        //                 location.wall[x][y].horizontal) {
+        //                 uart1.print("└");
+
+        //             } else if (location.wall[x][y].vertical) {
+        //                 uart1.print("╵");
+
+        //             } else if (location.wall[x][y].horizontal) {
+        //                 uart1.print("╶");
+
+        //             } else {
+        //                 uart1.print(" ");
+        //             }
+        //         }
+        //         uart1.println();
+        //     }
+        // }
+
+        // 壁の状況を表示(location.wall)
         if (uart1.available() > 0) {
             while (uart1.available() > 0) {
                 char trash = uart1.read();
             }
 
-            uart1.println("wall:");
+            uart1.println("map:");
             for (int y = FIELD_ORIGIN * 2 - 1; y >= 0; y--) {
                 for (int x = 0; x < FIELD_ORIGIN * 2; x++) {
-                    if (location.wall[x][y].vertical &&
-                        location.wall[x][y].horizontal) {
-                        uart1.print("└");
-
-                    } else if (location.wall[x][y].vertical) {
-                        uart1.print("╵");
-
-                    } else if (location.wall[x][y].horizontal) {
-                        uart1.print("╶");
-
-                    } else {
-                        uart1.print(" ");
-                    }
+                    uart1.print(homing.dijkstraSteps[x][y]);
+                    uart1.print("\t");
                 }
                 uart1.println();
             }
@@ -119,7 +135,9 @@ void monitorApp(App) {
         // uart1.print(",");
         // uart1.print(location.y);
 
-        uart1.println();
+        uart1.println(homing.dijkstra(0, 0));
+
+        // uart1.println();
         app.delay(Period);
     }
 }

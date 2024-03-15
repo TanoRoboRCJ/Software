@@ -21,6 +21,24 @@ void Location::updateOdometory(void) {
     lastTime = millis();
 }
 
+bool Location::canGo(int x1, int y1, int x2, int y2) {
+    if (x1 == x2) {
+        if (y1 < y2) {  // y2が北側
+            return !wall[x1][y2].horizontal;
+        } else {  // y2が南側
+            return !wall[x1][y1].horizontal;
+        }
+    } else if (y1 == y2) {
+        if (x1 < x2) {  // x2が東側
+            return !wall[x2][y1].vertical;
+        } else {  // x2が西側
+            return !wall[x1][y1].vertical;
+        }
+    }
+
+    return false;
+}
+
 void Location::updateObservationData(void) {
     bool trustX = false;
     bool trustY = false;

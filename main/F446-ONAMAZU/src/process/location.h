@@ -69,6 +69,7 @@ class Location {
     void updateOdometory(void);
     void updateObservationData(void);
     void updateMap(void);
+    bool canGo(int x1, int y1, int x2, int y2);
 
     // VARIABLE
     Field field[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];

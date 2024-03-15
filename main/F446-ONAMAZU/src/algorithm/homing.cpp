@@ -2,13 +2,60 @@
 
 Homing homing;
 
+int Homing::dijkstra(int destX, int destY) {
+    // RIGHT 0, FRONT 1, LEFT 2, BACK 3
+
+    // 初期化
+    for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
+        for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
+            homing.dijkstraSteps[i][j] = -1;
+        }
+    }
+
+    homing.dijkstraSteps[destX + FIELD_ORIGIN][destX + FIELD_ORIGIN] = 0;
+
+    // ダイクストラ法で歩数を計算
+    while (1) {
+        for (int x = 2; x < FIELD_ORIGIN * 2 - 2; x++) {
+            for (int y = 2; y < FIELD_ORIGIN * 2 - 2; y++) {
+                // 到達ずみなら次へ
+                if (homing.dijkstraSteps[x][y] != -1) {
+                    continue;
+                }
+
+                // 周囲の歩数を取得
+                int northStep = homing.dijkstraSteps[x][y + 1];
+                int eastStep = homing.dijkstraSteps[x + 1][y];
+                int southStep = homing.dijkstraSteps[x][y - 1];
+                int westStep = homing.dijkstraSteps[x - 1][y];
+
+                if (northStep != -1 && location.canGo(x, y, x, y + 1)) {
+                    homing.dijkstraSteps[x][y] = northStep + 1;
+                } else if (eastStep != -1 && location.canGo(x, y, x + 1, y)) {
+                    homing.dijkstraSteps[x][y] = eastStep + 1;
+                } else if (southStep != -1 && location.canGo(x, y, x, y - 1)) {
+                    homing.dijkstraSteps[x][y] = southStep + 1;
+                } else if (westStep != -1 && location.canGo(x, y, x - 1, y)) {
+                    homing.dijkstraSteps[x][y] = westStep + 1;
+                }
+            }
+        }
+
+        if (homing.dijkstraSteps[location.x + FIELD_ORIGIN][location.x + FIELD_ORIGIN] != -1) {
+            break;
+        }
+    }
+
+    return homing.dijkstraSteps[location.x + FIELD_ORIGIN][location.x + FIELD_ORIGIN];
+}
+
 int Homing::homingWeighting(void) {
     int weight[4] = {0};
 
     weight[RIGHT] = homingRightWeight();
     weight[FRONT] = homingFrontWeight();
-    weight[LEFT]  = homingLeftWeight();
-    weight[BACK]  = homingBackWeight();
+    weight[LEFT] = homingLeftWeight();
+    weight[BACK] = homingBackWeight();
 
     if (tof.rightWallExists == true) {
         weight[RIGHT] = DISABLE * 10;
