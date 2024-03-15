@@ -111,6 +111,33 @@ void monitorApp(App) {
         // }
 
         // 壁の状況を表示(location.wall)
+        // if (uart1.available() > 0) {
+        //     while (uart1.available() > 0) {
+        //         char trash = uart1.read();
+        //     }
+
+        //     uart1.println("wall:");
+        //     for (int y = FIELD_ORIGIN * 2 - 1; y >= 0; y--) {
+        //         for (int x = 0; x < FIELD_ORIGIN * 2; x++) {
+        //             if (location.wall[x][y].vertical &&
+        //                 location.wall[x][y].horizontal) {
+        //                 uart1.print("└");
+
+        //             } else if (location.wall[x][y].vertical) {
+        //                 uart1.print("╵");
+
+        //             } else if (location.wall[x][y].horizontal) {
+        //                 uart1.print("╶");
+
+        //             } else {
+        //                 uart1.print(" ");
+        //             }
+        //         }
+        //         uart1.println();
+        //     }
+        // }
+
+        // 壁の状況を表示(location.wall)
         if (uart1.available() > 0) {
             while (uart1.available() > 0) {
                 char trash = uart1.read();

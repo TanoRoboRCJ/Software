@@ -8,13 +8,8 @@
 
 class Homing {
    public:
-<<<<<<< Updated upstream
     const int HomingTime = 180000;
     bool started         = false;
-=======
-    const int HomingTime = 600000;
-    bool started = false;
->>>>>>> Stashed changes
 
     int homingWeighting(void);
     int homingRightWeight(void);
