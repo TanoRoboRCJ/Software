@@ -79,6 +79,10 @@ void monitorApp(App) {
         //         break;
         // }
 
+        uart1.print(loadcell.load[0]);
+        uart1.print("\t");
+        uart1.print(loadcell.load[1]);
+
         // 壁の状況を表示(location.wall)
         if (uart1.available() > 0) {
             while (uart1.available() > 0) {
@@ -115,7 +119,7 @@ void monitorApp(App) {
         // uart1.print(",");
         // uart1.print(location.y);
 
-        // uart1.println();
+        uart1.println();
         app.delay(Period);
     }
 }

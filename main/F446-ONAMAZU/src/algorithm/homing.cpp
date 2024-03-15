@@ -132,19 +132,19 @@ int Homing::homingBackWeight(void) {
 
     if (gyro.direction == WEST && tof.wallExists[EAST] == false) {
         weight = (abs(location.x + 1) + abs(location.y)) * 5 +
-                 homingReachedCount[x + 1][y] * 100;
+                 homingReachedCount[x + 1][y] * 300;
 
     } else if (gyro.direction == NORTH && tof.wallExists[SOUTH] == false) {
         weight = (abs(location.x) + abs(location.y - 1)) * 5 +
-                 homingReachedCount[x][y - 1] * 100;
+                 homingReachedCount[x][y - 1] * 300;
 
     } else if (gyro.direction == EAST && tof.wallExists[WEST] == false) {
         weight = (abs(location.x - 1) + abs(location.y)) * 5 +
-                 homingReachedCount[x - 1][y] * 100;
+                 homingReachedCount[x - 1][y] * 300;
 
     } else if (gyro.direction == SOUTH && tof.wallExists[NORTH] == false) {
         weight = (abs(location.x) + abs(location.y + 1)) * 5 +
-                 homingReachedCount[x][y + 1] * 100;
+                 homingReachedCount[x][y + 1] * 300;
     }
     if (weight > 1000) {
         weight = 1000;
