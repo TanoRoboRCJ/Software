@@ -9,9 +9,10 @@ void mainApp(App) {
 
     static bool status         = false;
     static bool hasGameStarted = false;
+    static bool isFirst        = true;
 
     while (1) {
-        if (ui.toggle) {
+        if (ui.toggle  && !isFirst) {
             if (hasGameStarted == false) {
                 hasGameStarted = true;
                 gyro.setOffset();
@@ -36,6 +37,10 @@ void mainApp(App) {
             lcd.writeRunningStatus();
 
         } else {
+            if(!ui.toggle){
+                isFirst = false;
+            }
+            
             app.stop(homingApp);
             app.stop(rightWallApp);
             app.stop(adjustmentApp);

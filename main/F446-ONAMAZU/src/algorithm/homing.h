@@ -8,7 +8,7 @@
 
 class Homing {
    public:
-    const int HomingTime = 180000;
+    const int HomingTime = 240000;
     bool started         = false;
 
     int homingWeighting(void);
@@ -17,7 +17,8 @@ class Homing {
     int homingLeftWeight(void);
     int homingBackWeight(void);
 
-    int dijkstra(int destX = 0, int destY = 0);
+    int dijkstra(int destX, int destY, int originX = 0, int originY = 0);
+    int dijkstraWeighting(void);
     int dijkstraSteps[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
     int homingReachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};

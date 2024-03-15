@@ -81,7 +81,7 @@ void monitorApp(App) {
 
         uart1.print(loadcell.load[0]);
         uart1.print("\t");
-        uart1.print(loadcell.load[1]);
+        uart1.println(loadcell.load[1]);
 
         // 壁の状況を表示(location.wall)
         // if (uart1.available() > 0) {
@@ -138,20 +138,20 @@ void monitorApp(App) {
         // }
 
         // 壁の状況を表示(location.wall)
-        if (uart1.available() > 0) {
-            while (uart1.available() > 0) {
-                char trash = uart1.read();
-            }
+        // if (uart1.available() > 0) {
+        //     while (uart1.available() > 0) {
+        //         char trash = uart1.read();
+        //     }
 
-            uart1.println("map:");
-            for (int y = FIELD_ORIGIN * 2 - 1; y >= 0; y--) {
-                for (int x = 0; x < FIELD_ORIGIN * 2; x++) {
-                    uart1.print(homing.dijkstraSteps[x][y]);
-                    uart1.print("\t");
-                }
-                uart1.println();
-            }
-        }
+        //     uart1.println("map:");
+        //     for (int y = FIELD_ORIGIN * 2 - 1; y >= 0; y--) {
+        //         for (int x = 0; x < FIELD_ORIGIN * 2; x++) {
+        //             uart1.print(homing.dijkstraSteps[x][y]);
+        //             uart1.print("\t");
+        //         }
+        //         uart1.println();
+        //     }
+        // }
 
         // gyro
         // uart1.print("gyro: ");
@@ -162,7 +162,7 @@ void monitorApp(App) {
         // uart1.print(",");
         // uart1.print(location.y);
 
-        uart1.println(homing.dijkstra(0, 0));
+        // uart1.println(homing.dijkstra(location.x, location.y));
 
         // uart1.println();
         app.delay(Period);

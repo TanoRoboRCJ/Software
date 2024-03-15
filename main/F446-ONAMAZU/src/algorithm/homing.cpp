@@ -2,7 +2,7 @@
 
 Homing homing;
 
-int Homing::dijkstra(int destX, int destY) {
+int Homing::dijkstra(int destX, int destY, int originX, int originY) {
     // RIGHT 0, FRONT 1, LEFT 2, BACK 3
 
     // 初期化
@@ -12,9 +12,12 @@ int Homing::dijkstra(int destX, int destY) {
         }
     }
 
-    homing.dijkstraSteps[destX + FIELD_ORIGIN][destX + FIELD_ORIGIN] = 0;
+    homing.dijkstraSteps[originX + FIELD_ORIGIN][originY + FIELD_ORIGIN] = 0;
 
     // ダイクストラ法で歩数を計算
+
+    int counter = 0;
+    int oldCounter = 0;
     while (1) {
         for (int x = 2; x < FIELD_ORIGIN * 2 - 2; x++) {
             for (int y = 2; y < FIELD_ORIGIN * 2 - 2; y++) {
@@ -31,22 +34,33 @@ int Homing::dijkstra(int destX, int destY) {
 
                 if (northStep != -1 && location.canGo(x, y, x, y + 1)) {
                     homing.dijkstraSteps[x][y] = northStep + 1;
+                    counter++;
                 } else if (eastStep != -1 && location.canGo(x, y, x + 1, y)) {
                     homing.dijkstraSteps[x][y] = eastStep + 1;
+                    counter++;
                 } else if (southStep != -1 && location.canGo(x, y, x, y - 1)) {
                     homing.dijkstraSteps[x][y] = southStep + 1;
+                    counter++;
                 } else if (westStep != -1 && location.canGo(x, y, x - 1, y)) {
                     homing.dijkstraSteps[x][y] = westStep + 1;
+                    counter++;
                 }
             }
         }
 
-        if (homing.dijkstraSteps[location.x + FIELD_ORIGIN][location.x + FIELD_ORIGIN] != -1) {
+        if (homing.dijkstraSteps[destX + FIELD_ORIGIN][destY + FIELD_ORIGIN] !=
+            -1) {
             break;
         }
+
+        if (oldCounter == counter) {
+            return 10000;
+        }
+
+        oldCounter = counter;
     }
 
-    return homing.dijkstraSteps[location.x + FIELD_ORIGIN][location.x + FIELD_ORIGIN];
+    return homing.dijkstraSteps[destX + FIELD_ORIGIN][destY + FIELD_ORIGIN];
 }
 
 int Homing::homingWeighting(void) {
@@ -56,6 +70,64 @@ int Homing::homingWeighting(void) {
     weight[FRONT] = homingFrontWeight();
     weight[LEFT] = homingLeftWeight();
     weight[BACK] = homingBackWeight();
+
+    if (tof.rightWallExists == true) {
+        weight[RIGHT] = DISABLE * 10;
+    }
+    if (tof.frontWallExists == true) {
+        weight[FRONT] = DISABLE * 10;
+    }
+    if (tof.leftWallExists == true) {
+        weight[LEFT] = DISABLE * 10;
+    }
+    if (tof.behindWallExists == true) {
+        weight[BACK] = DISABLE * 10;
+    }
+
+    if (weight[RIGHT] <= weight[FRONT] && weight[RIGHT] <= weight[LEFT] &&
+        weight[RIGHT] <= weight[BACK]) {  // NOTE 同列の場合は右優先
+        return 0;                         // right
+    } else if (weight[FRONT] <= weight[RIGHT] &&
+               weight[FRONT] <= weight[LEFT] && weight[FRONT] <= weight[BACK]) {
+        return 1;  // front
+    } else if (weight[LEFT] <= weight[RIGHT] && weight[LEFT] <= weight[FRONT] &&
+               weight[LEFT] <= weight[BACK]) {
+        return 2;  // left
+    } else if (weight[BACK] <= weight[RIGHT] && weight[BACK] <= weight[FRONT] &&
+               weight[BACK] <= weight[LEFT]) {
+        return 3;  // back
+    }
+}
+
+int Homing::dijkstraWeighting(void) {
+    int weight[4] = {0};
+
+    switch (gyro.direction) {
+        case NORTH:
+            weight[RIGHT] = dijkstra(location.x + 1, location.y);
+            weight[FRONT] = dijkstra(location.x, location.y + 1);
+            weight[LEFT] = dijkstra(location.x - 1, location.y);
+            weight[BACK] = dijkstra(location.x, location.y - 1);
+            break;
+        case EAST:
+            weight[RIGHT] = dijkstra(location.x, location.y - 1);
+            weight[FRONT] = dijkstra(location.x + 1, location.y);
+            weight[LEFT] = dijkstra(location.x, location.y + 1);
+            weight[BACK] = dijkstra(location.x - 1, location.y);
+            break;
+        case SOUTH:
+            weight[RIGHT] = dijkstra(location.x - 1, location.y);
+            weight[FRONT] = dijkstra(location.x, location.y - 1);
+            weight[LEFT] = dijkstra(location.x + 1, location.y);
+            weight[BACK] = dijkstra(location.x, location.y + 1);
+            break;
+        case WEST:
+            weight[RIGHT] = dijkstra(location.x, location.y + 1);
+            weight[FRONT] = dijkstra(location.x - 1, location.y);
+            weight[LEFT] = dijkstra(location.x, location.y - 1);
+            weight[BACK] = dijkstra(location.x + 1, location.y);
+            break;
+    }
 
     if (tof.rightWallExists == true) {
         weight[RIGHT] = DISABLE * 10;

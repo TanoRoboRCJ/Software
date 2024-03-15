@@ -163,7 +163,7 @@ void homingApp(App) {  // CHECK 最適化されてない
                     app.delay(Period);
                     servo.suspend  = true;
                     servo.velocity = 0;
-                    switch (homing.homingWeighting()) {
+                    switch (homing.dijkstraWeighting()) {
                         case 0:  // right
                             movement.turnRight();
                             break;
@@ -179,7 +179,7 @@ void homingApp(App) {  // CHECK 最適化されてない
                     movement.move_1tile();
                     homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                              [location.y + FIELD_ORIGIN]++;
-                    app.delay(100);
+                    // app.delay(100);
                 }
             }
             app.delay(Period);
