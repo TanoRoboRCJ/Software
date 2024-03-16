@@ -41,7 +41,7 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
         }
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
-        
+
         app.delay(Period);
     }  // 次のタイルまで前進
     while (140 < tof.val[0] && tof.val[0] < 250) {
@@ -110,11 +110,11 @@ void Movement::angleAdjustment(void) {  // NOTE y = ax + b
     }
 
     if (tof.rightWallExists == true && tof.leftWallExists == false) {
-        servo.isCorrectingAngle = map(tof.val[4] - 130, -100, 100, -20, 20);
+        servo.isCorrectingAngle = map(tof.val[4] - 130, -85, 85, -20, 20);
     }
 
     if (tof.rightWallExists == false && tof.leftWallExists == true) {
-        servo.isCorrectingAngle = map(130 - tof.val[12], -100, 100, -20, 20);
+        servo.isCorrectingAngle = map(130 - tof.val[12], -85, 85, -20, 20);
     }
 
     if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {
@@ -141,7 +141,7 @@ void Movement::avoidBarrier(void) {
         app.delay(300);
         servo.driveAngularVelocity(-90, 90);
         app.delay(300);
-        isHit = false;
+        isHit = true;
     }
     if (loadcell.status == LEFT) {
         app.stop(servoApp);
@@ -154,9 +154,9 @@ void Movement::avoidBarrier(void) {
         app.delay(300);
         servo.driveAngularVelocity(-90, -90);
         app.delay(300);
-        isHit = false;
+        isHit = true;
     }
-    if (!isHit) {
+    if (isHit) {
         servo.velocity = servo.DefaultSpeed;
         app.start(servoApp);
         if (homing.started == true) {
@@ -164,6 +164,6 @@ void Movement::avoidBarrier(void) {
         } else {
             app.restart(rightWallApp);
         }
-        isHit = true;
+        isHit = false;
     }
 }

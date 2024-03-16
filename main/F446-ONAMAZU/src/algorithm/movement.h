@@ -11,12 +11,11 @@ class Movement {
     double _oldCoordinateX = 0;
     double _oldCoordinateY = 0;
 
-    bool isHit = false;
-
     const int Radius = 20;
     const int _Wait  = 500;
 
    public:
+    bool isHit = false;
     void move_1tile(void);
     void back(void);
     void turnRight(void);
