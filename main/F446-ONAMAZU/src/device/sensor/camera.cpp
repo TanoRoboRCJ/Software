@@ -4,7 +4,7 @@ CAMERA::CAMERA(HardwareSerial *ptr, int _ledPin) : ledPin(_ledPin) {
     serialPtr = ptr;
     serialPtr->begin(115200);
 
-    led = 0.5;
+    led = 0.2;
 }
 
 void CAMERA::read(void) {
