@@ -20,6 +20,9 @@ void rightWallApp(App) {
             exploring.updateMap();
             originUpdate = false;
         }
+        while (movement.isHit == true) {
+            app.delay(Period);
+        }
         app.delay(Period);
         servo.suspend  = true;
         servo.velocity = 0;
