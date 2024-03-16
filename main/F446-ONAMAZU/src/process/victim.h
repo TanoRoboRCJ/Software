@@ -7,7 +7,7 @@
 class VICTIM {
    public:
     bool isDetected   = false;
-    int isRightOrLeft = NONE;  // 0;NAN 1;right 2;left
+    int isRightOrLeft = NONE;  // RIGHT: 0 LEFT: 2 NONE: 5
     int id            = 0;
 
     bool place[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]       = {false};

@@ -5,8 +5,13 @@
 
 #include "./SCServo/SCServo.h"
 #include "../sensor/gyro.h"
+#include "../bottom.h"
+#include "../../kit/RTOS-Kit.h"
 
+extern Bottom bottom;
 extern GYRO gyro;
+extern RTOS_Kit kit;
+extern void servoApp(App);
 
 class STS3032 {
    public:

@@ -85,4 +85,63 @@ void STS3032::stop(void) {
 }
 
 void STS3032::rescueKit(int num, int position) {
+    static int remainingRescueKitR = 2;
+    static int remainingRescueKitL = 2;
+
+    int deg = gyro.deg;
+    int turnDeg = (deg + 180) % 360;
+    bool turn = false;
+
+    app.stop(servoApp);
+
+    for (int i = 0; i < num; i++) {
+        if (position == 0) {
+            if (remainingRescueKitR == 0 && turn == false) {
+                position = 2;
+                turn = true;
+
+                while (abs(gyro.deg - turnDeg) > 5 &&
+                       abs(gyro.deg - turnDeg) < 355) {
+                    drive(0, turnDeg);
+                    app.delay(10);
+                }
+            }
+        } else if (position == 2) {
+            if (remainingRescueKitL == 0 && turn == false) {
+                position = 0;
+                turn = true;
+
+                while (abs(gyro.deg - turnDeg) > 5 &&
+                       abs(gyro.deg - turnDeg) < 355) {
+                    drive(0, turnDeg);
+                    app.delay(10);
+                }
+            }
+        }
+        driveAngularVelocity(0, 0);
+
+        if (position == 0) {
+            bottom.rescueKit[0] = false;
+            app.delay(400);
+            bottom.rescueKit[0] = true;
+            app.delay(200);
+
+            remainingRescueKitR--;
+        } else if (position == 2) {
+            bottom.rescueKit[1] = false;
+            app.delay(400);
+            bottom.rescueKit[1] = true;
+            app.delay(200);
+
+            remainingRescueKitL--;
+        }
+    }
+
+    while (abs(gyro.deg - deg) > 5 && abs(gyro.deg - deg) < 355) {
+        drive(0, deg);
+        app.delay(10);
+    }
+    driveAngularVelocity(0, 0);
+
+    app.start(servoApp);
 }
