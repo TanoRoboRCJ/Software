@@ -24,15 +24,17 @@ void rightWallApp(App) {
         servo.suspend  = true;
         servo.velocity = 0;
 
-        switch (exploring.weighting()) {
-            case 0:  // right
-                movement.turnRight();
-                break;
-            case 1:  // front
-                break;
-            case 2:  // left
-                movement.turnLeft();
-                break;
+        if (abs(gyro.slope) < 15) {
+            switch (exploring.weighting()) {
+                case 0:  // right
+                    movement.turnRight();
+                    break;
+                case 1:  // front
+                    break;
+                case 2:  // left
+                    movement.turnLeft();
+                    break;
+            }
         }
         movement.move_1tile();
         // app.delay(100);
@@ -54,7 +56,8 @@ void floorApp(App) {
     while (1) {
         int blueTileX = FIELD_ORIGIN;
         int blueTileY = FIELD_ORIGIN;
-        if (floorSensor.frontColor == floorSensor.BLACK && abs(gyro.slope) <= 5) {
+        if (floorSensor.frontColor == floorSensor.BLACK &&
+            abs(gyro.slope) <= 5) {
             if (homing.started == true) {
                 app.stop(homingApp);
             } else {
@@ -163,18 +166,20 @@ void homingApp(App) {  // CHECK 最適化されてない
                     app.delay(Period);
                     servo.suspend  = true;
                     servo.velocity = 0;
-                    switch (homing.dijkstraWeighting()) {
-                        case 0:  // right
-                            movement.turnRight();
-                            break;
-                        case 1:  // front
-                            break;
-                        case 2:  // left
-                            movement.turnLeft();
-                            break;
-                        case 3:  // back
-                            movement.turnReverse();
-                            break;
+                    if (abs(gyro.slope) < 15) {
+                        switch (homing.dijkstraWeighting()) {
+                            case 0:  // right
+                                movement.turnRight();
+                                break;
+                            case 1:  // front
+                                break;
+                            case 2:  // left
+                                movement.turnLeft();
+                                break;
+                            case 3:  // back
+                                movement.turnReverse();
+                                break;
+                        }
                     }
                     movement.move_1tile();
                     homing.homingReachedCount[location.x + FIELD_ORIGIN]
