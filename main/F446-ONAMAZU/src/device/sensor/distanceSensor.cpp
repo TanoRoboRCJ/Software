@@ -63,7 +63,7 @@ int DISTANCE_SENSOR::read(void) {
             serialPtr->read();
         }
 
-        val[8] = bottom.tof[1];
+        val[8] = constrain(bottom.tof[1] - 5, 0, 1200);
 
         return 0;
 
