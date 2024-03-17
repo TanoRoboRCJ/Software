@@ -11,7 +11,8 @@ class VICTIM {
     int id            = 0;
 
     bool place[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]       = {false};
-    int kindOfVictim[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+    int kindOfVictimX[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+    int kindOfVictimY[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
     void read(void) {
         static unsigned long timer = 0;

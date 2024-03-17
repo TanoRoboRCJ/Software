@@ -60,8 +60,14 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         app.stop(adjustmentApp);
         app.stop(floorApp);
 
-        victim.kindOfVictim[location.x + FIELD_ORIGIN]
+if(gyro.direction == NORTH || gyro.direction == SOUTH){
+        victim.kindOfVictimY[location.x + FIELD_ORIGIN]
                            [location.y + FIELD_ORIGIN] = victim.id;
+}else if(gyro.direction == EAST || gyro.direction == WEST){
+        victim.kindOfVictimX[location.x + FIELD_ORIGIN]
+                           [location.y + FIELD_ORIGIN] = victim.id;
+}
+
         victim.place[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN] =
             true;
         victim.isDetected = true;
@@ -128,18 +134,18 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
 bool duplicate(void) {  // 進行方向に今見ているデータと同じデータがあれば破棄
     if (gyro.direction == NORTH || gyro.direction == SOUTH) {
-        if (victim.kindOfVictim[location.x + FIELD_ORIGIN]
+        if (victim.kindOfVictimY[location.x + FIELD_ORIGIN]
                                [location.y + FIELD_ORIGIN + 1] == victim.id ||
-            victim.kindOfVictim[location.x + FIELD_ORIGIN]
+            victim.kindOfVictimY[location.x + FIELD_ORIGIN]
                                [location.y + FIELD_ORIGIN - 1] == victim.id) {
             return true;
         } else {
             return false;
         }
     } else if (gyro.direction == EAST || gyro.direction == WEST) {
-        if (victim.kindOfVictim[location.x + FIELD_ORIGIN + 1]
+        if (victim.kindOfVictimX[location.x + FIELD_ORIGIN + 1]
                                [location.y + FIELD_ORIGIN] == victim.id ||
-            victim.kindOfVictim[location.x + FIELD_ORIGIN - 1]
+            victim.kindOfVictimX[location.x + FIELD_ORIGIN - 1]
                                [location.y + FIELD_ORIGIN] == victim.id) {
             return true;
         } else {

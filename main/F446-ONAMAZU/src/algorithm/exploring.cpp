@@ -22,6 +22,12 @@ void Exploring::updateMap(void) {
 int Exploring::weighting(void) {
     int weight[3] = {0};
 
+    for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
+        for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
+            reachedCount[i][j] %= 21;
+        }
+    }
+
     weight[RIGHT] = rightWeight();
     weight[FRONT] = frontWeight();
     weight[LEFT]  = leftWeight();
