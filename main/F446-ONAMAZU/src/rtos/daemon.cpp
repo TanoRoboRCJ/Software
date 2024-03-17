@@ -133,7 +133,8 @@ void monitorApp(App) {
 
         // NOTE: gyro
         uart1.print("gyro: ");
-        uart1.print(gyro.deg);
+        // uart1.print(gyro.deg);
+        uart1.print(gyro.slope);
 
         // NOTE: location
         // uart1.print(location.x);

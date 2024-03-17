@@ -47,6 +47,8 @@ int Exploring::weighting(void) {
     // uart1.print(weight[FRONT]);
     // uart1.print("\t");
     // uart1.print(weight[LEFT]);
+    // uart1.print("\t");
+    // uart1.print(gyro.deg);
     // uart1.println();
 
     if (weight[RIGHT] <= weight[FRONT] &&
