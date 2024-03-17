@@ -27,8 +27,7 @@ void GYRO::init(void) {
 
     sensorPtr->getSensor(&sensor);
     if (bnoID != sensor.sensor_id) {
-        uart1.println(
-            "\nNo Calibration Data for this sensor exists in EEPROM");
+        uart1.println("\nNo Calibration Data for this sensor exists in EEPROM");
         delay(500);
     } else {
         uart1.println("\nFound Calibration for this sensor in EEPROM.");
@@ -152,64 +151,64 @@ void GYRO::displaySensorOffsets(const adafruit_bno055_offsets_t &calibData) {
 
 #else
 
-GYRO::GYRO(Adafruit_BNO055 *p) {
+euler_t ypr;
+
+GYRO::GYRO(Adafruit_BNO08x* p) {
+    sensorPtr = p;
 }
 
 void GYRO::init(void) {
-    mpu.initialize();
-    if (mpu.testConnection() != true) {
-        Serial.println("MPU disconection");
-        while (true) {
-        }
+    Wire.setSDA(PB9);
+    Wire.setSCL(PB8);
+    Wire.begin();
+    delay(100);
+    sensorPtr->begin_I2C();
+    sensorPtr->enableReport(SH2_ARVR_STABILIZED_RV, 5000);
+}
+
+void GYRO::quaternionToEuler(float qr, float qi, float qj, float qk,
+                             euler_t* ypr, bool degrees) {
+    float sqr = sq(qr);
+    float sqi = sq(qi);
+    float sqj = sq(qj);
+    float sqk = sq(qk);
+
+    ypr->yaw = atan2(2.0 * (qi * qj + qk * qr), (sqi - sqj - sqk + sqr));
+    ypr->pitch = asin(-2.0 * (qi * qk - qj * qr) / (sqi + sqj + sqk + sqr));
+    ypr->roll = atan2(2.0 * (qj * qk + qi * qr), (-sqi - sqj + sqk + sqr));
+
+    if (degrees) {
+        ypr->yaw *= RAD_TO_DEG;
+        ypr->pitch *= RAD_TO_DEG;
+        ypr->roll *= RAD_TO_DEG;
     }
-    if (mpu.dmpInitialize() != 0) {
-        Serial.println("MPU break");
-        while (true) {
-        }
-    }
-    mpu.setXGyroOffset(Gyro_X);
-    mpu.setYGyroOffset(Gyro_Y);
-    mpu.setZGyroOffset(Gyro_Z);
-    mpu.setZAccelOffset(Accel_Z);
-    mpu.setDMPEnabled(true);
-    mpuIntStatus = mpu.getIntStatus();
-    dmpReady = true;
-    packetSize = mpu.dmpGetFIFOPacketSize();
+}
+
+void GYRO::quaternionToEulerRV(sh2_RotationVectorWAcc_t* rotational_vector,
+                               euler_t* ypr, bool degrees) {
+    quaternionToEuler(rotational_vector->real, rotational_vector->i,
+                      rotational_vector->j, rotational_vector->k, ypr, degrees);
 }
 
 int GYRO::read(void) {
-    mpuIntStatus = false;
-    mpuIntStatus = mpu.getIntStatus();
-    fifoCount = mpu.getFIFOCount();
-
-    if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
-        mpu.resetFIFO();
-    } else if (mpuIntStatus & 0x02) {
-        while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-        mpu.getFIFOBytes(fifoBuffer, packetSize);
-        fifoCount -= packetSize;
-        mpu.dmpGetQuaternion(&q, fifoBuffer);
-        mpu.dmpGetGravity(&gravity, &q);
-        mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-        slope = degrees(ypr[2]) - slopeOffset;
-        deg = degrees(ypr[0]) - offset;
-
-        while (deg < 0) {
-            deg += 360;
-        }
-        deg %= 360;
-
-        while (slope < 0) {
-            slope += 360;
-        }
-        slope %= 360;
-
-        if (slope >= 180) {
-            slope -= 360;
-        }
+    sh2_SensorValue_t sensorValue;
+    if (sensorPtr->wasReset()) {
+        sensorPtr->enableReport(SH2_ARVR_STABILIZED_RV, 5000);
     }
 
-    if (abs(slope) <= 8) {
+    if (sensorPtr->getSensorEvent(&sensorValue)) {
+        quaternionToEulerRV(&sensorValue.un.arvrStabilizedRV, &ypr, true);
+    }
+
+    deg = (int)(ypr.yaw * -1 - offset + 720) % 360;
+    slope = (int)(ypr.pitch - slopeOffset + 720) % 360;
+
+    if (slope >= 180) {
+        slope -= 360;
+    }
+    slope *= -1;
+
+    if (abs(slope) <= 4) {
         slope = 0;
     }
 
@@ -219,27 +218,17 @@ int GYRO::read(void) {
 }
 
 void GYRO::setOffset(void) {
-    // mpuIntStatus = false;
-    // mpuIntStatus = mpu.getIntStatus();
-    // fifoCount = mpu.getFIFOCount();
+    sh2_SensorValue_t sensorValue;
+    if (sensorPtr->wasReset()) {
+        sensorPtr->enableReport(SH2_ARVR_STABILIZED_RV, 5000);
+    }
 
-    // if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
-    //     mpu.resetFIFO();
-    // } else if (mpuIntStatus & 0x02) {
-    //     while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-    //     mpu.getFIFOBytes(fifoBuffer, packetSize);
-    //     fifoCount -= packetSize;
-    //     mpu.dmpGetQuaternion(&q, fifoBuffer);
-    //     mpu.dmpGetGravity(&gravity, &q);
-    //     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    //     slopeOffset = degrees(ypr[2]);
-    //     offset = degrees(ypr[0]);
+    if (sensorPtr->getSensorEvent(&sensorValue)) {
+        quaternionToEulerRV(&sensorValue.un.arvrStabilizedRV, &ypr, true);
+    }
 
-    //     if (offset < 0) offset += 360;
-    //     if (offset > 359) offset %= 360;
-    //     if (slopeOffset < 0) slopeOffset += 360;
-    //     if (slopeOffset > 359) slopeOffset %= 360;
-    // }
+    offset = (int)(ypr.yaw * -1 + 720) % 360;
+    slopeOffset = (int)(ypr.pitch + 720) % 360;
 }
 
 void GYRO::directionDecision(void) {
@@ -252,6 +241,38 @@ void GYRO::directionDecision(void) {
     } else if (deg >= 225 && deg < 315) {
         direction = WEST;
     }
+}
+
+void GYRO::displaySensorOffsets(const adafruit_bno055_offsets_t& calibData) {
+    uart1.print("Accelerometer: ");
+    uart1.print(calibData.accel_offset_x);
+    uart1.print(" ");
+    uart1.print(calibData.accel_offset_y);
+    uart1.print(" ");
+    uart1.print(calibData.accel_offset_z);
+    uart1.print(" ");
+
+    uart1.print("\nGyro: ");
+    uart1.print(calibData.gyro_offset_x);
+    uart1.print(" ");
+    uart1.print(calibData.gyro_offset_y);
+    uart1.print(" ");
+    uart1.print(calibData.gyro_offset_z);
+    uart1.print(" ");
+
+    uart1.print("\nMag: ");
+    uart1.print(calibData.mag_offset_x);
+    uart1.print(" ");
+    uart1.print(calibData.mag_offset_y);
+    uart1.print(" ");
+    uart1.print(calibData.mag_offset_z);
+    uart1.print(" ");
+
+    uart1.print("\nAccel Radius: ");
+    uart1.print(calibData.accel_radius);
+
+    uart1.print("\nMag Radius: ");
+    uart1.print(calibData.mag_radius);
 }
 
 #endif

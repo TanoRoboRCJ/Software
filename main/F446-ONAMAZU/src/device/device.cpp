@@ -23,12 +23,17 @@ Adafruit_NeoPixel leftLED(7, PA15, NEO_GRB + NEO_KHZ800);
 LED led(&rightLED, &topLED, &leftLED);
 
 // SENSOR
-Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
+// #ifdef BNO055_MODE
+// Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
+// #else
+Adafruit_BNO08x bno08x = Adafruit_BNO08x(-1);
+GYRO gyro(&bno08x);
+// #endif
 
 HardwareSerial uart4(PA1, PA0);
 DISTANCE_SENSOR tof(&uart4);
 
-GYRO gyro(&bno);
+
 SWITCH ui;
 LOADCELL loadcell;
 FLOOR_SENSOR floorSensor;

@@ -6,7 +6,7 @@
 #ifndef _GYRO_H_
 #define _GYRO_H_
 
-#define BNO055_MODE
+// #define BNO055_MODE
 
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -14,7 +14,7 @@
 #include <Wire.h>
 #include <Adafruit_BNO055.h>
 #include <Adafruit_Sensor.h>
-#include <MPU6050_6Axis_MotionApps20.h>
+#include <Adafruit_BNO08x.h>
 
 #ifdef BNO055_MODE
 
@@ -54,34 +54,37 @@ class GYRO {
 
 #else
 
-#define Accel_X -5583
-#define Accel_Y 419
-#define Accel_Z 752
-#define Gyro_X 41
-#define Gyro_Y 54
-#define Gyro_Z 17
+struct euler_t {
+    float yaw;
+    float pitch;
+    float roll;
+};
 
 class GYRO {
    public:
-    const bool isGyroDisabled = false;
+    euler_t ypr;
+    GYRO(Adafruit_BNO08x *p);
 
-    GYRO(Adafruit_BNO055 *p);
+    void quaternionToEuler(float qr, float qi, float qj, float qk, euler_t *ypr,
+                           bool degrees = false);
+    void quaternionToEulerRV(sh2_RotationVectorWAcc_t *rotational_vector,
+                             euler_t *ypr, bool degrees = false);
 
     void init(void);
     void setOffset(void);
     int read(void);
     void directionDecision(void);
+    void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData);
 
-    Adafruit_BNO055 *sensorPtr;
+    Adafruit_BNO08x *sensorPtr;
 
     int deg = 0;
-    int magnetic = 0;
     int offset = 0;
 
     int error = 0;
     int oldDeg = 0;
 
-    int slope = 0;
+    int slope = 0;  // 上向が負
     int slopeOffset = 0;
 
     bool North = false;
@@ -92,17 +95,6 @@ class GYRO {
     int direction = 0;
 
    private:
-    MPU6050 mpu;
-    uint8_t mpuIntStatus;
-    bool dmpReady = false;  // set true if DMP init was successful
-    uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
-
-    uint16_t fifoCount;
-    uint8_t fifoBuffer[64];  // FIFO storage buffer                 //
-                             // orientation/motion vars
-    Quaternion q;            // [w, x, y, z]         quaternion container
-    VectorFloat gravity;     // [x, y, z]            gravity vector
-    float ypr[3];
 };
 
 #endif
