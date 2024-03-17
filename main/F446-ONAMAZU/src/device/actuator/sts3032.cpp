@@ -85,8 +85,8 @@ void STS3032::stop(void) {
 }
 
 void STS3032::rescueKit(int num, int position) {
-    static int remainingRescueKitR = 2;
-    static int remainingRescueKitL = 2;
+    static int remainingRescueKitR = 6;
+    static int remainingRescueKitL = 6;
 
     int deg = gyro.deg;
     int turnDeg = (deg + 180) % 360;
@@ -96,7 +96,7 @@ void STS3032::rescueKit(int num, int position) {
 
     for (int i = 0; i < num; i++) {
         if (position == 0) {
-            if (remainingRescueKitR == 0 && turn == false) {
+            if (remainingRescueKitR <= 0 && turn == false) {
                 position = 2;
                 turn = true;
 
@@ -107,7 +107,7 @@ void STS3032::rescueKit(int num, int position) {
                 }
             }
         } else if (position == 2) {
-            if (remainingRescueKitL == 0 && turn == false) {
+            if (remainingRescueKitL <= 0 && turn == false) {
                 position = 0;
                 turn = true;
 
@@ -122,16 +122,16 @@ void STS3032::rescueKit(int num, int position) {
 
         if (position == 0) {
             bottom.rescueKit[0] = false;
-            app.delay(400);
+            app.delay(800);
             bottom.rescueKit[0] = true;
-            app.delay(200);
+            app.delay(400);
 
             remainingRescueKitR--;
         } else if (position == 2) {
             bottom.rescueKit[1] = false;
-            app.delay(400);
+            app.delay(800);
             bottom.rescueKit[1] = true;
-            app.delay(200);
+            app.delay(400);
 
             remainingRescueKitL--;
         }

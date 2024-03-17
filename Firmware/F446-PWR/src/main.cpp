@@ -8,7 +8,7 @@ Output ledToggle = Output(PA0);
 Output ledBuiltin = Output(PB12);
 
 const int PushDeg[2] = {-24, 24};
-const int PullDeg[2] = {40, -40};
+const int PullDeg[2] = {41, -41};
 Output servo[2] = {Output(PB2), Output(PB1)};
 bool isPushing[2] = {true, true};
 
