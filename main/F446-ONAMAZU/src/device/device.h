@@ -33,7 +33,12 @@ extern Adafruit_NeoPixel leftLED;
 extern LED led;
 
 //SENSOR
-extern Adafruit_BNO055 bno;
+//FIXME: これがexternエラーの正体
+#ifdef BNO055_MODE
+extern Adafruit_BNO055 bno055;
+#else
+extern Adafruit_BNO08x bno08x;
+#endif
 
 extern HardwareSerial uart4;
 extern DISTANCE_SENSOR tof;

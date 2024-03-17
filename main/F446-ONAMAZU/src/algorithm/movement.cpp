@@ -2,6 +2,7 @@
 
 Movement movement;
 
+// FIXME: 絶対方位指定じゃないとバグります！
 void Movement::turnRight(void) {
     servo.suspend = true;
     app.delay(_Wait);
@@ -11,6 +12,7 @@ void Movement::turnRight(void) {
     app.delay(_Wait * 2);
 }
 
+// FIXME: 絶対方位指定じゃないとバグります！
 void Movement::turnLeft(void) {
     servo.suspend = true;
     app.delay(_Wait);
@@ -20,6 +22,7 @@ void Movement::turnLeft(void) {
     app.delay(_Wait * 2);
 }
 
+// FIXME: 絶対方位指定じゃないとバグります！
 void Movement::turnReverse(void) {
     servo.suspend = true;
     app.delay(_Wait);
@@ -34,24 +37,24 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     _oldCoordinateY = location.coordinateY;
 
     while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
-           abs(location.coordinateY - _oldCoordinateY) <
-               300) {  // FIXME 誤差が蓄積される
-        if (tof.frontWallExists == true) {
+           abs(location.coordinateY - _oldCoordinateY) < 300) {
+        if (tof.frontWallExists ==
+            true) {  // FIXME: isHit無視してbreakする可能性がある
             break;
         }
-        servo.suspend  = false;
+        servo.suspend = false;
         servo.velocity = servo.DefaultSpeed;
 
         app.delay(Period);
     }  // 次のタイルまで前進
     while (140 < tof.val[0] && tof.val[0] < 250) {
         app.stop(locationApp);
-        servo.suspend  = false;
+        servo.suspend = false;
         servo.velocity = servo.DefaultSpeed;
         app.delay(Period);
     }
     app.start(locationApp);
-    servo.suspend  = true;
+    servo.suspend = true;
     servo.velocity = 0;
 }
 
@@ -61,7 +64,7 @@ void Movement::back(void) {
 
     while (abs(location.coordinateX - _oldCoordinateX) < 100 &&
            abs(location.coordinateY - _oldCoordinateY) < 100) {
-        servo.suspend  = false;
+        servo.suspend = false;
         servo.velocity = -servo.DefaultSpeed;
         app.delay(Period);
     }  // 黒タイルから後退
@@ -70,8 +73,8 @@ void Movement::back(void) {
 void Movement::turnNorth(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend           = false;
-    servo.angle             = 0;
+    servo.suspend = false;
+    servo.angle = 0;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -79,8 +82,8 @@ void Movement::turnNorth(void) {
 void Movement::turnEast(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend           = false;
-    servo.angle             = 90;
+    servo.suspend = false;
+    servo.angle = 90;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -88,8 +91,8 @@ void Movement::turnEast(void) {
 void Movement::turnSouth(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend           = false;
-    servo.angle             = 180;
+    servo.suspend = false;
+    servo.angle = 180;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -97,8 +100,8 @@ void Movement::turnSouth(void) {
 void Movement::turnWest(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend           = false;
-    servo.angle             = 270;
+    servo.suspend = false;
+    servo.angle = 270;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -130,6 +133,8 @@ void Movement::angleAdjustment(void) {  // NOTE y = ax + b
 }
 
 void Movement::avoidBarrier(void) {
+    // FIXME:
+    // isHitをonにするのは当たった瞬間な気がします、あと39行目のtof.frontWallExistsのところにisHitの条件が入っていないので、回避動作中に壁が視野に入ったら多分breakしてしまう
     if (loadcell.status == RIGHT) {
         app.stop(servoApp);
         if (homing.started == true) {
@@ -159,6 +164,8 @@ void Movement::avoidBarrier(void) {
     if (isHit) {
         servo.velocity = servo.DefaultSpeed;
         app.start(servoApp);
+
+        // FIXME: これ、restartではなくてstartじゃない？
         if (homing.started == true) {
             app.restart(homingApp);
         } else {

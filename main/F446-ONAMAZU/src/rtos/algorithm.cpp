@@ -10,32 +10,41 @@
 #include "./RTOS.h"
 
 void rightWallApp(App) {
+    // CHECK: これstaticじゃなくてよくね？
     static bool originUpdate = true;
     while (1) {
         bottom.LED_color[0] = 0;
         bottom.LED_color[1] = 255;
         bottom.LED_color[2] = 150;
+
         if (originUpdate) {
             exploring.reachedCount[FIELD_ORIGIN][FIELD_ORIGIN]++;
             exploring.updateMap();
             originUpdate = false;
         }
+
         while (movement.isHit == true) {
             app.delay(Period);
         }
         app.delay(Period);
+
         servo.suspend  = true;
         servo.velocity = 0;
 
+        // CHECK:とりあえずプリントデバッグしてみよう
         if (abs(gyro.slope) < 15) {
+            // CHECK:右の判定を30cm地点じゃなくて、28 - 30の地点で空いていたら見たいにしたいね
             switch (exploring.weighting()) {
                 case 0:  // right
+                    // uart1.println("CASE A: right");
                     movement.turnRight();
                     break;
                 case 1:  // front
+                    // uart1.println("CASE B: front");
                     break;
                 case 2:  // left
                     movement.turnLeft();
+                    // uart1.println("CASE C: left");
                     break;
             }
         }
@@ -43,11 +52,12 @@ void rightWallApp(App) {
         // app.delay(100);
         exploring.reachedCount[location.x + FIELD_ORIGIN]
                               [location.y + FIELD_ORIGIN]++;
+
         exploring.updateMap();
     }
 }
 
-void adjustmentApp(App) {  // NOTE movement.hに移行
+void adjustmentApp(App) {
     while (1) {
         movement.angleAdjustment();
         movement.avoidBarrier();

@@ -5,7 +5,6 @@
 
 #define FIELD_ORIGIN 20
 
-// FIXME: いずれはFieldとRouteを統合したい
 class Field {
    public:
     bool isPassed = false;

@@ -155,6 +155,8 @@ int Homing::dijkstraWeighting(void) {
                weight[BACK] <= weight[LEFT]) {
         return 3;  // back
     }
+
+    // FIXME: ここには来ないはず（最後のelse ifは安全のためelseにすべき）
 }
 
 int Homing::homingRightWeight(void) {

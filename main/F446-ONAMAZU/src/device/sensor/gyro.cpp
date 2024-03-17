@@ -158,6 +158,7 @@ GYRO::GYRO(Adafruit_BNO08x* p) {
 }
 
 void GYRO::init(void) {
+    // CHECK:これ多分いらない
     Wire.setSDA(PB9);
     Wire.setSCL(PB8);
     Wire.begin();
@@ -196,6 +197,8 @@ int GYRO::read(void) {
         sensorPtr->enableReport(SH2_ARVR_STABILIZED_RV, 5000);
     }
 
+    // FIXME:
+    // この辺でswitch文するのはどこいったんですか？（Adafruit公式ドキュメント見て）
     if (sensorPtr->getSensorEvent(&sensorValue)) {
         quaternionToEulerRV(&sensorValue.un.arvrStabilizedRV, &ypr, true);
     }
@@ -219,6 +222,7 @@ int GYRO::read(void) {
 
 void GYRO::setOffset(void) {
     sh2_SensorValue_t sensorValue;
+    // CHECK:この辺りの仕様を理解してから使おう
     if (sensorPtr->wasReset()) {
         sensorPtr->enableReport(SH2_ARVR_STABILIZED_RV, 5000);
     }

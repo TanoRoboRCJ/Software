@@ -67,10 +67,12 @@ void STS3032::drive(int velocity, int angle) {
     while (angularVelocity < 0) {
         angularVelocity += 360;
     }
+    // CHECK: %= 360をつける方が安全
     if (angularVelocity > 180) {
         angularVelocity -= 360;
     }
 
+    // CHECK: ここの許容値もっと狭めてKpを上げるべきな気がする
     if (abs(angularVelocity) > 40) {
         angularVelocity *= Kp;
         driveAngularVelocity(0, angularVelocity);

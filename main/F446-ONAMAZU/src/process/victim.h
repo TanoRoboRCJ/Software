@@ -15,6 +15,7 @@ class VICTIM {
     int kindOfVictimY[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
     void read(void) {
+        // CHECK: このtimerなんなん
         static unsigned long timer = 0;
         for (int i = 0; i < 2; i++) {
             camera[i].read();

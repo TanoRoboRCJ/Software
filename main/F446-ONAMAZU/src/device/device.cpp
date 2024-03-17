@@ -23,12 +23,14 @@ Adafruit_NeoPixel leftLED(7, PA15, NEO_GRB + NEO_KHZ800);
 LED led(&rightLED, &topLED, &leftLED);
 
 // SENSOR
-// #ifdef BNO055_MODE
-// Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
-// #else
+// CHECK device.hに不審なexternがあったので修正すればifdef可能なはず
+#ifdef BNO055_MODE
+Adafruit_BNO055 bno055 = Adafruit_BNO055(55, 0x28, &Wire);
+GYRO gyro(&bno055);
+#else
 Adafruit_BNO08x bno08x = Adafruit_BNO08x(-1);
 GYRO gyro(&bno08x);
-// #endif
+#endif
 
 HardwareSerial uart4(PA1, PA0);
 DISTANCE_SENSOR tof(&uart4);

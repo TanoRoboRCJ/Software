@@ -1,4 +1,3 @@
-// FIXME: 汚すぎる
 #include "location.h"
 
 extern HardwareSerial uart1;

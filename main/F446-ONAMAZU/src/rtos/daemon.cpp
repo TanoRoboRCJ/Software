@@ -172,6 +172,7 @@ void sensorApp(App) {
 void servoApp(App) {
     while (1) {
         if (!servo.suspend) {
+            // CHECK:この条件分岐いらなくね？？（sts3032.hでtrueに設定されている）
             if (servo.isAngleCorrectionEnabled) {
                 servo.drive(servo.velocity,
                             servo.angle + servo.isCorrectingAngle);
@@ -191,6 +192,7 @@ void ledApp(App) {
     // int ledStatus = 0;
     int victimId = 0;
 
+    // CHECK: カメラ調整の時に邪魔でしかないのでこれオフにしよっか
     for (int i = 0; i < 3; i++) {
         led.setColor(i, led.white);
         led.setBrightness(i, 255);
@@ -219,7 +221,6 @@ void ledApp(App) {
             }
             if (tof.canCorrect) {
                 led.setBrightness(RIGHT, 255);
-
                 led.setColor(RIGHT, led.white);
                 led.setBrightness(LEFT, 255);
                 led.setColor(LEFT, led.white);

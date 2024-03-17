@@ -36,8 +36,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                     victim.place[location.x + FIELD_ORIGIN]
                                 [location.y + FIELD_ORIGIN] == true) {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data       = 'N';
-                    camera[1].data       = 'N';
+                    camera[0].data = 'N';
+                    camera[1].data = 'N';
                 } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
                             tof.val[3] < 240) ||
                            (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
@@ -45,8 +45,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data       = 'N';
-                    camera[1].data       = 'N';
+                    camera[0].data = 'N';
+                    camera[1].data = 'N';
                 }
             }
             app.delay(10);
@@ -60,19 +60,19 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         app.stop(adjustmentApp);
         app.stop(floorApp);
 
-if(gyro.direction == NORTH || gyro.direction == SOUTH){
-        victim.kindOfVictimY[location.x + FIELD_ORIGIN]
-                           [location.y + FIELD_ORIGIN] = victim.id;
-}else if(gyro.direction == EAST || gyro.direction == WEST){
-        victim.kindOfVictimX[location.x + FIELD_ORIGIN]
-                           [location.y + FIELD_ORIGIN] = victim.id;
-}
+        if (gyro.direction == NORTH || gyro.direction == SOUTH) {
+            victim.kindOfVictimY[location.x + FIELD_ORIGIN]
+                                [location.y + FIELD_ORIGIN] = victim.id;
+        } else if (gyro.direction == EAST || gyro.direction == WEST) {
+            victim.kindOfVictimX[location.x + FIELD_ORIGIN]
+                                [location.y + FIELD_ORIGIN] = victim.id;
+        }
 
         victim.place[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN] =
             true;
         victim.isDetected = true;
 
-        servo.suspend  = true;
+        servo.suspend = true;
         servo.velocity = 0;
         servo.driveAngularVelocity(0, 0);
 
@@ -106,7 +106,7 @@ if(gyro.direction == NORTH || gyro.direction == SOUTH){
         servo.rescueKit(rescueKitNum, victim.isRightOrLeft);
         app.delay(100);
 
-        servo.suspend  = false;
+        servo.suspend = false;
         servo.velocity = servo.DefaultSpeed;
         if (homing.started == true) {
             app.start(homingApp);
@@ -117,41 +117,41 @@ if(gyro.direction == NORTH || gyro.direction == SOUTH){
         app.start(floorApp);
         int camTimer = millis();
         while (millis() - camTimer < 1000) {
-            victim.isDetected    = false;
-            victim.id            = 0;
+            victim.isDetected = false;
+            victim.id = 0;
             victim.isRightOrLeft = NONE;
-            camera[0].data       = 'N';
-            camera[1].data       = 'N';
+            camera[0].data = 'N';
+            camera[1].data = 'N';
         }
 
-        victim.isDetected    = false;
-        victim.id            = 0;
+        victim.isDetected = false;
+        victim.id = 0;
         victim.isRightOrLeft = NONE;
-        camera[0].data       = 'N';
-        camera[1].data       = 'N';
+        camera[0].data = 'N';
+        camera[1].data = 'N';
     }
 }
 
 bool duplicate(void) {  // 進行方向に今見ているデータと同じデータがあれば破棄
     if (gyro.direction == NORTH || gyro.direction == SOUTH) {
         if (victim.kindOfVictimY[location.x + FIELD_ORIGIN]
-                               [location.y + FIELD_ORIGIN + 1] == victim.id ||
+                                [location.y + FIELD_ORIGIN + 1] == victim.id ||
             victim.kindOfVictimY[location.x + FIELD_ORIGIN]
-                               [location.y + FIELD_ORIGIN - 1] == victim.id) {
+                                [location.y + FIELD_ORIGIN - 1] == victim.id) {
             return true;
         } else {
             return false;
         }
     } else if (gyro.direction == EAST || gyro.direction == WEST) {
         if (victim.kindOfVictimX[location.x + FIELD_ORIGIN + 1]
-                               [location.y + FIELD_ORIGIN] == victim.id ||
+                                [location.y + FIELD_ORIGIN] == victim.id ||
             victim.kindOfVictimX[location.x + FIELD_ORIGIN - 1]
-                               [location.y + FIELD_ORIGIN] == victim.id) {
+                                [location.y + FIELD_ORIGIN] == victim.id) {
             return true;
         } else {
             return false;
         }
-    }else{
+    } else {
         return false;
     }
 }

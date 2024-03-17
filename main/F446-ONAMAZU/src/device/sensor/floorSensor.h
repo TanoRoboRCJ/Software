@@ -23,7 +23,6 @@ class FLOOR_SENSOR {
 
     int checkPointX = 0;
     int checkPointY = 0;
-    ;
 
     int frontColor = 0;
     int backColor  = 0;

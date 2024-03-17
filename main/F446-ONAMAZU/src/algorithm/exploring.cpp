@@ -61,7 +61,7 @@ int Exploring::weighting(void) {
         return 2;  // left
     }
 
-    // FIXME: ここには来ないはず
+    // FIXME: ここには来ないはず（最後のelse ifは安全のためelseにすべき）
 }
 
 int Exploring::rightWeight(void) {

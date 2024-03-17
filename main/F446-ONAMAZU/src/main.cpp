@@ -17,6 +17,7 @@ void setup() {
 
     // デーモン
     app.create(monitorApp);
+    // CHECK: locationとservoをsecondにしてsensorをfirstにするべきでは？
     app.create(locationApp, firstPriority);
     app.create(victimNotifyApp);
     app.create(ledApp);

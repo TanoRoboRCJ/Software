@@ -7,6 +7,7 @@
 void mainApp(App) {
     startDaemon();
 
+    // CHECK: これstaticじゃなくてよくね？
     static bool status         = false;
     static bool hasGameStarted = false;
     static bool isFirst        = true;
