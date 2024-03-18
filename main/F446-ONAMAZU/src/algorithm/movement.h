@@ -14,6 +14,9 @@ class Movement {
     const int Radius = 20;
     const int _Wait  = 500;
 
+    bool isStucked(int direction);
+    void goOverBarrier(void);
+
    public:
     bool isHit = false;
     void move_1tile(void);

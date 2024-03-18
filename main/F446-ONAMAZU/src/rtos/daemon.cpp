@@ -57,9 +57,9 @@ void monitorApp(App) {
         // }
 
         // NOTE: loadcell
-        // uart1.print(loadcell.load[0]);
-        // uart1.print("\t");
-        // uart1.println(loadcell.load[1]);
+        uart1.print(loadcell.load[0]);
+        uart1.print("\t");
+        uart1.println(loadcell.load[1]);
 
         // 壁の状況を表示(location.wall)
         // if (uart1.available() > 0) {
@@ -132,9 +132,9 @@ void monitorApp(App) {
         // }
 
         // NOTE: gyro
-        uart1.print("gyro: ");
+        // uart1.print("gyro: ");
         // uart1.print(gyro.deg);
-        uart1.print(gyro.slope);
+        // uart1.print(gyro.slope);
 
         // NOTE: location
         // uart1.print(location.x);
@@ -143,7 +143,7 @@ void monitorApp(App) {
 
         // NOTE: uart1.println(homing.dijkstra(location.x, location.y));
 
-        uart1.println();
+        // uart1.println();
         app.delay(Period);
     }
 }
