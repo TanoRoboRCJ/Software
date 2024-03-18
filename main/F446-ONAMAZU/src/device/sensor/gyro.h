@@ -6,7 +6,7 @@
 #ifndef _GYRO_H_
 #define _GYRO_H_
 
-#define BNO055_MODE
+// #define BNO055_MODE
 
 #include <Arduino.h>
 #include <EEPROM.h>

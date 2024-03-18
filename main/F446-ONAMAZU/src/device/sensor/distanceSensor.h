@@ -36,7 +36,7 @@ class DISTANCE_SENSOR {
     double covX = 0;
     double covY = 0;
 
-    bool canCorrect = false;
+    int canCorrect = 0;
 
    private:
     int _valTemp[16] = {0};

@@ -87,6 +87,7 @@ void STS3032::stop(void) {
 }
 
 void STS3032::rescueKit(int num, int position) {
+    int count = 0;
     static int remainingRescueKitR = 6;
     static int remainingRescueKitL = 6;
 
@@ -126,17 +127,32 @@ void STS3032::rescueKit(int num, int position) {
             bottom.rescueKit[0] = false;
             app.delay(800);
             bottom.rescueKit[0] = true;
-            app.delay(450);
-
+            app.delay(550);
             remainingRescueKitR--;
         } else if (position == 2) {
             bottom.rescueKit[1] = false;
             app.delay(800);
             bottom.rescueKit[1] = true;
-            app.delay(450);
+            app.delay(550);
 
             remainingRescueKitL--;
         }
+
+        if (count % 2) {
+            driveAngularVelocity(0, 100);
+            app.delay(80);
+            driveAngularVelocity(0, -100);
+            app.delay(80);
+            driveAngularVelocity(0, 0);
+        } else {
+            driveAngularVelocity(0, -100);
+            app.delay(80);
+            driveAngularVelocity(0, 100);
+            app.delay(80);
+            driveAngularVelocity(0, 0);
+        }
+
+        count ++;
     }
 
     while (abs(gyro.deg - deg) > 5 && abs(gyro.deg - deg) < 355) {
