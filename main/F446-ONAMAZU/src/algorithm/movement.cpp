@@ -2,7 +2,7 @@
 
 Movement movement;
 
-// FIXME: 絶対方位指定じゃないとバグります！
+// FIXME: 絶対方位指定じゃないとバグります！//NOTE:修正済み
 void Movement::turnRight(void) {
     servo.suspend = true;
     app.delay(_Wait);
@@ -23,9 +23,14 @@ void Movement::turnRight(void) {
     }
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 2);
+
+    if (isStucked(gyro.direction) == true) {
+        // uart1.println("stucked");
+        goOverBarrier();
+    }
 }
 
-// FIXME: 絶対方位指定じゃないとバグります！
+// FIXME: 絶対方位指定じゃないとバグります！//NOTE:修正済み
 void Movement::turnLeft(void) {
     servo.suspend = true;
     app.delay(_Wait);
@@ -46,9 +51,14 @@ void Movement::turnLeft(void) {
     }
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 2);
+
+    if (isStucked(gyro.direction) == true) {
+        // uart1.println("stucked");
+        goOverBarrier();
+    }
 }
 
-// FIXME: 絶対方位指定じゃないとバグります！
+// FIXME: 絶対方位指定じゃないとバグります！//NOTE:修正済み
 void Movement::turnReverse(void) {
     servo.suspend = true;
     app.delay(_Wait);
@@ -69,6 +79,10 @@ void Movement::turnReverse(void) {
     }
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
+
+    if (isStucked(gyro.direction) == true) {
+        goOverBarrier();
+    }
 }
 
 void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
@@ -77,8 +91,10 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
 
     while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
            abs(location.coordinateY - _oldCoordinateY) < 300) {
-        if (tof.frontWallExists ==
-            true && isHit == false) {  // FIXME: isHit無視してbreakする可能性がある
+        if (tof.frontWallExists == true &&
+            isHit ==
+                false) {  // FIXME:
+                          // isHit無視してbreakする可能性がある//NOTE:条件式を追加
             break;
         }
         servo.suspend  = false;
@@ -106,7 +122,7 @@ void Movement::back(void) {
         servo.suspend  = false;
         servo.velocity = -servo.DefaultSpeed;
         app.delay(Period);
-    }  // 黒タイルから後退
+    }  // NOTE 黒タイルから後退
 }
 
 void Movement::turnNorth(void) {
@@ -145,7 +161,7 @@ void Movement::turnWest(void) {
     app.delay(_Wait * 3);
 }
 
-void Movement::angleAdjustment(void) {  // NOTE y = ax + b
+void Movement::angleAdjustment(void) {
     if (tof.rightWallExists == true && tof.leftWallExists == true) {
         servo.isCorrectingAngle =
             map(tof.val[4] - tof.val[12], -100, 100, -20, 20);
@@ -175,7 +191,8 @@ void Movement::avoidBarrier(void) {
     // FIXME:
     // isHitをonにするのは当たった瞬間な気がします、あと39行目のtof.frontWallExistsのところにisHitの条件が入っていないので、回避動作中に壁が視野に入ったら多分breakしてしまう
     if (loadcell.status == RIGHT) {
-        // FIXME: 多分ここでisHitを入れるべき
+        // FIXME: 多分ここでisHitを入れるべき//NOTE:修正済み
+        isHit = true;
         app.stop(servoApp);
         if (homing.started == true) {
             app.stop(homingApp);
@@ -186,10 +203,10 @@ void Movement::avoidBarrier(void) {
         app.delay(300);
         servo.driveAngularVelocity(-90, 90);
         app.delay(300);
-        isHit = true;
     }
     if (loadcell.status == LEFT) {
-        // FIXME: 多分ここでisHitを入れるべき
+        // FIXME: 多分ここでisHitを入れるべき//NOTE:修正済み
+        isHit = true;
         app.stop(servoApp);
         if (homing.started == true) {
             app.stop(homingApp);
@@ -200,18 +217,78 @@ void Movement::avoidBarrier(void) {
         app.delay(300);
         servo.driveAngularVelocity(-90, -90);
         app.delay(300);
-        isHit = true;
     }
     if (isHit) {
         servo.velocity = servo.DefaultSpeed;
         app.start(servoApp);
 
-        // FIXME: これ、restartではなくてstartじゃない？
+        // FIXME: これ、restartではなくてstartじゃない？//NOTE:修正済み
         if (homing.started == true) {
             app.start(homingApp);
         } else {
             app.start(rightWallApp);
         }
         isHit = false;
+    }
+}
+
+bool Movement::isStucked(int direction) {
+    switch (direction) {
+        case NORTH:
+            if (servo.angle != 0) {
+                return true;
+            } else {
+                return false;
+            }
+        case EAST:
+            if (servo.angle != 90) {
+                return true;
+            } else {
+                return false;
+            }
+        case SOUTH:
+            if (servo.angle != 180) {
+                return true;
+            } else {
+                return false;
+            }
+        case WEST:
+            if (servo.angle != 270) {
+                return true;
+            } else {
+                return false;
+            }
+        default:
+            return false;
+    }
+}
+
+void Movement::goOverBarrier(void) {
+    servo.suspend  = true;
+    servo.velocity = 0;
+    app.delay(_Wait);
+    switch (gyro.direction) {
+        case NORTH:
+            servo.angle = 0;
+            break;
+        case EAST:
+            servo.angle = 90;
+            break;
+        case SOUTH:
+            servo.angle = 180;
+            break;
+        case WEST:
+            servo.angle = 270;
+            break;
+    }
+    // FIXME:スタックしてるのにlocationの情報使うのは良くない
+    _oldCoordinateX = location.coordinateX;
+    _oldCoordinateY = location.coordinateY;
+
+    while (abs(location.coordinateX - _oldCoordinateX) < 50 &&
+           abs(location.coordinateY - _oldCoordinateY) < 50) {
+        servo.suspend  = false;
+        servo.velocity = servo.DefaultSpeed;
+        app.delay(Period);
     }
 }
