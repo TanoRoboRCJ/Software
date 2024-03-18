@@ -88,6 +88,7 @@ void Movement::turnReverse(void) {
 void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
+    exception       = true;
 
     while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
            abs(location.coordinateY - _oldCoordinateY) < 300) {
@@ -99,6 +100,7 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
         }
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
+        exception      = false;
 
         app.delay(Period);
     }  // 次のタイルまで前進
@@ -111,6 +113,10 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     app.start(locationApp);
     servo.suspend  = true;
     servo.velocity = 0;
+    if (exception == true && tof.rightWallExists == true &&
+        tof.frontWallExists == true && tof.leftWallExists == true) {
+        turnReverse();
+    }
 }
 
 void Movement::back(void) {

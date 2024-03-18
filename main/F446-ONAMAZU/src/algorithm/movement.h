@@ -13,6 +13,7 @@ class Movement {
 
     const int Radius = 20;
     const int _Wait  = 500;
+    bool exception = false;
 
     bool isStucked(int direction);
     void goOverBarrier(void);

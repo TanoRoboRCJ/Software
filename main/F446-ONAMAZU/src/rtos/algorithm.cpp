@@ -33,7 +33,8 @@ void rightWallApp(App) {
 
         // CHECK:とりあえずプリントデバッグしてみよう
         if (abs(gyro.slope) < 15) {
-            // CHECK:右の判定を30cm地点じゃなくて、28 - 30の地点で空いていたら見たいにしたいね
+            // CHECK:右の判定を30cm地点じゃなくて、28 -
+            // 30の地点で空いていたら見たいにしたいね
             switch (exploring.weighting()) {
                 case 0:  // right
                     // uart1.println("CASE A: right");
@@ -156,21 +157,20 @@ void homingApp(App) {  // CHECK 最適化されてない
                 buzzer.beat(440, 2);
                 homing.started = true;
             }
+            //  if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
+            //         (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
+            //         (location.route[0].wall[1] == tof.wallExists[EAST]) &&
+            //         (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
+            //         (location.route[0].wall[3] ==
+            //          tof.wallExists[WEST])) {  // NOTE 座標曖昧壁判定モード
+            //         app.stop(adjustmentApp);
+            //         servo.suspend  = true;
+            //         servo.velocity = 0;
+            //         buzzer.matsukenSamba();
+            //     }
             if (homing.started == true) {
-                // if ((location.x == 0) &&
-                //     (location.y == 0)) {  // NOTE 座標厳密モード
-                //     app.stop(adjustmentApp);
-                //     servo.suspend  = true;
-                //     servo.velocity = 0;
-                //     buzzer.matsukenSamba();
-                // }
-
-                if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
-                    (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
-                    (location.route[0].wall[1] == tof.wallExists[EAST]) &&
-                    (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
-                    (location.route[0].wall[3] ==
-                     tof.wallExists[WEST])) {  // NOTE 座標曖昧壁判定モード
+                if ((location.x == 0) &&
+                    (location.y == 0)) {  // NOTE 座標厳密モード
                     app.stop(adjustmentApp);
                     servo.suspend  = true;
                     servo.velocity = 0;
