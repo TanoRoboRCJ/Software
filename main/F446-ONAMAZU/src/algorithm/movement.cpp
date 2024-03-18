@@ -136,6 +136,7 @@ void Movement::avoidBarrier(void) {
     // FIXME:
     // isHitをonにするのは当たった瞬間な気がします、あと39行目のtof.frontWallExistsのところにisHitの条件が入っていないので、回避動作中に壁が視野に入ったら多分breakしてしまう
     if (loadcell.status == RIGHT) {
+        // FIXME: 多分ここでisHitを入れるべき
         app.stop(servoApp);
         if (homing.started == true) {
             app.stop(homingApp);
@@ -149,6 +150,7 @@ void Movement::avoidBarrier(void) {
         isHit = true;
     }
     if (loadcell.status == LEFT) {
+        // FIXME: 多分ここでisHitを入れるべき
         app.stop(servoApp);
         if (homing.started == true) {
             app.stop(homingApp);

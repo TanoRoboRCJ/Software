@@ -126,14 +126,14 @@ void STS3032::rescueKit(int num, int position) {
             bottom.rescueKit[0] = false;
             app.delay(800);
             bottom.rescueKit[0] = true;
-            app.delay(400);
+            app.delay(450);
 
             remainingRescueKitR--;
         } else if (position == 2) {
             bottom.rescueKit[1] = false;
             app.delay(800);
             bottom.rescueKit[1] = true;
-            app.delay(400);
+            app.delay(450);
 
             remainingRescueKitL--;
         }
