@@ -39,6 +39,14 @@ bool Location::canGo(int x1, int y1, int x2, int y2) {
 }
 
 void Location::updateObservationData(void) {
+    if (abs(gyro.slope) > 8) {
+        tof.canCorrect = 0;
+        return;
+    }
+
+    int oldCoordinateX = coordinateX;
+    int oldCoordinateY = coordinateY;
+
     bool trustX = false;
     bool trustY = false;
 
@@ -48,11 +56,11 @@ void Location::updateObservationData(void) {
     static int widthY = 0;
     static int widthX = 0;
 
-    const int SensorRadius = 25;
+    const int SensorRadius = 24;
 
     // 北か南　誤差10°
-    const int allowanceDegError = 10;
-    const int allowanceWidthError = 10;
+    const int allowanceDegError = 8;
+    const int allowanceWidthError = 25;
     const int range = 3;  // 信用するマス数
 
     if ((gyro.deg < 0 + allowanceDegError ||
@@ -64,6 +72,10 @@ void Location::updateObservationData(void) {
         // width
         widthX = abs(tof.vecX[4]) + abs(tof.vecX[12]) + SensorRadius * 2;
         widthY = abs(tof.vecY[0]) + abs(tof.vecY[8]) + 76 + 30 + SensorRadius;
+
+        uart1.print(widthX);
+        uart1.print("\t");
+        uart1.println(widthY);
 
         for (int i = 1; i <= range; i++) {
             if ((i * 300 - allowanceWidthError) < widthX &&
@@ -126,6 +138,11 @@ void Location::updateObservationData(void) {
                        gyro.deg < 90 + allowanceDegError);
         widthX = abs(tof.vecX[0]) + abs(tof.vecX[8]) + 76 + 30 + SensorRadius;
         widthY = abs(tof.vecY[4]) + abs(tof.vecY[12]) + SensorRadius * 2;
+
+        uart1.print(widthX);
+        uart1.print("\t");
+        uart1.println(widthY);
+
         for (int i = 1; i <= range; i++) {
             if ((i * 300 - allowanceWidthError) < widthX &&
                 widthX < (i * 300 + allowanceWidthError)) {
@@ -183,11 +200,19 @@ void Location::updateObservationData(void) {
 
     // uart1.println(widthX);
 
-    if (trustX || trustY) {
-        tof.canCorrect = true;
+    if (trustX && trustY) {
+        tof.canCorrect = 3;
+    } else if (trustX) {
+        tof.canCorrect = 1;
+    } else if (trustY) {
+        tof.canCorrect = 2;
     } else {
         tof.canCorrect = false;
     }
+
+    double proportion = 0.5;  // 小さいほど補正が早い
+    coordinateX = oldCoordinateX * proportion + coordinateX * (1 - proportion);
+    coordinateY = oldCoordinateY * proportion + coordinateY * (1 - proportion);
 
     int oldX = x;
     int oldY = y;
