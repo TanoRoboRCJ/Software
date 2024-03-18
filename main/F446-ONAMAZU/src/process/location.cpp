@@ -39,7 +39,8 @@ bool Location::canGo(int x1, int y1, int x2, int y2) {
 }
 
 void Location::updateObservationData(void) {
-    if (abs(gyro.slope) > 15) {
+    if (abs(gyro.slope) > 8) {
+        tof.canCorrect = 0;
         return;
     }
 
