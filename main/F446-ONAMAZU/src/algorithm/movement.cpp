@@ -7,7 +7,20 @@ void Movement::turnRight(void) {
     servo.suspend = true;
     app.delay(_Wait);
     servo.suspend = false;
-    servo.angle += 90;
+    switch (gyro.direction) {
+        case NORTH:
+            servo.angle = 90;
+            break;
+        case EAST:
+            servo.angle = 180;
+            break;
+        case SOUTH:
+            servo.angle = 270;
+            break;
+        case WEST:
+            servo.angle = 0;
+            break;
+    }
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 2);
 }
@@ -17,7 +30,20 @@ void Movement::turnLeft(void) {
     servo.suspend = true;
     app.delay(_Wait);
     servo.suspend = false;
-    servo.angle -= 90;
+    switch (gyro.direction) {
+        case NORTH:
+            servo.angle = 270;
+            break;
+        case EAST:
+            servo.angle = 0;
+            break;
+        case SOUTH:
+            servo.angle = 90;
+            break;
+        case WEST:
+            servo.angle = 180;
+            break;
+    }
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 2);
 }
@@ -27,7 +53,20 @@ void Movement::turnReverse(void) {
     servo.suspend = true;
     app.delay(_Wait);
     servo.suspend = false;
-    servo.angle += 180;
+    switch (gyro.direction) {
+        case NORTH:
+            servo.angle = 180;
+            break;
+        case EAST:
+            servo.angle = 270;
+            break;
+        case SOUTH:
+            servo.angle = 0;
+            break;
+        case WEST:
+            servo.angle = 90;
+            break;
+    }
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -39,22 +78,22 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
            abs(location.coordinateY - _oldCoordinateY) < 300) {
         if (tof.frontWallExists ==
-            true) {  // FIXME: isHit無視してbreakする可能性がある
+            true && isHit == false) {  // FIXME: isHit無視してbreakする可能性がある
             break;
         }
-        servo.suspend = false;
+        servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
 
         app.delay(Period);
     }  // 次のタイルまで前進
     while (140 < tof.val[0] && tof.val[0] < 250) {
         app.stop(locationApp);
-        servo.suspend = false;
+        servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
         app.delay(Period);
     }
     app.start(locationApp);
-    servo.suspend = true;
+    servo.suspend  = true;
     servo.velocity = 0;
 }
 
@@ -64,7 +103,7 @@ void Movement::back(void) {
 
     while (abs(location.coordinateX - _oldCoordinateX) < 100 &&
            abs(location.coordinateY - _oldCoordinateY) < 100) {
-        servo.suspend = false;
+        servo.suspend  = false;
         servo.velocity = -servo.DefaultSpeed;
         app.delay(Period);
     }  // 黒タイルから後退
@@ -73,8 +112,8 @@ void Movement::back(void) {
 void Movement::turnNorth(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend = false;
-    servo.angle = 0;
+    servo.suspend           = false;
+    servo.angle             = 0;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -82,8 +121,8 @@ void Movement::turnNorth(void) {
 void Movement::turnEast(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend = false;
-    servo.angle = 90;
+    servo.suspend           = false;
+    servo.angle             = 90;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -91,8 +130,8 @@ void Movement::turnEast(void) {
 void Movement::turnSouth(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend = false;
-    servo.angle = 180;
+    servo.suspend           = false;
+    servo.angle             = 180;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -100,8 +139,8 @@ void Movement::turnSouth(void) {
 void Movement::turnWest(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend = false;
-    servo.angle = 270;
+    servo.suspend           = false;
+    servo.angle             = 270;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
