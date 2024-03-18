@@ -57,7 +57,7 @@ int Exploring::weighting(void) {
     } else if (weight[FRONT] <= weight[RIGHT] &&
                weight[FRONT] <= weight[LEFT]) {
         return 1;  // front
-    } else if (weight[LEFT] <= weight[RIGHT] && weight[LEFT] <= weight[FRONT]) {
+    } else {
         return 2;  // left
     }
 

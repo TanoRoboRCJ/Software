@@ -167,9 +167,9 @@ void Movement::avoidBarrier(void) {
 
         // FIXME: これ、restartではなくてstartじゃない？
         if (homing.started == true) {
-            app.restart(homingApp);
+            app.start(homingApp);
         } else {
-            app.restart(rightWallApp);
+            app.start(rightWallApp);
         }
         isHit = false;
     }
