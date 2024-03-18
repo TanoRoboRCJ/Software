@@ -151,8 +151,6 @@ void GYRO::displaySensorOffsets(const adafruit_bno055_offsets_t &calibData) {
 
 #else
 
-euler_t ypr;
-
 GYRO::GYRO(Adafruit_BNO08x* p) {
     sensorPtr = p;
 }
@@ -164,7 +162,8 @@ void GYRO::init(void) {
     Wire.begin();
     delay(100);
     sensorPtr->begin_I2C();
-    sensorPtr->enableReport(SH2_ARVR_STABILIZED_RV, 5000);
+    sensorPtr->enableReport(SH2_GAME_ROTATION_VECTOR);
+    sh2_setCalConfig(0);
 }
 
 void GYRO::quaternionToEuler(float qr, float qi, float qj, float qk,
@@ -179,13 +178,13 @@ void GYRO::quaternionToEuler(float qr, float qi, float qj, float qk,
     ypr->roll = atan2(2.0 * (qj * qk + qi * qr), (-sqi - sqj + sqk + sqr));
 
     if (degrees) {
-        ypr->yaw *= RAD_TO_DEG;
-        ypr->pitch *= RAD_TO_DEG;
+        ypr->yaw *= RAD_TO_DEG * -1;
+        ypr->pitch *= RAD_TO_DEG * -1;
         ypr->roll *= RAD_TO_DEG;
     }
 }
 
-void GYRO::quaternionToEulerRV(sh2_RotationVectorWAcc_t* rotational_vector,
+void GYRO::quaternionToEulerRV(sh2_RotationVector* rotational_vector,
                                euler_t* ypr, bool degrees) {
     quaternionToEuler(rotational_vector->real, rotational_vector->i,
                       rotational_vector->j, rotational_vector->k, ypr, degrees);
@@ -193,17 +192,17 @@ void GYRO::quaternionToEulerRV(sh2_RotationVectorWAcc_t* rotational_vector,
 
 int GYRO::read(void) {
     sh2_SensorValue_t sensorValue;
+    // sh2_setCalConfig(0);
     if (sensorPtr->wasReset()) {
-        sensorPtr->enableReport(SH2_ARVR_STABILIZED_RV, 5000);
+        sensorPtr->enableReport(SH2_GAME_ROTATION_VECTOR, 1000);
     }
 
-    // FIXME:
-    // この辺でswitch文するのはどこいったんですか？（Adafruit公式ドキュメント見て）
     if (sensorPtr->getSensorEvent(&sensorValue)) {
-        quaternionToEulerRV(&sensorValue.un.arvrStabilizedRV, &ypr, true);
+        quaternionToEulerRV(&sensorValue.un.gameRotationVector, &ypr, true);
     }
+    acc = (sensorValue.status) & 0B00000011;
 
-    deg = (int)(ypr.yaw * -1 - offset + 720) % 360;
+    deg = (int)(ypr.yaw - offset + 720) % 360;
     slope = (int)(ypr.pitch - slopeOffset + 720) % 360;
 
     if (slope >= 180) {
@@ -221,17 +220,7 @@ int GYRO::read(void) {
 }
 
 void GYRO::setOffset(void) {
-    sh2_SensorValue_t sensorValue;
-    // CHECK:この辺りの仕様を理解してから使おう
-    if (sensorPtr->wasReset()) {
-        sensorPtr->enableReport(SH2_ARVR_STABILIZED_RV, 5000);
-    }
-
-    if (sensorPtr->getSensorEvent(&sensorValue)) {
-        quaternionToEulerRV(&sensorValue.un.arvrStabilizedRV, &ypr, true);
-    }
-
-    offset = (int)(ypr.yaw * -1 + 720) % 360;
+    offset = (int)(ypr.yaw + 720) % 360;
     slopeOffset = (int)(ypr.pitch + 720) % 360;
 }
 

@@ -6,7 +6,7 @@
 #ifndef _GYRO_H_
 #define _GYRO_H_
 
-#define BNO055_MODE
+// #define BNO055_MODE
 
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -67,7 +67,7 @@ class GYRO {
 
     void quaternionToEuler(float qr, float qi, float qj, float qk, euler_t *ypr,
                            bool degrees = false);
-    void quaternionToEulerRV(sh2_RotationVectorWAcc_t *rotational_vector,
+    void quaternionToEulerRV(sh2_RotationVector *rotational_vector,
                              euler_t *ypr, bool degrees = false);
 
     void init(void);
@@ -80,6 +80,7 @@ class GYRO {
 
     int deg = 0;
     int offset = 0;
+    uint8_t acc = 0;
 
     int error = 0;
     int oldDeg = 0;
