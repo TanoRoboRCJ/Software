@@ -60,6 +60,9 @@ void rightWallApp(App) {
 
 void adjustmentApp(App) {
     while (1) {
+        while (movement.isStucked(gyro.direction) == true) {
+            app.delay(Period);
+        }
         movement.angleAdjustment();
         movement.avoidBarrier();
         app.delay(Period);
@@ -177,9 +180,9 @@ void homingApp(App) {  // CHECK 最適化されてない
 
                     homing.hasFinished = true;
                     buzzer.matsukenSamba();
-                // }
+                    // }
 
-                // if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
+                    // if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
                     // (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
                     // (location.route[0].wall[1] == tof.wallExists[EAST]) &&
                     // (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
