@@ -48,7 +48,7 @@ void BUZZER::beat(int freq, double beat) {
 }
 
 void BUZZER::rescueKit(int kit) {
-    bpm = 800;
+    bpm = 1000;
     for (int i = 0; i < kit; i++) {
         beat(FA, 1);
         beat(RA, 1);
@@ -56,7 +56,7 @@ void BUZZER::rescueKit(int kit) {
     }
     beat(0, 2);
 
-    bpm = 500;
+    bpm = 1000;
     if (kit == 0) {
         beat(MI_, 1);
         beat(SHI, 1);
