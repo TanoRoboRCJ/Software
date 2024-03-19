@@ -25,41 +25,41 @@ void monitorApp(App) {
         //  uart1.print(tof.val[12]);
 
         // NOTE: floor
-        // uart1.print("Color of floor: ");
-        // switch(floorSensor.frontColor){
-        //     case 0:
-        //         uart1.print("white");
-        //         break;
-        //     case 1:
-        //         uart1.print("black");
-        //         break;
-        //     case 2:
-        //         uart1.print("Blue");
-        //         break;
-        //     case 3:
-        //         uart1.print("Silver");
-        //         break;
-        // }
-        // uart1.print("\t");
-        // switch(floorSensor.backColor){
-        //     case 0:
-        //         uart1.print("white");
-        //         break;
-        //     case 1:
-        //         uart1.print("black");
-        //         break;
-        //     case 2:
-        //         uart1.print("Blue");
-        //         break;
-        //     case 3:
-        //         uart1.print("Silver");
-        //         break;
-        // }
+        uart1.print("Color of floor: ");
+        switch(floorSensor.frontColor){
+            case 0:
+                uart1.print("white");
+                break;
+            case 1:
+                uart1.print("black");
+                break;
+            case 2:
+                uart1.print("Blue");
+                break;
+            case 3:
+                uart1.print("Silver");
+                break;
+        }
+        uart1.print("\t");
+        switch(floorSensor.backColor){
+            case 0:
+                uart1.print("white");
+                break;
+            case 1:
+                uart1.print("black");
+                break;
+            case 2:
+                uart1.print("Blue");
+                break;
+            case 3:
+                uart1.print("Silver");
+                break;
+        }
 
         // NOTE: loadcell
-        uart1.print(loadcell.load[0]);
-        uart1.print("\t");
-        uart1.println(loadcell.load[1]);
+        // uart1.print(loadcell.load[0]);
+        // uart1.print("\t");
+        // uart1.println(loadcell.load[1]);
 
         // 壁の状況を表示(location.wall)
         // if (uart1.available() > 0) {
@@ -134,7 +134,8 @@ void monitorApp(App) {
         // NOTE: gyro
         // uart1.print("gyro: ");
         // uart1.print(gyro.deg);
-        // uart1.print(gyro.slope);
+        uart1.print("\t");
+        uart1.print(gyro.slope);
 
         // NOTE: location
         // uart1.print(location.x);
@@ -143,7 +144,7 @@ void monitorApp(App) {
 
         // NOTE: uart1.println(homing.dijkstra(location.x, location.y));
 
-        // uart1.println();
+        uart1.println();
         app.delay(Period);
     }
 }
@@ -204,7 +205,13 @@ void ledApp(App) {
     }
 
     while (1) {
-        if (victim.isDetected) {
+        if (homing.hasFinished) {
+            for (int i = 0; i < 3; i++) {
+                led.setBrightness(i, 255);
+                led.setColor(i, led.cyan);
+            }
+            led.showAll();
+        } else if (victim.isDetected) {
             int blink = ((millis() / 200) % 5 == 0) * 255;
 
             for (int i = 0; i < 3; i++) {

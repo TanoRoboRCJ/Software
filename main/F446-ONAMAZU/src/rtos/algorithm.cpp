@@ -174,6 +174,8 @@ void homingApp(App) {  // CHECK 最適化されてない
                     app.stop(adjustmentApp);
                     servo.suspend  = true;
                     servo.velocity = 0;
+
+                    homing.hasFinished = true;
                     buzzer.matsukenSamba();
                 // }
 
