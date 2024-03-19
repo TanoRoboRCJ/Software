@@ -203,11 +203,6 @@ void homingApp(App) {  // CHECK 最適化されてない
                     // buzzer.matsukenSamba();
                 } else {
                     app.delay(Period);
-<<<<<<< HEAD
-                    servo.suspend = true;
-                    servo.velocity = 0;
-=======
->>>>>>> d91a9c78f4db5f364cf4568b861190ac544ff469
                     if (abs(gyro.slope) < 15) {
                         switch (homing.dijkstraWeighting()) {
                             case 0:  // right
