@@ -28,12 +28,6 @@ void rightWallApp(App) {
         }
         app.delay(Period);
 
-<<<<<<< HEAD
-        servo.suspend = true;
-        servo.velocity = 0;
-
-=======
->>>>>>> d91a9c78f4db5f364cf4568b861190ac544ff469
         // CHECK:とりあえずプリントデバッグしてみよう
         if (abs(gyro.slope) < 15) {
             // CHECK:右の判定を30cm地点じゃなくて、28 -
