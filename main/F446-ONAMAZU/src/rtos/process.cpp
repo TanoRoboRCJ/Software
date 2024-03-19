@@ -77,7 +77,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.driveAngularVelocity(0, 0);
 
         buzzer.bpm = 120;
-        buzzer.beat(FA_, 0.5);
+        buzzer.beat(FA_, 0.1);
 
         app.delay(5000);
 
