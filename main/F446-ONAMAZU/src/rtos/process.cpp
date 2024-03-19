@@ -36,8 +36,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                     victim.place[location.x + FIELD_ORIGIN]
                                 [location.y + FIELD_ORIGIN] == true) {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data = 'N';
-                    camera[1].data = 'N';
+                    camera[0].data       = 'N';
+                    camera[1].data       = 'N';
                 } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
                             tof.val[3] < 240) ||
                            (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
@@ -45,8 +45,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data = 'N';
-                    camera[1].data = 'N';
+                    camera[0].data       = 'N';
+                    camera[1].data       = 'N';
                 }
             }
             app.delay(10);
@@ -72,14 +72,18 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             true;
         victim.isDetected = true;
 
-        servo.suspend = true;
+        servo.suspend  = true;
         servo.velocity = 0;
         servo.driveAngularVelocity(0, 0);
 
         buzzer.bpm = 120;
         buzzer.beat(FA_, 0.1);
 
-        app.delay(5000);
+        unsigned long stopTimer = millis();
+        while (millis() - stopTimer < 5000) {
+            servo.driveAngularVelocity(0, 0);
+            app.delay(100);
+        }
 
         switch (victim.id) {
             case VICTIM_H:
@@ -106,7 +110,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.rescueKit(rescueKitNum, victim.isRightOrLeft);
         app.delay(100);
 
-        servo.suspend = false;
+        servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
         if (homing.started == true) {
             app.start(homingApp);
@@ -117,18 +121,18 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         app.start(floorApp);
         int camTimer = millis();
         while (millis() - camTimer < 1000) {
-            victim.isDetected = false;
-            victim.id = 0;
+            victim.isDetected    = false;
+            victim.id            = 0;
             victim.isRightOrLeft = NONE;
-            camera[0].data = 'N';
-            camera[1].data = 'N';
+            camera[0].data       = 'N';
+            camera[1].data       = 'N';
         }
 
-        victim.isDetected = false;
-        victim.id = 0;
+        victim.isDetected    = false;
+        victim.id            = 0;
         victim.isRightOrLeft = NONE;
-        camera[0].data = 'N';
-        camera[1].data = 'N';
+        camera[0].data       = 'N';
+        camera[1].data       = 'N';
     }
 }
 

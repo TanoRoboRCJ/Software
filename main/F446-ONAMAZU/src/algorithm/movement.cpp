@@ -128,8 +128,6 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
         app.delay(Period);
     }
     app.start(locationApp);
-    servo.suspend  = true;
-    servo.velocity = 0;
     if (exception == true && tof.rightWallExists == true &&
         tof.frontWallExists == true && tof.leftWallExists == true) {
         turnReverse();

@@ -28,22 +28,23 @@ void rightWallApp(App) {
         }
         app.delay(Period);
 
-        servo.suspend  = true;
-        servo.velocity = 0;
-
         // CHECK:とりあえずプリントデバッグしてみよう
         if (abs(gyro.slope) < 15) {
             // CHECK:右の判定を30cm地点じゃなくて、28 -
             // 30の地点で空いていたら見たいにしたいね
             switch (exploring.weighting()) {
                 case 0:  // right
-                    // uart1.println("CASE A: right");
+                         // uart1.println("CASE A: right");
+                    servo.suspend  = true;
+                    servo.velocity = 0;
                     movement.turnRight();
                     break;
                 case 1:  // front
                     // uart1.println("CASE B: front");
                     break;
                 case 2:  // left
+                    servo.suspend  = true;
+                    servo.velocity = 0;
                     movement.turnLeft();
                     // uart1.println("CASE C: left");
                     break;
@@ -195,19 +196,23 @@ void homingApp(App) {  // CHECK 最適化されてない
                     // buzzer.matsukenSamba();
                 } else {
                     app.delay(Period);
-                    servo.suspend  = true;
-                    servo.velocity = 0;
                     if (abs(gyro.slope) < 15) {
                         switch (homing.dijkstraWeighting()) {
                             case 0:  // right
+                                servo.suspend  = true;
+                                servo.velocity = 0;
                                 movement.turnRight();
                                 break;
                             case 1:  // front
                                 break;
                             case 2:  // left
+                                servo.suspend  = true;
+                                servo.velocity = 0;
                                 movement.turnLeft();
                                 break;
                             case 3:  // back
+                                servo.suspend  = true;
+                                servo.velocity = 0;
                                 movement.turnReverse();
                                 break;
                         }
