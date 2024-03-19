@@ -35,7 +35,7 @@ void rightWallApp(App) {
             switch (exploring.weighting()) {
                 case 0:  // right
                          // uart1.println("CASE A: right");
-                    servo.suspend  = true;
+                    servo.suspend = true;
                     servo.velocity = 0;
                     movement.turnRight();
                     break;
@@ -43,7 +43,7 @@ void rightWallApp(App) {
                     // uart1.println("CASE B: front");
                     break;
                 case 2:  // left
-                    servo.suspend  = true;
+                    servo.suspend = true;
                     servo.velocity = 0;
                     movement.turnLeft();
                     // uart1.println("CASE C: left");
@@ -164,8 +164,11 @@ void homingApp(App) {  // CHECK 最適化されてない
             if (homing.started == false && servo.suspend == true &&
                 victim.isDetected == false) {
                 app.stop(rightWallApp);
-                homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN]++;
+
+                if (millis() > homing.HomingTime + 5000) {
+                    homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                             [location.y + FIELD_ORIGIN]++;
+                }
                 buzzer.beat(440, 2);
                 homing.started = true;
             }
@@ -206,27 +209,30 @@ void homingApp(App) {  // CHECK 最適化されてない
                     if (abs(gyro.slope) < 15) {
                         switch (homing.dijkstraWeighting()) {
                             case 0:  // right
-                                servo.suspend  = true;
+                                servo.suspend = true;
                                 servo.velocity = 0;
                                 movement.turnRight();
                                 break;
                             case 1:  // front
                                 break;
                             case 2:  // left
-                                servo.suspend  = true;
+                                servo.suspend = true;
                                 servo.velocity = 0;
                                 movement.turnLeft();
                                 break;
                             case 3:  // back
-                                servo.suspend  = true;
+                                servo.suspend = true;
                                 servo.velocity = 0;
                                 movement.turnReverse();
                                 break;
                         }
                     }
                     movement.move_1tile();
-                    homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                             [location.y + FIELD_ORIGIN]++;
+
+                    if (millis() > homing.HomingTime + 5000) {
+                        homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                                 [location.y + FIELD_ORIGIN]++;
+                    }
                     // app.delay(100);
                 }
             }
