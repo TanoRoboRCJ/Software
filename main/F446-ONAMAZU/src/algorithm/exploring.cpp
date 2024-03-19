@@ -32,13 +32,13 @@ int Exploring::weighting(void) {
     weight[FRONT] = frontWeight();
     weight[LEFT]  = leftWeight();
 
-    if (tof.rightWallExists == true) {
+    if (movement.CanGoRight == false) {
         weight[RIGHT] = DISABLE;
     }
     if (tof.frontWallExists == true) {
         weight[FRONT] = DISABLE;
     }
-    if (tof.leftWallExists == true) {
+    if (movement.CanGoLeft == false) {
         weight[LEFT] = DISABLE;
     }
 

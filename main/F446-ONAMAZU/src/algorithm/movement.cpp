@@ -89,6 +89,8 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
     exception       = true;
+    CanGoRight      = false;
+    CanGoLeft       = false;
 
     while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
            abs(location.coordinateY - _oldCoordinateY) < 300) {
@@ -96,7 +98,22 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
             isHit ==
                 false) {  // FIXME:
                           // isHit無視してbreakする可能性がある//NOTE:条件式を追加
+            if (tof.rightWallExists == false) {
+                CanGoRight = true;
+            }
+            if (tof.leftWallExists == false) {
+                CanGoLeft = true;
+            }
             break;
+        }
+        if (abs(location.coordinateX - _oldCoordinateX) > 280 ||
+            abs(location.coordinateY - _oldCoordinateY) > 280) {
+            if (tof.rightWallExists == false) {
+                CanGoRight = true;
+            }
+            if (tof.leftWallExists == false) {
+                CanGoLeft = true;
+            }
         }
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;

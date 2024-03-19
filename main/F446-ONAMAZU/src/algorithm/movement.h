@@ -20,6 +20,8 @@ class Movement {
 
    public:
     bool isHit = false;
+    bool CanGoRight = false;
+    bool CanGoLeft = false;
     void move_1tile(void);
     void back(void);
     void turnRight(void);
