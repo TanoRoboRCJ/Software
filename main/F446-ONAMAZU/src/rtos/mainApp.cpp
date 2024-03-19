@@ -13,14 +13,14 @@ void mainApp(App) {
     static bool isFirst        = true;
 
     while (1) {
-        if (ui.toggle  && !isFirst) {
+        if (ui.toggle && !isFirst) {
             if (hasGameStarted == false) {
                 hasGameStarted = true;
                 gyro.setOffset();
             }
             if (status) {
                 app.start(servoApp);
-                if (homing.started == true) {
+                if (homing.started == true && homing.hasFinished == false) {
                     app.start(homingApp);
                 } else {
                     app.start(rightWallApp);
@@ -38,10 +38,10 @@ void mainApp(App) {
             lcd.writeRunningStatus();
 
         } else {
-            if(!ui.toggle){
+            if (!ui.toggle) {
                 isFirst = false;
             }
-            
+
             app.stop(homingApp);
             app.stop(rightWallApp);
             app.stop(adjustmentApp);

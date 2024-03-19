@@ -76,7 +76,7 @@ void floorApp(App) {
         int blueTileY = FIELD_ORIGIN;
         if (floorSensor.frontColor == floorSensor.BLACK &&
             abs(gyro.slope) <= 5) {
-            if (homing.started == true) {
+            if (homing.started == true && homing.hasFinished == false) {
                 app.stop(homingApp);
             } else {
                 app.stop(rightWallApp);
@@ -117,7 +117,7 @@ void floorApp(App) {
 
                 location.setToAvoidBlackTile(location.x - 1, location.y);
             }
-            if (homing.started == true) {
+            if (homing.started == true && homing.hasFinished == false) {
                 app.restart(homingApp);
             } else {
                 app.restart(rightWallApp);
@@ -126,7 +126,7 @@ void floorApp(App) {
         if (floorSensor.backColor == floorSensor.BLUE &&
             floorSensor.frontColor == floorSensor.BLUE &&
             abs(gyro.slope) <= 5) {  // 5秒止まる
-            if (homing.started == true) {
+            if (homing.started == true && homing.hasFinished == false) {
                 app.stop(homingApp);
             } else {
                 app.stop(rightWallApp);
@@ -136,7 +136,7 @@ void floorApp(App) {
             blueTileX = location.x;
             blueTileY = location.y;
             app.delay(5000);
-            if (homing.started == true) {
+            if (homing.started == true && homing.hasFinished == false) {
                 app.start(homingApp);
             } else {
                 app.start(rightWallApp);
