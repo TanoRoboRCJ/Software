@@ -17,6 +17,7 @@ void Exploring::updateMap(void) {
     location.route[i].wall[3] = tof.wallExists[WEST];   // 西
 
     i++;
+    constrain(i, 0, 999);
 }
 
 int Exploring::weighting(void) {
@@ -31,6 +32,13 @@ int Exploring::weighting(void) {
     weight[RIGHT] = rightWeight();
     weight[FRONT] = frontWeight();
     weight[LEFT]  = leftWeight();
+
+    if (tof.rightWallExists == false) {
+        movement.CanGoRight = true;
+    }
+    if (tof.leftWallExists == false) {
+        movement.CanGoLeft = true;
+    }
 
     if (movement.CanGoRight == false) {
         weight[RIGHT] = DISABLE;

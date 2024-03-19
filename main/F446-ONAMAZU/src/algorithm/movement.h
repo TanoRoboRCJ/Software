@@ -15,7 +15,6 @@ class Movement {
     const int _Wait  = 500;
     bool exception = false;
 
-    bool isStucked(int direction);
     void goOverBarrier(void);
 
    public:
@@ -34,6 +33,7 @@ class Movement {
 
     void angleAdjustment(void);
     void avoidBarrier(void);
+    bool isStucked(int direction);
 };
 
 extern Movement movement;
