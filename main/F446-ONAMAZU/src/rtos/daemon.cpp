@@ -57,9 +57,15 @@ void monitorApp(App) {
         // }
 
         // NOTE: loadcell
-        uart1.print(loadcell.load[0]);
+        // uart1.print(loadcell.load[0]);
+        // uart1.print("\t");
+        // uart1.println(loadcell.load[1]);
+
+        uart1.print(servo.remainingRescueKitR);
         uart1.print("\t");
-        uart1.println(loadcell.load[1]);
+        uart1.print(servo.remainingRescueKitL);
+        uart1.print("\t");
+        uart1.println(victim.isRightOrLeft);
 
         // 壁の状況を表示(location.wall)
         // if (uart1.available() > 0) {

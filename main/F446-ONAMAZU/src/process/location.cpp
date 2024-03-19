@@ -73,9 +73,9 @@ void Location::updateObservationData(void) {
         widthX = abs(tof.vecX[4]) + abs(tof.vecX[12]) + SensorRadius * 2;
         widthY = abs(tof.vecY[0]) + abs(tof.vecY[8]) + 76 + 30 + SensorRadius;
 
-        uart1.print(widthX);
-        uart1.print("\t");
-        uart1.println(widthY);
+        // uart1.print(widthX);
+        // uart1.print("\t");
+        // uart1.println(widthY);
 
         for (int i = 1; i <= range; i++) {
             if ((i * 300 - allowanceWidthError) < widthX &&
@@ -139,9 +139,9 @@ void Location::updateObservationData(void) {
         widthX = abs(tof.vecX[0]) + abs(tof.vecX[8]) + 76 + 30 + SensorRadius;
         widthY = abs(tof.vecY[4]) + abs(tof.vecY[12]) + SensorRadius * 2;
 
-        uart1.print(widthX);
-        uart1.print("\t");
-        uart1.println(widthY);
+        // uart1.print(widthX);
+        // uart1.print("\t");
+        // uart1.println(widthY);
 
         for (int i = 1; i <= range; i++) {
             if ((i * 300 - allowanceWidthError) < widthX &&
@@ -236,6 +236,14 @@ void Location::updateObservationData(void) {
     if (oldY > y) {  // 南に移動
         wall[x + FIELD_ORIGIN][oldY + FIELD_ORIGIN].horizontal = false;
     }
+}
+
+void Location::setToAvoidBlackTile(int x, int y) {
+    wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN].vertical = true;
+    wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN].horizontal = true;
+
+    wall[x + FIELD_ORIGIN + 1][y + FIELD_ORIGIN].vertical = true;
+    wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN + 1].horizontal = true;
 }
 
 void Location::updateMap(void) {

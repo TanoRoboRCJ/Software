@@ -23,7 +23,7 @@ class STS3032 {
 
     const int DefaultSpeed = 90;
     const double SlopeSpeed = 0.8;
-    
+
     void directDrive(int id, int percent, int acceleration = 0);
     void drive(int velocity, int angle);
     void driveAngularVelocity(int velocity, int angularVelocity);
@@ -42,6 +42,9 @@ class STS3032 {
 
     void rescueKit(int num, int position);
     int sumOfRescueKit = 0;
+
+    int remainingRescueKitR = 6;
+    int remainingRescueKitL = 6;
 
    private:
 };

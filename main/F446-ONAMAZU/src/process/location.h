@@ -75,6 +75,7 @@ class Location {
     Route route[200];
 
     Wall wall[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
+    void setToAvoidBlackTile(int x, int y);
 
     int x = 0;
     int y = 0;

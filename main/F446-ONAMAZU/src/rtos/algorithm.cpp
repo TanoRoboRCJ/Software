@@ -105,6 +105,7 @@ void floorApp(App) {
                 homing.homingReachedCount[location.x + FIELD_ORIGIN - 1]
                                          [location.y + FIELD_ORIGIN] = 50;
             }
+            location.setToAvoidBlackTile(location.x, location.y);
             if (homing.started == true) {
                 app.restart(homingApp);
             } else {
