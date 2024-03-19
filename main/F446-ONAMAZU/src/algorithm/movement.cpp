@@ -215,7 +215,7 @@ void Movement::avoidBarrier(void) {
         // FIXME: 多分ここでisHitを入れるべき//NOTE:修正済み
         isHit = true;
         app.stop(servoApp);
-        if (homing.started == true) {
+        if (homing.started == true && homing.hasFinished == false) {
             app.stop(homingApp);
         } else {
             app.stop(rightWallApp);
@@ -229,7 +229,7 @@ void Movement::avoidBarrier(void) {
         // FIXME: 多分ここでisHitを入れるべき//NOTE:修正済み
         isHit = true;
         app.stop(servoApp);
-        if (homing.started == true) {
+        if (homing.started == true && homing.hasFinished == false) {
             app.stop(homingApp);
         } else {
             app.stop(rightWallApp);
@@ -244,7 +244,7 @@ void Movement::avoidBarrier(void) {
         app.start(servoApp);
 
         // FIXME: これ、restartではなくてstartじゃない？//NOTE:修正済み
-        if (homing.started == true) {
+        if (homing.started == true && homing.hasFinished == false) {
             app.start(homingApp);
         } else {
             app.start(rightWallApp);

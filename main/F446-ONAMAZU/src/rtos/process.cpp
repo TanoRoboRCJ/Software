@@ -52,7 +52,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             app.delay(10);
         }
 
-        if (homing.started == true) {
+        if (homing.started == true && homing.hasFinished == false) {
             app.stop(homingApp);
         } else {
             app.stop(rightWallApp);
@@ -112,7 +112,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
-        if (homing.started == true) {
+        if (homing.started == true && homing.hasFinished == false) {
             app.start(homingApp);
         } else {
             app.start(rightWallApp);
