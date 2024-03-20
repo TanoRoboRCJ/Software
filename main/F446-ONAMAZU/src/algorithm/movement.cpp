@@ -128,6 +128,7 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
         app.delay(Period);
     }
     app.start(locationApp);
+    servo.suspend = true;
     if (exception == true && tof.rightWallExists == true &&
         tof.frontWallExists == true && tof.leftWallExists == true) {
         turnReverse();
@@ -220,10 +221,18 @@ void Movement::avoidBarrier(void) {
         } else {
             app.stop(rightWallApp);
         }
-        servo.driveAngularVelocity(-90, -90);
-        app.delay(300);
-        servo.driveAngularVelocity(-90, 90);
-        app.delay(300);
+        unsigned long timer = millis();
+        while (millis() - timer < 300) {
+            servo.driveAngularVelocity(-90, -90);
+
+            app.delay(10);
+        }
+
+        timer = millis();
+        while (millis() - timer < 300) {
+            servo.driveAngularVelocity(-90, 90);
+            app.delay(10);
+        }
     }
     if (loadcell.status == LEFT) {
         // FIXME: 多分ここでisHitを入れるべき//NOTE:修正済み
@@ -234,10 +243,18 @@ void Movement::avoidBarrier(void) {
         } else {
             app.stop(rightWallApp);
         }
-        servo.driveAngularVelocity(-90, 90);
-        app.delay(300);
-        servo.driveAngularVelocity(-90, -90);
-        app.delay(300);
+
+        unsigned long timer = millis();
+        while (millis() - timer < 300) {
+            servo.driveAngularVelocity(-90, 90);
+            app.delay(10);
+        }
+
+        timer = millis();
+        while (millis() - timer < 300) {
+            servo.driveAngularVelocity(-90, -90);
+            app.delay(10);
+        }
     }
     if (isHit) {
         servo.velocity = servo.DefaultSpeed;
