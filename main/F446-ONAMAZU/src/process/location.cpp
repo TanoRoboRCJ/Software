@@ -1,5 +1,10 @@
 #include "location.h"
 
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
+
 extern HardwareSerial uart1;
 
 Location::Location(/* args */) {
@@ -39,13 +44,8 @@ bool Location::canGo(int x1, int y1, int x2, int y2) {
 }
 
 void Location::updateObservationData(void) {
-    if (abs(gyro.slope) > 8) {
-        tof.canCorrect = 0;
-        return;
-    }
-
-    int oldCoordinateX = coordinateX;
-    int oldCoordinateY = coordinateY;
+    const int oldCoordinateX = coordinateX;
+    const int oldCoordinateY = coordinateY;
 
     bool trustX = false;
     bool trustY = false;
@@ -200,6 +200,30 @@ void Location::updateObservationData(void) {
 
     // uart1.println(widthX);
 
+    double proportion = 0.5;  // 小さいほど補正が早い
+    coordinateX = oldCoordinateX * proportion + coordinateX * (1 - proportion);
+    coordinateY = oldCoordinateY * proportion + coordinateY * (1 - proportion);
+
+    if (abs(gyro.slope) > 8) {
+        if (gyro.direction == NORTH || gyro.direction == SOUTH) {
+            coordinateY = oldCoordinateY;
+            trustY = false;
+        } else {
+            coordinateX = oldCoordinateX;
+            trustX = false;
+        }
+    }
+
+    if (tof.covX < 50) {
+        coordinateX = oldCoordinateX;
+        trustX = false;
+    }
+
+    if (tof.covY < 50) {
+        coordinateY = oldCoordinateY;
+        trustY = false;
+    }
+
     if (trustX && trustY) {
         tof.canCorrect = 3;
     } else if (trustX) {
@@ -207,12 +231,8 @@ void Location::updateObservationData(void) {
     } else if (trustY) {
         tof.canCorrect = 2;
     } else {
-        tof.canCorrect = false;
+        tof.canCorrect = 0;
     }
-
-    double proportion = 0.5;  // 小さいほど補正が早い
-    coordinateX = oldCoordinateX * proportion + coordinateX * (1 - proportion);
-    coordinateY = oldCoordinateY * proportion + coordinateY * (1 - proportion);
 
     int oldX = x;
     int oldY = y;
