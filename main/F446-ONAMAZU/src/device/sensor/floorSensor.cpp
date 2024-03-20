@@ -15,10 +15,10 @@ void FLOOR_SENSOR::read(void) {
 }
 
 void FLOOR_SENSOR::frontColorJudgment(void) {
-    if (frontCRGB[0] < 70 && frontCRGB[1] < 35 && frontCRGB[2] < 35 &&
-        frontCRGB[3] < 35) {
+    if (frontCRGB[0] < 90 && frontCRGB[1] < 50 && frontCRGB[2] < 50 &&
+        frontCRGB[3] < 50) {
         frontColor = BLACK;
-    } else if (frontCRGB[0] > 100 && frontCRGB[0] < 180 && frontCRGB[1] < 50 &&
+    } else if (frontCRGB[0] > 90 && frontCRGB[0] < 180 && frontCRGB[1] < 50 &&
                frontCRGB[2] < 60 && frontCRGB[3] < 70) {
         frontColor = BLUE;
     } else if (frontCRGB[0] > 150 && frontCRGB[0] < 250 && frontCRGB[1] < 100 &&
