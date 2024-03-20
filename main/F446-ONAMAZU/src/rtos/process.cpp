@@ -38,10 +38,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                     victim.isRightOrLeft = NONE;
                     camera[0].data       = 'N';
                     camera[1].data       = 'N';
-                } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
-                            tof.val[3] < 240) ||
-                           (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
-                            tof.val[13] < 240)) {
+                } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 && tof.lidarRightWallExists) ||
+                           (victim.isRightOrLeft == LEFT && tof.val[12] < 190 && tof.lidarLeftWallExists)) {
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;

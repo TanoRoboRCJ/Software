@@ -34,7 +34,7 @@ void monitorApp(App) {
         uart1.print(floorSensor.frontCRGB[3]);
         uart1.print("\t");
         uart1.print("Color of floor: ");
-        switch(floorSensor.frontColor){
+        switch (floorSensor.frontColor) {
             case 0:
                 uart1.print("white");
                 break;
@@ -49,7 +49,7 @@ void monitorApp(App) {
                 break;
         }
         uart1.print("\t");
-        switch(floorSensor.backColor){
+        switch (floorSensor.backColor) {
             case 0:
                 uart1.print("white");
                 break;
@@ -143,7 +143,10 @@ void monitorApp(App) {
         // uart1.print("gyro: ");
         // uart1.print(gyro.deg);
         uart1.print("\t");
-        uart1.print(gyro.slope);
+        uart1.print(tof.lidarRightWallExists);
+
+        uart1.print("\t");
+        uart1.print(tof.lidarLeftWallExists);
 
         // NOTE: location
         // uart1.print(location.x);
