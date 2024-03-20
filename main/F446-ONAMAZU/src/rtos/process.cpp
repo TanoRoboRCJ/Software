@@ -108,8 +108,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         servo.rescueKit(rescueKitNum, victim.isRightOrLeft);
         app.delay(100);
 
-        servo.suspend  = false;
-        servo.velocity = servo.DefaultSpeed;
         if (homing.started == true && homing.hasFinished == false) {
             app.start(homingApp);
         } else {
