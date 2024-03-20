@@ -234,11 +234,21 @@ void ledApp(App) {
                 led.setBrightness(i, 0);
                 led.setColor(i, led.white);
             }
-            if (tof.canCorrect) {
+            if (tof.canCorrect == 3) {
                 led.setBrightness(RIGHT, 255);
                 led.setColor(RIGHT, led.white);
                 led.setBrightness(LEFT, 255);
                 led.setColor(LEFT, led.white);
+            } else if (tof.canCorrect == 2) {
+                led.setBrightness(RIGHT, 255);
+                led.setColor(RIGHT, led.cyan);
+                led.setBrightness(LEFT, 255);
+                led.setColor(LEFT, led.cyan);
+            } else if (tof.canCorrect == 1) {
+                led.setBrightness(RIGHT, 255);
+                led.setColor(RIGHT, led.yellow);
+                led.setBrightness(LEFT, 255);
+                led.setColor(LEFT, led.yellow);
             }
             led.showAll();
 
