@@ -54,7 +54,7 @@ int Homing::dijkstra(int destX, int destY, int originX, int originY) {
         }
 
         if (oldCounter == counter) {
-            return 10000;
+            return 1000;
         }
 
         oldCounter = counter;
@@ -101,6 +101,9 @@ int Homing::homingWeighting(void) {
 
 int Homing::dijkstraWeighting(void) {
     int weight[4] = {0};
+
+    // FIXME いけないマスとかあると
+    // 10000が帰ってきて、壁がうおーってなるから修正する
 
     switch (gyro.direction) {
         case NORTH:
@@ -177,6 +180,10 @@ int Homing::dijkstraWeighting(void) {
             break;
     }
 
+    for (int i = 0; i < 4; i++) {
+        weight[i] = constrain(weight[i], 0, DISABLE * 10 - 1);
+    }
+
     if (tof.rightWallExists == true) {
         weight[RIGHT] = DISABLE * 10;
     }
@@ -200,7 +207,11 @@ int Homing::dijkstraWeighting(void) {
                weight[LEFT] <= weight[BACK]) {
         return 2;  // left
     } else {
-        return 3;  // back
+        if (millis() < homing.HomingTime + 5000) {
+            return 3;  // back
+        } else {
+            return 0;  // front
+        }
     }
 
     // FIXME: ここには来ないはず（最後のelse ifは安全のためelseにすべき）
