@@ -70,6 +70,16 @@ void loop() {
         for (size_t i = 0; i < sizeof(float); i++) {
             uart5.write(bytePtrY[i]);
         }
+
+        if (lidar.rightWallExists && lidar.leftWallExists) {
+            uart5.write('A');
+        } else if (lidar.rightWallExists) {
+            uart5.write('R');
+        } else if (lidar.leftWallExists) {
+            uart5.write('L');
+        } else {
+            uart5.write('N');
+        }
     }
 
     static int gyroDeg = 0;
@@ -92,12 +102,13 @@ void loop() {
 
     lidar.read(gyroDeg);
     lidar.updateHistogram();
+    lidar.judgeWall();
 
     static int count = 0;
     if (count++ % 10 != 0) {
         return;
     }
-    
+
     lidar.calcCov();
 
     // gyro
@@ -105,6 +116,14 @@ void loop() {
     uartForDebug.print("gyro:");
     uartForDebug.print("\t");
     uartForDebug.print(gyroDeg);
+
+    uartForDebug.print("\t");
+    uartForDebug.print("wall | R:");
+    uartForDebug.print("\t");
+    uartForDebug.print(lidar.rightWallExists);
+    uartForDebug.print("\t");
+    uartForDebug.print(" L:");
+    uartForDebug.print(lidar.leftWallExists);
     uartForDebug.print(" cov | X:");
     uartForDebug.print("\t");
     uartForDebug.print(lidar.covX);

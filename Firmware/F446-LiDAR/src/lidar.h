@@ -4,6 +4,8 @@ class POINT {
    public:
     double x = 0;
     double y = 0;
+    bool rightWallExists = true;
+    bool leftWallExists = true;
 };
 
 class HISTOGRAM {
@@ -31,9 +33,17 @@ class LIDAR {
 
     void updateHistogram(void);
     void calcCov(const int _phase = 0);
+    void judgeWall(void);
 
     double covX = 0;
     double covY = 0;
+
+    const int WallStart = 89;
+    const int WallEnd = 121;
+    const int WallRange = 225;
+
+    bool rightWallExists = true;
+    bool leftWallExists = true;
 
    private:
     HardwareSerial *uartPtr;

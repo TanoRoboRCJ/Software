@@ -64,6 +64,25 @@ void LIDAR::read(const int _gyro) {
 
             circularBufferIndex++;
             circularBufferIndex %= DataBuffLength;
+
+            point[circularBufferIndex].rightWallExists = true;
+            point[circularBufferIndex].leftWallExists = true;
+
+            while (angle <= 0) {
+                angle += 360;
+            }
+            while (angle >= 360) {
+                angle -= 360;
+            }
+
+            if (distance > WallRange) {
+                if (angle >= WallStart && angle <= WallEnd) {
+                    point[circularBufferIndex].rightWallExists = false;
+                } else if (angle >= (360 - WallEnd) &&
+                           angle <= (360 - WallStart)) {
+                    point[circularBufferIndex].leftWallExists = false;
+                }
+            }
         }
     }
 
@@ -102,7 +121,7 @@ void LIDAR::calcCov(const int _phase) {
         cov += histogarm[i].x * refWave[(i + _phase) % HistogramLength];
     }
     cov /= HistogramLength;
-    this-> covX = cov;
+    this->covX = cov;
 
     cov = 0;
     for (int i = 0; i < HistogramLength; i++) {
@@ -110,4 +129,30 @@ void LIDAR::calcCov(const int _phase) {
     }
     cov /= HistogramLength;
     this->covY = cov;
+}
+
+void LIDAR::judgeWall(void) {
+    rightWallExists = true;
+    leftWallExists = true;
+
+    int rightWallCounter = 0;
+    int leftWallCounter = 0;
+
+    for (int i = 0; i < LIDAR::DataBuffLength; i++) {
+        if (!point[i].rightWallExists) {
+            rightWallCounter++;
+        }
+        if (!point[i].leftWallExists) {
+            leftWallCounter++;
+        }
+    }
+
+    const int Threshold = 15;
+
+    if (rightWallCounter > Threshold) {
+        rightWallExists = false;
+    }
+    if (leftWallCounter > Threshold) {
+        leftWallExists = false;
+    }
 }
