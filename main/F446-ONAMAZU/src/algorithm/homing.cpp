@@ -105,6 +105,17 @@ int Homing::dijkstraWeighting(void) {
     // FIXME いけないマスとかあると
     // 10000が帰ってきて、壁がうおーってなるから修正する
 
+        if (millis() - floorSensor.resetTimer > 60000) {
+        for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
+            for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
+                if (homingReachedCount[i][j] >= 50) {
+                    homingReachedCount[i][j] = 0;
+                }
+            }
+        }
+        floorSensor.resetTimer = millis();
+    }
+
     switch (gyro.direction) {
         case NORTH:
             weight[RIGHT] = dijkstra(location.x + 1, location.y) +

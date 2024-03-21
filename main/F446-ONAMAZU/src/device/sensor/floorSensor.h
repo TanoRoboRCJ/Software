@@ -27,6 +27,8 @@ class FLOOR_SENSOR {
     int frontColor = 0;
     int backColor  = 0;
 
+    unsigned long resetTimer = 0;
+
    private:
 };
 

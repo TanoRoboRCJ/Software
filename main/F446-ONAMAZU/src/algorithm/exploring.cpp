@@ -28,6 +28,16 @@ int Exploring::weighting(void) {
             reachedCount[i][j] %= 21;
         }
     }
+    if (millis() - floorSensor.resetTimer > 60000) {
+        for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
+            for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
+                if (reachedCount[i][j] >= 20) {
+                    reachedCount[i][j] = 0;
+                }
+            }
+        }
+        floorSensor.resetTimer = millis();
+    }
 
     weight[RIGHT] = rightWeight();
     weight[FRONT] = frontWeight();
