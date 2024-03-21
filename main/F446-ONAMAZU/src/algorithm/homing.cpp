@@ -54,7 +54,7 @@ int Homing::dijkstra(int destX, int destY, int originX, int originY) {
         }
 
         if (oldCounter == counter) {
-            return 1000;
+            return 90;
         }
 
         oldCounter = counter;

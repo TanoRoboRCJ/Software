@@ -162,5 +162,11 @@ void loop(void) {
         }
     }
 
+    static unsigned long lastTime = millis();
+    uartForDebug.print("Period: ");
+    uartForDebug.print((millis() - lastTime));
+
+    lastTime = millis();
+
     uartForDebug.println();
 }
