@@ -135,7 +135,7 @@ void floorApp(App) {
             servo.velocity = 0;
             blueTileX      = location.x;
             blueTileY      = location.y;
-            app.delay(5000);
+            app.delay(5500);
             if (homing.started == true && homing.hasFinished == false) {
                 app.start(homingApp);
             } else {

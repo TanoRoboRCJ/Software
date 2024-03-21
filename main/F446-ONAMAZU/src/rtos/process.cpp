@@ -32,14 +32,14 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         while (1) {
             if (victim.isRightOrLeft != NONE && ui.toggle == true) {
-                if (duplicate() ||
-                    victim.place[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN] == true) {
+                if (duplicate() == true) {
                     victim.isRightOrLeft = NONE;
                     camera[0].data       = 'N';
                     camera[1].data       = 'N';
-                } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 && tof.lidarRightWallExists) ||
-                           (victim.isRightOrLeft == LEFT && tof.val[12] < 190 && tof.lidarLeftWallExists)) {
+                } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
+                            tof.lidarRightWallExists) ||
+                           (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
+                            tof.lidarLeftWallExists)) {
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;
@@ -66,8 +66,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                                 [location.y + FIELD_ORIGIN] = victim.id;
         }
 
-        victim.place[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN] =
-            true;
         victim.isDetected = true;
 
         servo.suspend  = true;
@@ -137,7 +135,9 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
         if (victim.kindOfVictimY[location.x + FIELD_ORIGIN]
                                 [location.y + FIELD_ORIGIN + 1] == victim.id ||
             victim.kindOfVictimY[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN - 1] == victim.id) {
+                                [location.y + FIELD_ORIGIN - 1] == victim.id ||
+            victim.kindOfVictimY[location.x + FIELD_ORIGIN]
+                                [location.y + FIELD_ORIGIN] == victim.id) {
             return true;
         } else {
             return false;
@@ -146,6 +146,8 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
         if (victim.kindOfVictimX[location.x + FIELD_ORIGIN + 1]
                                 [location.y + FIELD_ORIGIN] == victim.id ||
             victim.kindOfVictimX[location.x + FIELD_ORIGIN - 1]
+                                [location.y + FIELD_ORIGIN] == victim.id ||
+            victim.kindOfVictimX[location.x + FIELD_ORIGIN]
                                 [location.y + FIELD_ORIGIN] == victim.id) {
             return true;
         } else {

@@ -10,7 +10,6 @@ class VICTIM {
     int isRightOrLeft = NONE;  // RIGHT: 0 LEFT: 2 NONE: 5
     int id            = 0;
 
-    bool place[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]       = {false};
     int kindOfVictimX[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
     int kindOfVictimY[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
