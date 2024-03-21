@@ -58,14 +58,6 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         app.stop(adjustmentApp);
         app.stop(floorApp);
 
-        if (gyro.direction == NORTH || gyro.direction == SOUTH) {
-            victim.kindOfVictimY[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN] = victim.id;
-        } else if (gyro.direction == EAST || gyro.direction == WEST) {
-            victim.kindOfVictimX[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN] = victim.id;
-        }
-
         victim.isDetected = true;
 
         servo.suspend  = true;
@@ -79,6 +71,66 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         while (millis() - stopTimer < 5000) {
             servo.driveAngularVelocity(0, 0);
             app.delay(100);
+        }
+        
+        if (gyro.direction == NORTH || gyro.direction == SOUTH) {
+            switch (victim.id) {
+                case VICTIM_H:
+                    victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, H);
+                    break;
+                case VICTIM_S:
+                    victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, S);
+                    break;
+                case VICTIM_U:
+                    victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, U);
+                    break;
+                case VICTIM_RED:
+                    victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, R);
+                    break;
+                case VICTIM_YELLOW:
+                    victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, Y);
+                    break;
+                case VICTIM_GREEN:
+                    victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, G);
+                    break;
+            }
+        } else if (gyro.direction == EAST || gyro.direction == WEST) {
+            switch (victim.id) {
+                case VICTIM_H:
+                    victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, H);
+                    break;
+                case VICTIM_S:
+
+                    victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, S);
+                    break;
+                case VICTIM_U:
+
+                    victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, U);
+                    break;
+                case VICTIM_RED:
+
+                    victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, R);
+                    break;
+                case VICTIM_YELLOW:
+
+                    victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, Y);
+                    break;
+                case VICTIM_GREEN:
+                    victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN, G);
+                    break;
+            }
         }
 
         switch (victim.id) {
@@ -132,28 +184,133 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
 bool duplicate(void) {  // 進行方向に今見ているデータと同じデータがあれば破棄
     if (gyro.direction == NORTH || gyro.direction == SOUTH) {
-        if (victim.kindOfVictimY[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN + 1] == victim.id ||
-            victim.kindOfVictimY[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN - 1] == victim.id ||
-            victim.kindOfVictimY[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN] == victim.id) {
-            return true;
-        } else {
-            return false;
+        switch (victim.id) {
+            case VICTIM_H:
+                if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, H) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN - 1, H) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN + 1, H)) {
+                    return true;
+                }
+                break;
+            case VICTIM_S:
+                if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, S) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN - 1, S) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN + 1, S)) {
+                    return true;
+                }
+                break;
+            case VICTIM_U:
+                if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, U) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN - 1, U) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN + 1, U)) {
+                    return true;
+                }
+                break;
+            case VICTIM_RED:
+                if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, R) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN - 1, R) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN + 1, R)) {
+                    return true;
+                }
+                break;
+            case VICTIM_YELLOW:
+                if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, Y) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN - 1, Y) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN + 1, Y)) {
+                    return true;
+                }
+                break;
+            case VICTIM_GREEN:
+                if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, G) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN - 1, G) ||
+                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN + 1, G)) {
+                    return true;
+                }
+                break;
         }
     } else if (gyro.direction == EAST || gyro.direction == WEST) {
-        if (victim.kindOfVictimX[location.x + FIELD_ORIGIN + 1]
-                                [location.y + FIELD_ORIGIN] == victim.id ||
-            victim.kindOfVictimX[location.x + FIELD_ORIGIN - 1]
-                                [location.y + FIELD_ORIGIN] == victim.id ||
-            victim.kindOfVictimX[location.x + FIELD_ORIGIN]
-                                [location.y + FIELD_ORIGIN] == victim.id) {
-            return true;
-        } else {
-            return false;
+        switch (victim.id) {
+            case VICTIM_H:
+                if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, H) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
+                                        location.y + FIELD_ORIGIN, H) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
+                                        location.y + FIELD_ORIGIN, H)) {
+                    return true;
+                }
+                break;
+            case VICTIM_S:
+                if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, S) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
+                                        location.y + FIELD_ORIGIN, S) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
+                                        location.y + FIELD_ORIGIN, S)) {
+                    return true;
+                }
+                break;
+
+            case VICTIM_U:
+                if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, U) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
+                                        location.y + FIELD_ORIGIN, U) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
+                                        location.y + FIELD_ORIGIN, U)) {
+                    return true;
+                }
+                break;
+            case VICTIM_RED:
+                if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, R) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
+                                        location.y + FIELD_ORIGIN, R) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
+                                        location.y + FIELD_ORIGIN, R)) {
+                    return true;
+                }
+                break;
+            case VICTIM_YELLOW:
+                if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, Y) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
+                                        location.y + FIELD_ORIGIN, Y) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
+                                        location.y + FIELD_ORIGIN, Y)) {
+                    return true;
+                }
+                break;
+            case VICTIM_GREEN:
+                if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
+                                        location.y + FIELD_ORIGIN, G) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
+                                        location.y + FIELD_ORIGIN, G) ||
+                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
+                                        location.y + FIELD_ORIGIN, G)) {
+                    return true;
+                }
+                break;
         }
-    } else {
-        return false;
     }
+
+    return false;
 }
