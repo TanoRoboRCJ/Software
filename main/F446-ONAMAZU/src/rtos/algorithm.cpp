@@ -142,15 +142,18 @@ void floorApp(App) {
                 app.start(rightWallApp);
             }
             while (location.x == blueTileX && location.y == blueTileY) {
+                if (floorSensor.frontColor == floorSensor.BLACK) {
+                    break;
+                }
                 app.delay(Period);
             }
         }
-        if (floorSensor.frontColor == floorSensor.SILVER &&
-            floorSensor.backColor == floorSensor.SILVER && gyro.slope == 0) {
-            floorSensor.checkPointX = location.x;
-            floorSensor.checkPointY = location.y;
-            app.delay(Period);
-        }
+        // if (floorSensor.frontColor == floorSensor.SILVER &&
+        //     floorSensor.backColor == floorSensor.SILVER && gyro.slope == 0) {
+        //     floorSensor.checkPointX = location.x;
+        //     floorSensor.checkPointY = location.y;
+        //     app.delay(Period);
+        // }
         app.delay(Period);
     }
 }
