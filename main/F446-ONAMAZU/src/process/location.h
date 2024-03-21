@@ -57,7 +57,7 @@ class Wall {
 class Location {
    private:
     // CONSTANT
-    double _VelocityConstant = 0.0023;  // 0.00159 小さいと距離が長くなる
+    double _VelocityConstant = 0.0024;  // 0.00159 小さいと距離が長くなる
 
    public:
     // CONSTANT
