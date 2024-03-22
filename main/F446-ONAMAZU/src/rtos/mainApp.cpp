@@ -51,8 +51,8 @@ void mainApp(App) {
             servo.suspend  = true;
             servo.velocity = 0;
             servo.driveAngularVelocity(0, 0);
-            // location.coordinateX = floorSensor.checkPointX * 300;
-            // location.coordinateY = floorSensor.checkPointY * 300;
+            location.coordinateX = floorSensor.checkPointX * 300;
+            location.coordinateY = floorSensor.checkPointY * 300;
             status = true;
 
             lcd.begin();

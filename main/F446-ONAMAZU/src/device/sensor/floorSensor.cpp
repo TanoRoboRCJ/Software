@@ -21,8 +21,8 @@ void FLOOR_SENSOR::frontColorJudgment(void) {
     } else if (frontCRGB[0] > 90 && frontCRGB[0] < 180 && frontCRGB[1] < 50 &&
                frontCRGB[2] < 60 && frontCRGB[3] < 70) {
         frontColor = BLUE;
-    } else if (frontCRGB[0] > 150 && frontCRGB[0] < 250 && frontCRGB[1] < 100 &&
-               frontCRGB[2] < 100 && frontCRGB[3] < 100) {
+    } else if (frontCRGB[0] > 180 && frontCRGB[0] < 220 && frontCRGB[1] < 80 &&
+               frontCRGB[2] < 100 && frontCRGB[3] < 80) {
         frontColor = SILVER;
     } else {
         frontColor = WHITE;
@@ -36,8 +36,8 @@ void FLOOR_SENSOR::backColorJudgment(void) {
     } else if (backCRGB[0] > 80 && backCRGB[0] < 120 && backCRGB[1] < 45 &&
                backCRGB[2] < 50 && backCRGB[3] < 70) {
         backColor = BLUE;
-    } else if (backCRGB[0] > 200 && backCRGB[0] < 250 && backCRGB[1] < 120 &&
-               backCRGB[2] < 120 && backCRGB[3] < 120) {
+    } else if (backCRGB[0] > 120 && backCRGB[0] < 180 && backCRGB[1] < 70 &&
+               backCRGB[2] < 80 && backCRGB[3] < 70) {
         backColor = SILVER;
     } else {
         backColor = WHITE;
