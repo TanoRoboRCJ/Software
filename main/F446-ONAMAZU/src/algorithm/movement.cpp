@@ -322,11 +322,25 @@ void Movement::goOverBarrier(void) {
     // FIXME:スタックしてるのにlocationの情報使うのは良くない
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
+    randomSeed(millis());
 
-    while (abs(location.coordinateX - _oldCoordinateX) < 50 &&
-           abs(location.coordinateY - _oldCoordinateY) < 50) {
+    bool dir = random() % 2;
+
+    while (abs(location.coordinateX - _oldCoordinateX) < 10 &&//NOTE 進む距離調整
+           abs(location.coordinateY - _oldCoordinateY) < 10) {
+        app.stop(adjustmentApp);
+        app.stop(servoApp);
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
+
+        if (dir) {
+            servo.driveAngularVelocity(100, 0);
+        } else {
+            servo.driveAngularVelocity(-100, 0);
+        }
+
         app.delay(Period);
+        app.start(servoApp);
     }
+    app.stop(adjustmentApp);
 }

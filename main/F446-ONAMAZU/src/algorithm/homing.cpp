@@ -16,7 +16,7 @@ int Homing::dijkstra(int destX, int destY, int originX, int originY) {
 
     // ダイクストラ法で歩数を計算
 
-    int counter = 0;
+    int counter    = 0;
     int oldCounter = 0;
     while (1) {
         for (int x = 2; x < FIELD_ORIGIN * 2 - 2; x++) {
@@ -28,9 +28,9 @@ int Homing::dijkstra(int destX, int destY, int originX, int originY) {
 
                 // 周囲の歩数を取得
                 int northStep = homing.dijkstraSteps[x][y + 1];
-                int eastStep = homing.dijkstraSteps[x + 1][y];
+                int eastStep  = homing.dijkstraSteps[x + 1][y];
                 int southStep = homing.dijkstraSteps[x][y - 1];
-                int westStep = homing.dijkstraSteps[x - 1][y];
+                int westStep  = homing.dijkstraSteps[x - 1][y];
 
                 if (northStep != -1 && location.canGo(x, y, x, y + 1)) {
                     homing.dijkstraSteps[x][y] = northStep + 1;
@@ -68,8 +68,8 @@ int Homing::homingWeighting(void) {
 
     weight[RIGHT] = homingRightWeight();
     weight[FRONT] = homingFrontWeight();
-    weight[LEFT] = homingLeftWeight();
-    weight[BACK] = homingBackWeight();
+    weight[LEFT]  = homingLeftWeight();
+    weight[BACK]  = homingBackWeight();
 
     if (tof.rightWallExists == true) {
         weight[RIGHT] = DISABLE * 10;
@@ -105,7 +105,7 @@ int Homing::dijkstraWeighting(void) {
     // FIXME いけないマスとかあると
     // 10000が帰ってきて、壁がうおーってなるから修正する
 
-        if (millis() - floorSensor.resetTimer > 60000) {
+    if (millis() - floorSensor.resetTimer > 60000) {
         for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
             for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
                 if (homingReachedCount[i][j] >= 50) {
