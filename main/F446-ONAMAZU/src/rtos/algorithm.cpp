@@ -74,8 +74,7 @@ void floorApp(App) {
     while (1) {
         int blueTileX = FIELD_ORIGIN;
         int blueTileY = FIELD_ORIGIN;
-        if (floorSensor.frontColor == floorSensor.BLACK &&
-            abs(gyro.slope) <= 5) {
+        if (floorSensor.frontColor == floorSensor.BLACK) {
             if (homing.started == true && homing.hasFinished == false) {
                 app.stop(homingApp);
             } else {
@@ -152,6 +151,7 @@ void floorApp(App) {
             floorSensor.backColor == floorSensor.SILVER && gyro.slope == 0) {
             floorSensor.checkPointX = location.x;
             floorSensor.checkPointY = location.y;
+            buzzer.beat(DO_, 2);
             app.delay(Period);
         }
         app.delay(Period);

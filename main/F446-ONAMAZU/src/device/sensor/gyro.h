@@ -72,6 +72,7 @@ class GYRO {
 
     void init(void);
     void setOffset(void);
+    void setLoPStart(void);
     int read(void);
     void directionDecision(void);
     void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData);

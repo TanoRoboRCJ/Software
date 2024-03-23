@@ -31,6 +31,8 @@ void mainApp(App) {
                 app.start(homingApp);
                 app.start(floorApp);
 
+                gyro.setLoPStart();
+
                 servo.suspend  = false;
                 servo.velocity = servo.DefaultSpeed;
                 status         = false;

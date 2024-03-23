@@ -94,18 +94,18 @@ void Movement::turnReverse(void) {
 void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
-    exception       = true;
-    CanGoRight      = false;
-    CanGoLeft       = false;
+    // exception       = true;
+    CanGoRight = false;
+    CanGoLeft  = false;
 
     adjustmentTimer = 0;
 
     while ((abs(location.coordinateX - _oldCoordinateX) < 300 &&
-            abs(location.coordinateY - _oldCoordinateY) < 300) ||
-           (millis() - adjustmentTimer < 500)) {
-        if (gyro.slope < -15) {
-            adjustmentTimer = millis();
-        }
+            abs(location.coordinateY - _oldCoordinateY) < 300)/* ||
+           (millis() - adjustmentTimer < 500)*/) {
+        // if (gyro.slope < -15) {
+        //     adjustmentTimer = millis();
+        // }
 
         if (tof.frontWallExists == true &&
             isHit ==
@@ -130,7 +130,7 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
         }
         servo.suspend  = false;
         servo.velocity = servo.DefaultSpeed;
-        exception      = false;
+        // exception      = false;
 
         app.delay(Period);
     }  // 次のタイルまで前進
@@ -142,10 +142,10 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     }
     app.start(locationApp);
     servo.suspend = true;
-    if (exception == true && tof.rightWallExists == true &&
-        tof.frontWallExists == true && tof.leftWallExists == true) {
-        turnReverse();
-    }
+    // if (exception == true && tof.rightWallExists == true &&
+    //     tof.frontWallExists == true && tof.leftWallExists == true) {
+    //     turnReverse();
+    // }
 }
 
 void Movement::back(void) {
@@ -237,14 +237,14 @@ void Movement::avoidBarrier(void) {
         }
         unsigned long timer = millis();
         while (millis() - timer < 300) {
-            servo.driveAngularVelocity(-90, -90);
+            servo.driveAngularVelocity(-70, -70);
 
             app.delay(10);
         }
 
         timer = millis();
         while (millis() - timer < 300) {
-            servo.driveAngularVelocity(-90, 90);
+            servo.driveAngularVelocity(-70, 70);
             app.delay(10);
         }
     }
@@ -260,13 +260,13 @@ void Movement::avoidBarrier(void) {
 
         unsigned long timer = millis();
         while (millis() - timer < 300) {
-            servo.driveAngularVelocity(-90, 90);
+            servo.driveAngularVelocity(-70, 70);
             app.delay(10);
         }
 
         timer = millis();
         while (millis() - timer < 300) {
-            servo.driveAngularVelocity(-90, -90);
+            servo.driveAngularVelocity(-70, -70);
             app.delay(10);
         }
     }

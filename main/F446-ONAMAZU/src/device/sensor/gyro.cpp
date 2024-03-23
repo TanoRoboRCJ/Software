@@ -224,6 +224,11 @@ void GYRO::setOffset(void) {
     slopeOffset = (int)(ypr.pitch + 720) % 360;
 }
 
+void GYRO::setLoPStart(void) {
+    double dir = round(((int)(deg + 720) % 360) / 90.0) * 90;
+    offset = (int)(ypr.yaw - dir + 720) % 360;
+}
+
 void GYRO::directionDecision(void) {
     if (deg >= 315 || deg < 45) {
         direction = NORTH;
