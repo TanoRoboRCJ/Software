@@ -13,7 +13,10 @@ class Movement {
 
     const int Radius = 20;
     const int _Wait  = 500;
+    int adjustmentTimer = 0;
     bool exception = false;
+    bool dir = 1;
+    bool isSlope = false;
 
     void goOverBarrier(void);
 

@@ -73,7 +73,7 @@ void STS3032::drive(int velocity, int angle) {
     }
 
     // CHECK: ここの許容値もっと狭めてKpを上げるべきな気がする
-    if (abs(angularVelocity) > 20) {
+    if (abs(angularVelocity) > 30) {
         angularVelocity *= Kp;
         angularVelocity = constrain(angularVelocity, -90, 90);
         driveAngularVelocity(0, angularVelocity);

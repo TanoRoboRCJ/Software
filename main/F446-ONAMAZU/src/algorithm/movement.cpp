@@ -27,6 +27,8 @@ void Movement::turnRight(void) {
     if (isStucked(gyro.direction) == true) {
         // uart1.println("stucked");
         goOverBarrier();
+    } else {
+        dir = 1;
     }
 }
 
@@ -55,6 +57,8 @@ void Movement::turnLeft(void) {
     if (isStucked(gyro.direction) == true) {
         // uart1.println("stucked");
         goOverBarrier();
+    } else {
+        dir = 1;
     }
 }
 
@@ -82,6 +86,8 @@ void Movement::turnReverse(void) {
 
     if (isStucked(gyro.direction) == true) {
         goOverBarrier();
+    } else {
+        dir = 1;
     }
 }
 
@@ -92,8 +98,15 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     CanGoRight      = false;
     CanGoLeft       = false;
 
-    while (abs(location.coordinateX - _oldCoordinateX) < 300 &&
-           abs(location.coordinateY - _oldCoordinateY) < 300) {
+    adjustmentTimer = 0;
+
+    while ((abs(location.coordinateX - _oldCoordinateX) < 300 &&
+            abs(location.coordinateY - _oldCoordinateY) < 300) ||
+           (millis() - adjustmentTimer < 500)) {
+        if (gyro.slope < -15) {
+            adjustmentTimer = millis();
+        }
+
         if (tof.frontWallExists == true &&
             isHit ==
                 false) {  // FIXME:
@@ -141,8 +154,9 @@ void Movement::back(void) {
 
     while (abs(location.coordinateX - _oldCoordinateX) < 100 &&
            abs(location.coordinateY - _oldCoordinateY) < 100) {
-        servo.suspend  = false;
-        servo.velocity = -servo.DefaultSpeed;
+        servo.isCorrectingAngle = 0;
+        servo.suspend           = false;
+        servo.velocity          = -servo.DefaultSpeed;
         app.delay(Period);
     }  // NOTE 黒タイルから後退
 }
@@ -305,29 +319,27 @@ void Movement::goOverBarrier(void) {
     servo.suspend  = true;
     servo.velocity = 0;
     app.delay(_Wait);
-    switch (gyro.direction) {
-        case NORTH:
-            servo.angle = 0;
-            break;
-        case EAST:
-            servo.angle = 90;
-            break;
-        case SOUTH:
-            servo.angle = 180;
-            break;
-        case WEST:
-            servo.angle = 270;
-            break;
-    }
+    // switch (gyro.direction) {
+    //     case NORTH:
+    //         servo.angle = 0;
+    //         break;
+    //     case EAST:
+    //         servo.angle = 90;
+    //         break;
+    //     case SOUTH:
+    //         servo.angle = 180;
+    //         break;
+    //     case WEST:
+    //         servo.angle = 270;
+    //         break;
+    // }
     // FIXME:スタックしてるのにlocationの情報使うのは良くない
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
-    randomSeed(millis());
 
-    bool dir = random() % 2;
-
-    while (abs(location.coordinateX - _oldCoordinateX) < 10 &&//NOTE 進む距離調整
-           abs(location.coordinateY - _oldCoordinateY) < 10) {
+    while (abs(location.coordinateX - _oldCoordinateX) <
+               30 &&  // NOTE 進む距離調整
+           abs(location.coordinateY - _oldCoordinateY) < 30) {
         app.stop(adjustmentApp);
         app.stop(servoApp);
         servo.suspend  = false;
@@ -342,5 +354,8 @@ void Movement::goOverBarrier(void) {
         app.delay(Period);
         app.start(servoApp);
     }
-    app.stop(adjustmentApp);
+    randomSeed(millis());
+
+    dir = random() % 2;
+    app.start(adjustmentApp);
 }

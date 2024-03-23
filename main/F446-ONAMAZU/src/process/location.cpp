@@ -115,7 +115,7 @@ void Location::updateObservationData(void) {
                     coordinateY += (abs(tof.vecY[8]) % 300) - (150 - 76);
                 } else {
                     coordinateY +=
-                        (abs(tof.vecY[0]) % 300) - (150 - SensorRadius - 30);
+                        (abs(tof.vecY[0]) % 300) - (150 - SensorRadius - 37);
                 }
 
                 while (abs(coordinateY - oldCoordinateY) > 150) {
@@ -154,7 +154,7 @@ void Location::updateObservationData(void) {
                     coordinateX += (abs(tof.vecX[8]) % 300) - (150 - 76);
                 } else {
                     coordinateX +=
-                        (abs(tof.vecX[0]) % 300) - (150 - SensorRadius - 30);
+                        (abs(tof.vecX[0]) % 300) - (150 - SensorRadius - 37);
                 }
 
                 while (abs(coordinateX - oldCoordinateX) > 150) {
@@ -200,7 +200,7 @@ void Location::updateObservationData(void) {
 
     // uart1.println(widthX);
 
-    double proportion = 0.5;  // 小さいほど補正が早い
+    double proportion = 0.4;  // 小さいほど補正が早い
     coordinateX = oldCoordinateX * proportion + coordinateX * (1 - proportion);
     coordinateY = oldCoordinateY * proportion + coordinateY * (1 - proportion);
 

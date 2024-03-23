@@ -32,6 +32,14 @@ void monitorApp(App) {
         uart1.print(floorSensor.frontCRGB[2]);
         uart1.print("\t");
         uart1.print(floorSensor.frontCRGB[3]);
+        uart1.print("\t,\t");
+        uart1.print(floorSensor.backCRGB[0]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[1]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[2]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[3]);
         uart1.print("\t");
         uart1.print("Color of floor: ");
         switch (floorSensor.frontColor) {
