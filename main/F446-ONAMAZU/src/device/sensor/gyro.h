@@ -67,11 +67,12 @@ class GYRO {
 
     void quaternionToEuler(float qr, float qi, float qj, float qk, euler_t *ypr,
                            bool degrees = false);
-    void quaternionToEulerRV(sh2_RotationVectorWAcc_t *rotational_vector,
+    void quaternionToEulerRV(sh2_RotationVector *rotational_vector,
                              euler_t *ypr, bool degrees = false);
 
     void init(void);
     void setOffset(void);
+    void setLoPStart(void);
     int read(void);
     void directionDecision(void);
     void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData);
@@ -80,6 +81,7 @@ class GYRO {
 
     int deg = 0;
     int offset = 0;
+    uint8_t acc = 0;
 
     int error = 0;
     int oldDeg = 0;

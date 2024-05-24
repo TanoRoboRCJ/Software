@@ -25,36 +25,52 @@ void monitorApp(App) {
         //  uart1.print(tof.val[12]);
 
         // NOTE: floor
-        // uart1.print("Color of floor: ");
-        // switch(floorSensor.frontColor){
-        //     case 0:
-        //         uart1.print("white");
-        //         break;
-        //     case 1:
-        //         uart1.print("black");
-        //         break;
-        //     case 2:
-        //         uart1.print("Blue");
-        //         break;
-        //     case 3:
-        //         uart1.print("Silver");
-        //         break;
-        // }
-        // uart1.print("\t");
-        // switch(floorSensor.backColor){
-        //     case 0:
-        //         uart1.print("white");
-        //         break;
-        //     case 1:
-        //         uart1.print("black");
-        //         break;
-        //     case 2:
-        //         uart1.print("Blue");
-        //         break;
-        //     case 3:
-        //         uart1.print("Silver");
-        //         break;
-        // }
+        uart1.print(floorSensor.frontCRGB[0]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[1]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[2]);
+        uart1.print("\t");
+        uart1.print(floorSensor.frontCRGB[3]);
+        uart1.print("\t,\t");
+        uart1.print(floorSensor.backCRGB[0]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[1]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[2]);
+        uart1.print("\t");
+        uart1.print(floorSensor.backCRGB[3]);
+        uart1.print("\t");
+        uart1.print("Color of floor: ");
+        switch (floorSensor.frontColor) {
+            case 0:
+                uart1.print("white");
+                break;
+            case 1:
+                uart1.print("black");
+                break;
+            case 2:
+                uart1.print("Blue");
+                break;
+            case 3:
+                uart1.print("Silver");
+                break;
+        }
+        uart1.print("\t");
+        switch (floorSensor.backColor) {
+            case 0:
+                uart1.print("white");
+                break;
+            case 1:
+                uart1.print("black");
+                break;
+            case 2:
+                uart1.print("Blue");
+                break;
+            case 3:
+                uart1.print("Silver");
+                break;
+        }
 
         // NOTE: loadcell
         // uart1.print(loadcell.load[0]);
@@ -132,9 +148,15 @@ void monitorApp(App) {
         // }
 
         // NOTE: gyro
-        uart1.print("gyro: ");
+        // uart1.print("gyro: ");
         // uart1.print(gyro.deg);
+        uart1.print("\t");
         uart1.print(gyro.slope);
+        // uart1.print("\t");
+        // uart1.print(tof.lidarRightWallExists);
+
+        // uart1.print("\t");
+        // uart1.print(tof.lidarLeftWallExists);
 
         // NOTE: location
         // uart1.print(location.x);
@@ -204,7 +226,13 @@ void ledApp(App) {
     }
 
     while (1) {
-        if (victim.isDetected) {
+        if (homing.hasFinished) {
+            for (int i = 0; i < 3; i++) {
+                led.setBrightness(i, 255);
+                led.setColor(i, led.cyan);
+            }
+            led.showAll();
+        } else if (victim.isDetected) {
             int blink = ((millis() / 200) % 5 == 0) * 255;
 
             for (int i = 0; i < 3; i++) {
@@ -219,11 +247,21 @@ void ledApp(App) {
                 led.setBrightness(i, 0);
                 led.setColor(i, led.white);
             }
-            if (tof.canCorrect) {
+            if (tof.canCorrect == 3) {
                 led.setBrightness(RIGHT, 255);
                 led.setColor(RIGHT, led.white);
                 led.setBrightness(LEFT, 255);
                 led.setColor(LEFT, led.white);
+            } else if (tof.canCorrect == 2) {
+                led.setBrightness(RIGHT, 255);
+                led.setColor(RIGHT, led.cyan);
+                led.setBrightness(LEFT, 255);
+                led.setColor(LEFT, led.cyan);
+            } else if (tof.canCorrect == 1) {
+                led.setBrightness(RIGHT, 255);
+                led.setColor(RIGHT, led.yellow);
+                led.setBrightness(LEFT, 255);
+                led.setColor(LEFT, led.yellow);
             }
             led.showAll();
 

@@ -15,7 +15,7 @@ DISTANCE_SENSOR::DISTANCE_SENSOR(HardwareSerial *p) {
 }
 
 int DISTANCE_SENSOR::read(void) {
-    if (serialPtr->available() >= 35 + 8) {
+    if (serialPtr->available() >= 35 + 8 + 1) {
         int checkDegit = 0;
 
         if (serialPtr->read() == 'V') {
@@ -58,6 +58,21 @@ int DISTANCE_SENSOR::read(void) {
 
         covX = covX_float;
         covY = covY_float;
+
+        char wallExists = serialPtr->read();
+        if (wallExists == 'A') {
+            lidarRightWallExists = true;
+            lidarLeftWallExists = true;
+        } else if (wallExists == 'R') {
+            lidarRightWallExists = true;
+            lidarLeftWallExists = false;
+        } else if (wallExists == 'L') {
+            lidarRightWallExists = false;
+            lidarLeftWallExists = true;
+        } else if (wallExists == 'N') {
+            lidarRightWallExists = false;
+            lidarLeftWallExists = false;
+        }
 
         while (serialPtr->available() > 0) {
             serialPtr->read();
@@ -112,7 +127,7 @@ void DISTANCE_SENSOR::direction(void) {
 }
 
 void DISTANCE_SENSOR::wallJudgment(void) {
-    gyro.read();    //  NOTE: これを消すと動かない
+    gyro.read();  //  NOTE: これを消すと動かない
     if (val[4] > 215) {
         rightWallExists = false;
     } else {

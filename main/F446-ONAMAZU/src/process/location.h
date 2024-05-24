@@ -57,7 +57,7 @@ class Wall {
 class Location {
    private:
     // CONSTANT
-    double _VelocityConstant = 0.0023;  // 0.00159 小さいと距離が長くなる
+    double _VelocityConstant = 0.0024;  // 0.00159 小さいと距離が長くなる
 
    public:
     // CONSTANT
@@ -72,9 +72,10 @@ class Location {
 
     // VARIABLE
     Field field[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
-    Route route[200];
+    Route route[1000];
 
     Wall wall[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
+    void setToAvoidBlackTile(int x, int y);
 
     int x = 0;
     int y = 0;

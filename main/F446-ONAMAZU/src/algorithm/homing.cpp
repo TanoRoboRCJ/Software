@@ -54,7 +54,7 @@ int Homing::dijkstra(int destX, int destY, int originX, int originY) {
         }
 
         if (oldCounter == counter) {
-            return 10000;
+            return abs(destX - originX) + abs(destY - originY) + 50;
         }
 
         oldCounter = counter;
@@ -102,31 +102,97 @@ int Homing::homingWeighting(void) {
 int Homing::dijkstraWeighting(void) {
     int weight[4] = {0};
 
+    // FIXME いけないマスとかあると
+    // 10000が帰ってきて、壁がうおーってなるから修正する
+
+    if (millis() - floorSensor.resetTimer > 60000) {
+        for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
+            for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
+                if (homingReachedCount[i][j] >= 50) {
+                    homingReachedCount[i][j] = 0;
+                }
+            }
+        }
+        floorSensor.resetTimer = millis();
+    }
+
     switch (gyro.direction) {
         case NORTH:
-            weight[RIGHT] = dijkstra(location.x + 1, location.y);
-            weight[FRONT] = dijkstra(location.x, location.y + 1);
-            weight[LEFT]  = dijkstra(location.x - 1, location.y);
-            weight[BACK]  = dijkstra(location.x, location.y - 1);
+            weight[RIGHT] = dijkstra(location.x + 1, location.y) +
+                            homingReachedCount[location.x + FIELD_ORIGIN + 1]
+                                              [location.y + FIELD_ORIGIN] *
+                                100;
+            weight[FRONT] = dijkstra(location.x, location.y + 1) +
+                            homingReachedCount[location.x + FIELD_ORIGIN]
+                                              [location.y + FIELD_ORIGIN + 1] *
+                                100;
+            weight[LEFT] = dijkstra(location.x - 1, location.y) +
+                           homingReachedCount[location.x + FIELD_ORIGIN - 1]
+                                             [location.y + FIELD_ORIGIN] *
+                               100;
+            weight[BACK] = dijkstra(location.x, location.y - 1) +
+                           homingReachedCount[location.x + FIELD_ORIGIN]
+                                             [location.y + FIELD_ORIGIN - 1] *
+                               100;
             break;
         case EAST:
-            weight[RIGHT] = dijkstra(location.x, location.y - 1);
-            weight[FRONT] = dijkstra(location.x + 1, location.y);
-            weight[LEFT]  = dijkstra(location.x, location.y + 1);
-            weight[BACK]  = dijkstra(location.x - 1, location.y);
+            weight[RIGHT] = dijkstra(location.x, location.y - 1) +
+                            homingReachedCount[location.x + FIELD_ORIGIN]
+                                              [location.y + FIELD_ORIGIN - 1] *
+                                100;
+            weight[FRONT] = dijkstra(location.x + 1, location.y) +
+                            homingReachedCount[location.x + FIELD_ORIGIN + 1]
+                                              [location.y + FIELD_ORIGIN] *
+                                100;
+            weight[LEFT] = dijkstra(location.x, location.y + 1) +
+                           homingReachedCount[location.x + FIELD_ORIGIN]
+                                             [location.y + FIELD_ORIGIN + 1] *
+                               100;
+            weight[BACK] = dijkstra(location.x - 1, location.y) +
+                           homingReachedCount[location.x + FIELD_ORIGIN - 1]
+                                             [location.y + FIELD_ORIGIN] *
+                               100;
             break;
         case SOUTH:
-            weight[RIGHT] = dijkstra(location.x - 1, location.y);
-            weight[FRONT] = dijkstra(location.x, location.y - 1);
-            weight[LEFT]  = dijkstra(location.x + 1, location.y);
-            weight[BACK]  = dijkstra(location.x, location.y + 1);
+            weight[RIGHT] = dijkstra(location.x - 1, location.y) +
+                            homingReachedCount[location.x + FIELD_ORIGIN - 1]
+                                              [location.y + FIELD_ORIGIN] *
+                                100;
+            weight[FRONT] = dijkstra(location.x, location.y - 1) +
+                            homingReachedCount[location.x + FIELD_ORIGIN]
+                                              [location.y + FIELD_ORIGIN - 1] *
+                                100;
+            weight[LEFT] = dijkstra(location.x + 1, location.y) +
+                           homingReachedCount[location.x + FIELD_ORIGIN + 1]
+                                             [location.y + FIELD_ORIGIN] *
+                               100;
+            weight[BACK] = dijkstra(location.x, location.y + 1) +
+                           homingReachedCount[location.x + FIELD_ORIGIN]
+                                             [location.y + FIELD_ORIGIN + 1] *
+                               100;
             break;
         case WEST:
-            weight[RIGHT] = dijkstra(location.x, location.y + 1);
-            weight[FRONT] = dijkstra(location.x - 1, location.y);
-            weight[LEFT]  = dijkstra(location.x, location.y - 1);
-            weight[BACK]  = dijkstra(location.x + 1, location.y);
+            weight[RIGHT] = dijkstra(location.x, location.y + 1) +
+                            homingReachedCount[location.x + FIELD_ORIGIN]
+                                              [location.y + FIELD_ORIGIN + 1] *
+                                100;
+            weight[FRONT] = dijkstra(location.x - 1, location.y) +
+                            homingReachedCount[location.x + FIELD_ORIGIN - 1]
+                                              [location.y + FIELD_ORIGIN] *
+                                100;
+            weight[LEFT] = dijkstra(location.x, location.y - 1) +
+                           homingReachedCount[location.x + FIELD_ORIGIN]
+                                             [location.y + FIELD_ORIGIN - 1] *
+                               100;
+            weight[BACK] = dijkstra(location.x + 1, location.y) +
+                           homingReachedCount[location.x + FIELD_ORIGIN + 1]
+                                             [location.y + FIELD_ORIGIN] *
+                               100;
             break;
+    }
+
+    for (int i = 0; i < 4; i++) {
+        weight[i] = constrain(weight[i], 0, DISABLE * 10 - 1);
     }
 
     if (tof.rightWallExists == true) {
@@ -152,7 +218,11 @@ int Homing::dijkstraWeighting(void) {
                weight[LEFT] <= weight[BACK]) {
         return 2;  // left
     } else {
-        return 3;  // back
+        if (millis() < homing.HomingTime + 5000) {
+            return 3;  // back
+        } else {
+            return 0;  // front
+        }
     }
 
     // FIXME: ここには来ないはず（最後のelse ifは安全のためelseにすべき）

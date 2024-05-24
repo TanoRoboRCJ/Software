@@ -17,6 +17,7 @@ void Exploring::updateMap(void) {
     location.route[i].wall[3] = tof.wallExists[WEST];   // 西
 
     i++;
+    constrain(i, 0, 999);
 }
 
 int Exploring::weighting(void) {
@@ -27,18 +28,35 @@ int Exploring::weighting(void) {
             reachedCount[i][j] %= 21;
         }
     }
+    if (millis() - floorSensor.resetTimer > 60000) {
+        for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
+            for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
+                if (reachedCount[i][j] >= 20) {
+                    reachedCount[i][j] = 0;
+                }
+            }
+        }
+        floorSensor.resetTimer = millis();
+    }
 
     weight[RIGHT] = rightWeight();
     weight[FRONT] = frontWeight();
     weight[LEFT]  = leftWeight();
 
-    if (tof.rightWallExists == true) {
+    if (tof.rightWallExists == false) {
+        movement.CanGoRight = true;
+    }
+    if (tof.leftWallExists == false) {
+        movement.CanGoLeft = true;
+    }
+
+    if (movement.CanGoRight == false) {
         weight[RIGHT] = DISABLE;
     }
     if (tof.frontWallExists == true) {
         weight[FRONT] = DISABLE;
     }
-    if (tof.leftWallExists == true) {
+    if (movement.CanGoLeft == false) {
         weight[LEFT] = DISABLE;
     }
 

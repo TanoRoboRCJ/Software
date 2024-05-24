@@ -31,10 +31,10 @@ void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
     data[0] = angularVelocity - velocity;
     data[1] = angularVelocity + velocity;
 
-    if (gyro.slope < -15) {
-        data[0] *= SlopeSpeed;
-        data[1] *= SlopeSpeed;
-    }
+    // if (gyro.slope < -15) {
+    //     data[0] *= SlopeSpeed;
+    //     data[1] *= SlopeSpeed;
+    // }
 
     rightWheelSpeed = -data[0];
     leftWheelSpeed = data[1];
@@ -73,11 +73,13 @@ void STS3032::drive(int velocity, int angle) {
     }
 
     // CHECK: ここの許容値もっと狭めてKpを上げるべきな気がする
-    if (abs(angularVelocity) > 40) {
+    if (abs(angularVelocity) > 30) {
         angularVelocity *= Kp;
+        angularVelocity = constrain(angularVelocity, -90, 90);
         driveAngularVelocity(0, angularVelocity);
     } else {
         angularVelocity *= Kp;
+        angularVelocity = constrain(angularVelocity, -90, 90);
         driveAngularVelocity(velocity, angularVelocity);
     }
 }
@@ -87,9 +89,6 @@ void STS3032::stop(void) {
 }
 
 void STS3032::rescueKit(int num, int position) {
-    static int remainingRescueKitR = 6;
-    static int remainingRescueKitL = 6;
-
     int deg = gyro.deg;
     int turnDeg = (deg + 180) % 360;
     bool turn = false;
@@ -97,26 +96,38 @@ void STS3032::rescueKit(int num, int position) {
     app.stop(servoApp);
 
     for (int i = 0; i < num; i++) {
-        if (position == 0) {
-            if (remainingRescueKitR <= 0 && turn == false) {
+        if (position == 0 && remainingRescueKitR == 0) {  // ないよ！！
+            if (turn == false && remainingRescueKitL > 0) {
                 position = 2;
                 turn = true;
 
-                while (abs(gyro.deg - turnDeg) > 5 &&
-                       abs(gyro.deg - turnDeg) < 355) {
-                    drive(0, turnDeg);
-                    app.delay(10);
-                }
-            }
-        } else if (position == 2) {
-            if (remainingRescueKitL <= 0 && turn == false) {
-                position = 0;
-                turn = true;
+                unsigned long startTime = millis();
 
                 while (abs(gyro.deg - turnDeg) > 5 &&
                        abs(gyro.deg - turnDeg) < 355) {
                     drive(0, turnDeg);
                     app.delay(10);
+
+                    if (millis() - startTime > 4000) {
+                        break;
+                    }
+                }
+            }
+        } else if (position == 2 && remainingRescueKitL == 0) {
+            if (turn == false && remainingRescueKitR > 0) {
+                position = 0;
+                turn = true;
+
+                unsigned long startTime = millis();
+
+                while (abs(gyro.deg - turnDeg) > 5 &&
+                       abs(gyro.deg - turnDeg) < 355) {
+                    drive(0, turnDeg);
+                    app.delay(10);
+
+                    if (millis() - startTime > 4000) {
+                        break;
+                    }
                 }
             }
         }
@@ -124,19 +135,21 @@ void STS3032::rescueKit(int num, int position) {
 
         if (position == 0) {
             bottom.rescueKit[0] = false;
-            app.delay(800);
+            app.delay(200);
             bottom.rescueKit[0] = true;
-            app.delay(450);
-
+            app.delay(150);
             remainingRescueKitR--;
+
         } else if (position == 2) {
             bottom.rescueKit[1] = false;
-            app.delay(800);
+            app.delay(200);
             bottom.rescueKit[1] = true;
-            app.delay(450);
-
+            app.delay(150);
             remainingRescueKitL--;
         }
+
+        remainingRescueKitR = constrain(remainingRescueKitR, 0, 6);
+        remainingRescueKitL = constrain(remainingRescueKitL, 0, 6);
     }
 
     while (abs(gyro.deg - deg) > 5 && abs(gyro.deg - deg) < 355) {
