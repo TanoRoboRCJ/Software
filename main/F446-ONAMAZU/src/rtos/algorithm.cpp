@@ -30,8 +30,7 @@ void rightWallApp(App) {
 
         // CHECK:とりあえずプリントデバッグしてみよう
         if (abs(gyro.slope) < 15) {
-            // CHECK:右の判定を30cm地点じゃなくて、28 -
-            // 30の地点で空いていたら見たいにしたいね
+            //NOTE:28-30cmで壁判定Done
             switch (exploring.weighting()) {
                 case 0:  // right
                          // uart1.println("CASE A: right");
