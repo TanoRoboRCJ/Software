@@ -4,6 +4,7 @@
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
 #include "../process/process.h"
+#include "./algorithm/movement.h"
 
 #define NORTH 0
 #define EAST 1

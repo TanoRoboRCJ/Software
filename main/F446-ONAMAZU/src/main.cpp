@@ -28,7 +28,7 @@ void setup() {
     app.create(rightWallApp);
     app.create(adjustmentApp);
     app.create(homingApp);
-    app.create(floorApp);
+    app.create(floorApp,secondPriority);
 
     app.start(mainApp);
     app.startRTOS();
