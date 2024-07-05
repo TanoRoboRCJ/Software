@@ -3,5 +3,3 @@
 Location location;
 
 VICTIM victim;
-
-LCD lcd;

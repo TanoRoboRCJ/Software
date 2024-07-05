@@ -99,7 +99,7 @@ void ledApp(App) {
     int ledStatus = 0;
     int victimId = 0;
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
         led.setColor(i, led.white);
         led.setBrightness(i, 255);
     }
@@ -113,7 +113,7 @@ void ledApp(App) {
         if (victim.isDetected) {
             int blink = ((millis() / 200) % 5 == 0) * 255;
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 4; i++) {
                 led.setBrightness(i, blink);
                 led.setColor(i, victim.color(victimId));
             }
@@ -121,7 +121,7 @@ void ledApp(App) {
 
             app.delay(10);
         } else {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 4; i++) {
                 led.setBrightness(i, 0);
                 led.setColor(i, led.white);
             }

@@ -23,7 +23,6 @@ void mainApp(App) {
                 servo.velocity = servo.DefaultSpeed;
                 status = false;
             }
-            lcd.writeRunningStatus();
 
         } else {
             app.stop(homingApp);
@@ -35,8 +34,6 @@ void mainApp(App) {
             servo.velocity = 0;
             servo.driveAngularVelocity(0, 0);
             status = true;
-
-            lcd.begin();
         }
 
         app.delay(Period);

@@ -7,6 +7,8 @@
 #define TOP 1
 #define RIGHT 0
 #define LEFT 2
+#define UI 3
+#define CAM 4
 
 class LED {
    private:
@@ -17,14 +19,16 @@ class LED {
 
     bool disableTop = false;
     bool disableSide = false;
+    bool disableUI = false;
+    bool disableCam = false;
 
-    const bool* disablePtr[3] = {&disableSide, &disableTop, &disableSide};
+    const bool* disablePtr[5] = {&disableSide, &disableTop, &disableSide, &disableUI, &disableCam};
 
-    Adafruit_NeoPixel* ptrArr[3];
+    Adafruit_NeoPixel* ptrArr[5];
 
    public:
     LED(Adafruit_NeoPixel* right, Adafruit_NeoPixel* top,
-        Adafruit_NeoPixel* left);
+        Adafruit_NeoPixel* left, Adafruit_NeoPixel* ui, Adafruit_NeoPixel* cam);
 
     // functions:
     void bootIllumination(void);
@@ -34,7 +38,6 @@ class LED {
 
     void setColor(int led, int r, int g, int b);
     void setColor(int led, unsigned long color);
-    void setGlowColor();
     void setBrightness(int led, int brightness);
     void setBrightnessRaw(int led, int brightness);
 

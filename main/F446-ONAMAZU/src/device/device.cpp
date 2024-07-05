@@ -20,7 +20,9 @@ STS3032 servo(&uart5);
 Adafruit_NeoPixel topLED(22, PC1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel rightLED(7, PB13, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel leftLED(7, PA15, NEO_GRB + NEO_KHZ800);
-LED led(&rightLED, &topLED, &leftLED);
+Adafruit_NeoPixel camLED(4, PA7, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel uiLED(8, PB14, NEO_GRB + NEO_KHZ800);
+LED led(&rightLED, &topLED, &leftLED, &uiLED, &camLED);
 
 // SENSOR
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);

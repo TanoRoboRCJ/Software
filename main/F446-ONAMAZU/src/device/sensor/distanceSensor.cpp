@@ -44,7 +44,7 @@ int DISTANCE_SENSOR::read(void) {
             serialPtr->read();
         }
 
-        val[8] = bottom.tof[0];
+        // val[8] = bottom.tof[0];
 
         return 0;
 
