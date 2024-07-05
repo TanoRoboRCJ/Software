@@ -2,20 +2,20 @@
 
 #include <Wire.h>
 #include <SPI.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include "img.h"
+// #include <Adafruit_GFX.h>
+// #include <Adafruit_SSD1306.h>
+// #include "img.h"
 // 画面のサイズの設定
-#define SCREEN_WIDTH (128)
-#define SCREEN_HEIGHT (64)
+// #define SCREEN_WIDTH (128)
+// #define SCREEN_HEIGHT (64)
 
-// 画面のサイズ(データシートから)
-#define SCREEN_ADDRESS (0x3C)
+// // 画面のサイズ(データシートから)
+// #define SCREEN_ADDRESS (0x3C)
 
 int loopCount = 0;
 
 // ディスプレイ変数の宣言
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
+// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
 
 #include <Adafruit_NeoPixel.h>
 #define NUMPIXELS 1
@@ -32,10 +32,16 @@ VL53L0X distanceSensor[numOfSensors];
 
 PCA9555 ioex;
 using namespace PCA95x5::Port;
-const int xshutPin[] = {P02, P01, P00, P17, P16, P11, P04, P03,
-                        P05, P06, P07, P10, P15, P14, P13, P12};
+// const int xshutPin[] = {P02, P01, P00, P17, P16, P11, P04, P03,
+//                         P05, P06, P07, P10, P15, P14, P13, P12};
+// const bool disalbledSensor[16] = {false, false, false, false, false, true,
+//                                   true,  true,  false,  true,  true,  true,
+//                                   false, false, false, false};
+
+const int xshutPin[] = {P02, P01, P00, P17, P16, P05, P04, P03,
+                        P11, P06, P07, P10, P15, P14, P13, P12};
 const bool disalbledSensor[16] = {false, false, false, false, false, true,
-                                  true,  true,  true,  true,  true,  true,
+                                  true,  true,  false,  true,  true,  true,
                                   false, false, false, false};
 
 bool deviceScanner(void);
@@ -50,15 +56,15 @@ void setup() {
 
     Wire.begin();
 
-    if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
-        Serial.println(F("SSD1306 can not allocate memory!"));
-        return;
-    }
-    display.setRotation(2);
-    display.clearDisplay();
-    display.setTextColor(WHITE);
-    display.drawBitmap(0, 0, BootImg, 128, 64, WHITE);
-    display.display();
+    // if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    //     Serial.println(F("SSD1306 can not allocate memory!"));
+    //     return;
+    // }
+    // display.setRotation(2);
+    // display.clearDisplay();
+    // display.setTextColor(WHITE);
+    // display.drawBitmap(0, 0, BootImg, 128, 64, WHITE);
+    // display.display();
 
     // while (1) {
     //     deviceScanner();

@@ -32,6 +32,10 @@ HardwareSerial uart2(PA3, PA2);
 
 const bool uartForDebugEnable = true;
 
+#include <Adafruit_NeoPixel.h>
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(2, PA0, NEO_GRB + NEO_KHZ800);
+
 int degToPulse(int deg) {
     const int Neutral = 1500;
     const int Range = 1000;
@@ -114,6 +118,15 @@ void setup(void) {
     enc.bootIllumination(0);
 
     analogWriteFrequency(PwmFreq);
+
+    strip.begin();
+    strip.show();
+
+    strip.setBrightness(255);
+    strip.setPixelColor(1, strip.Color(255, 0, 255));
+
+    strip.setPixelColor(0, strip.Color(0, 255, 255));
+    strip.show();
 }
 
 void loop(void) {

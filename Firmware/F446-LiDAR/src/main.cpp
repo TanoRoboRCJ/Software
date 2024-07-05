@@ -6,7 +6,7 @@ LIDAR lidar(&uart2, PA6);
 
 #include <IO-Kit.h>
 Output ledBuiltin = Output(PB12);
-Output BOOT1 = Output(PB2);
+// Output BOOT1 = Output(PB2);
 
 HardwareSerial uartForDebug(PA10, PA9);
 
@@ -23,7 +23,7 @@ void setup() {
     uart4.begin(1000000);
     uart5.begin(1000000);
 
-    BOOT1 = LOW;
+    // BOOT1 = LOW;
 }
 
 void loop() {

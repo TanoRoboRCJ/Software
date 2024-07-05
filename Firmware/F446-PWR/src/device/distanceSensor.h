@@ -11,7 +11,7 @@ class DistanceSensor {
     static const int Quantity = 2;
     const int FirstAddr = 0x30;
 
-    VL53L0X vl53l0x[Quantity];
+    // VL53L0X vl53l0x[Quantity];
     TwoWire* wirePtr;
 
     Output xshutPin[Quantity] = {Output(PA5), Output(PA6)};
