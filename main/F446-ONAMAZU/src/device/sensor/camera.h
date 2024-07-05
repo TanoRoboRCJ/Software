@@ -19,11 +19,7 @@
 class CAMERA {
    public:
     HardwareSerial *serialPtr;
-    CAMERA(HardwareSerial *ptr, int _ledPin);
-
-    const int ledPin;
-
-    Output led = Output(ledPin);
+    CAMERA(HardwareSerial *ptr);
 
     bool isVictimDetected = true;
     int data = NO_VICTIM;

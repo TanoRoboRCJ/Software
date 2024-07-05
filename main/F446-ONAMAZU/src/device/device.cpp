@@ -17,7 +17,7 @@ BUZZER buzzer(&buzzerPin);
 HardwareSerial uart5(PD2, PC12);
 STS3032 servo(&uart5);
 
-Adafruit_NeoPixel topLED(24, PC1, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel topLED(22, PC1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel rightLED(7, PB13, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel leftLED(7, PA15, NEO_GRB + NEO_KHZ800);
 LED led(&rightLED, &topLED, &leftLED);
@@ -35,7 +35,7 @@ FLOOR_SENSOR floorSensor;
 
 HardwareSerial uart2(PA3, PA2);
 HardwareSerial uart6(PC7, PC6);
-CAMERA camera[2] = {CAMERA(&uart2, PB15), CAMERA(&uart6, PB14)};  // 右左
+CAMERA camera[2] = {CAMERA(&uart6), CAMERA(&uart2)};  // 右左
 
 // FUNCTION
 void initUART(void) {
