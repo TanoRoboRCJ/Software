@@ -33,7 +33,7 @@ void rightWallApp(App) {
             //NOTE:28-30cmで壁判定Done
             switch (exploring.weighting()) {
                 case 0:  // right
-                         // uart1.println("CASE A: right");
+                         // uart1.println("CASE A: right";
                     servo.suspend  = true;
                     servo.velocity = 0;
                     movement.turnRight();
