@@ -22,14 +22,16 @@ void monitorApp(App) {
         //  uart1.print("\t");
         //  uart1.print(tof.val[4]);
         //  uart1.print("\t");
+        //  uart1.print(tof.val[8]);
+        //  uart1.print("\t");
         //  uart1.print(tof.val[12]);
 
         // NOTE: floor
-        uart1.print(floorSensor.frontCRGB[0]);
-        uart1.print("\t");
-        uart1.print(floorSensor.frontCRGB[1]);
-        uart1.print("\t");
-        uart1.print(tof.val[12]);
+        // uart1.print(floorSensor.frontCRGB[0]);
+        // uart1.print("\t");
+        // uart1.print(floorSensor.frontCRGB[1]);
+        // uart1.print("\t");
+        // uart1.print(tof.val[12]);
 
         // NOTE: loadcell
         // uart1.print(loadcell.load[0]);
@@ -107,8 +109,8 @@ void monitorApp(App) {
         // }
 
         // NOTE: gyro
-        // uart1.print("gyro: ");
-        // uart1.print(gyro.deg);
+        uart1.print("gyro: ");
+        uart1.print(gyro.deg);
         uart1.print("\t");
         uart1.print(gyro.slope);
         // uart1.print("\t");

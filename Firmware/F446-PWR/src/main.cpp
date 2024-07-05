@@ -108,6 +108,8 @@ void setup(void) {
     uartForDebug.begin(115200);
     uart2.begin(115200);
 
+    delay(100);
+
     wireBus1.begin();
     wireBus2.begin();
 
@@ -157,12 +159,6 @@ void loop(void) {
     // SERIAL DEBUG
     if (!uartForDebugEnable) {
         return;
-    }
-
-    uartForDebug.print("ToF|\t");
-    for (int i = 0; i < 2; i++) {
-        uartForDebug.print(tof.val[i]);
-        uartForDebug.print("\t");
     }
 
     for (int tcsSelecter = 0; tcsSelecter < 2; tcsSelecter++) {

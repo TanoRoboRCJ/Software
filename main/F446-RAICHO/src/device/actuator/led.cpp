@@ -43,7 +43,7 @@ void LED::initCompleteIllumination(void) {
 
     // カメラの色温度調整
     setBrightnessRaw(CAM, 100);
-    setColor(CAM, colorRGB(255, 0, 255));
+    setColor(CAM, colorRGB(0xFF, 0xFF, 0xC0));  // #FFE9C9
     show(CAM);
 }
 
