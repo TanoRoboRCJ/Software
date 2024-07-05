@@ -4,9 +4,10 @@
 CRGB led[1];
 
 #include "./BLE_Peripheral.h"
-BLE_PERIPHERAL BLE_Peripheral("ONAMAZU BLE-Kit");
+BLE_PERIPHERAL BLE_Peripheral("RAICHO BLE-Kit");
 
 char sendDataArr[140] = { 0 };
+int dataRing = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -20,15 +21,21 @@ void setup() {
 void loop() {
   if (BLE_Peripheral.checkConnection()) {
     if (Serial.available() != 0) {
-      delay(5);
-      int dataSize = 0;
-      char sendDataArr[140] = { 0 };
       while (Serial.available() != 0) {
-        sendDataArr[dataSize] = Serial.read();
-        dataSize++;
-      }
+        sendDataArr[dataRing] = Serial.read();
 
-      BLE_Peripheral.write(sendDataArr, dataSize);
+        if (sendDataArr[dataRing] == '\n') {
+          BLE_Peripheral.write(sendDataArr, dataRing);
+          dataRing = 0;
+          for (int i = 0; i < 140; i++) {
+            sendDataArr[i] = 0;
+          }
+
+          break;
+        }
+        
+        dataRing++;
+      }
     }
 
     if ((millis() / 20) % 2 == 0 && (millis() / 300) % 5 == 0) {

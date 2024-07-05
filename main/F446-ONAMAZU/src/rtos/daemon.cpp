@@ -29,48 +29,7 @@ void monitorApp(App) {
         uart1.print("\t");
         uart1.print(floorSensor.frontCRGB[1]);
         uart1.print("\t");
-        uart1.print(floorSensor.frontCRGB[2]);
-        uart1.print("\t");
-        uart1.print(floorSensor.frontCRGB[3]);
-        uart1.print("\t,\t");
-        uart1.print(floorSensor.backCRGB[0]);
-        uart1.print("\t");
-        uart1.print(floorSensor.backCRGB[1]);
-        uart1.print("\t");
-        uart1.print(floorSensor.backCRGB[2]);
-        uart1.print("\t");
-        uart1.print(floorSensor.backCRGB[3]);
-        uart1.print("\t");
-        uart1.print("Color of floor: ");
-        switch (floorSensor.frontColor) {
-            case 0:
-                uart1.print("white");
-                break;
-            case 1:
-                uart1.print("black");
-                break;
-            case 2:
-                uart1.print("Blue");
-                break;
-            case 3:
-                uart1.print("Silver");
-                break;
-        }
-        uart1.print("\t");
-        switch (floorSensor.backColor) {
-            case 0:
-                uart1.print("white");
-                break;
-            case 1:
-                uart1.print("black");
-                break;
-            case 2:
-                uart1.print("Blue");
-                break;
-            case 3:
-                uart1.print("Silver");
-                break;
-        }
+        uart1.print(tof.val[12]);
 
         // NOTE: loadcell
         // uart1.print(loadcell.load[0]);
@@ -163,10 +122,8 @@ void monitorApp(App) {
         // uart1.print(",");
         // uart1.print(location.y);
 
-        // NOTE: uart1.println(homing.dijkstra(location.x, location.y));
-
         uart1.println();
-        app.delay(Period);
+        app.delay(10);
     }
 }
 
