@@ -17,16 +17,18 @@ void setup() {
 
     // デーモン
     app.create(monitorApp);
+    // CHECK: locationとservoをsecondにしてsensorをfirstにするべきでは？
     app.create(locationApp, firstPriority);
     app.create(victimNotifyApp);
     app.create(ledApp);
     app.create(sensorApp, secondPriority);
-    app.create(servoApp, secondPriority);
+    app.create(servoApp, firstPriority);
 
     // 動作系統
     app.create(rightWallApp);
     app.create(adjustmentApp);
-    app.create(homingApp); //FIXME これはまだ動かない
+    app.create(homingApp);
+    app.create(floorApp,secondPriority);
 
     app.start(mainApp);
     app.startRTOS();

@@ -5,7 +5,6 @@
 
 #define FIELD_ORIGIN 20
 
-// FIXME: いずれはFieldとRouteを統合したい
 class Field {
    public:
     bool isPassed = false;
@@ -48,10 +47,17 @@ class Route {
     };
 };
 
+class Wall {
+   public:
+    // |_ の壁があるかどうか
+    bool vertical = true;
+    bool horizontal = true;
+};
+
 class Location {
    private:
     // CONSTANT
-    double _VelocityConstant = 0.0022;//0.00159
+    double _VelocityConstant = 0.0024;  // 0.00159 小さいと距離が長くなる
 
    public:
     // CONSTANT
@@ -62,18 +68,20 @@ class Location {
     void updateOdometory(void);
     void updateObservationData(void);
     void updateMap(void);
+    bool canGo(int x1, int y1, int x2, int y2);
 
     // VARIABLE
     Field field[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
-    Route route[200];
+    Route route[1000];
+
+    Wall wall[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
+    void setToAvoidBlackTile(int x, int y);
 
     int x = 0;
     int y = 0;
 
     double coordinateX = 0;  // 絶対座標 [mm]
     double coordinateY = 0;  // 絶対座標 [mm]
-
-    int IndexOfSensorFacingNorth = 0;
 
     unsigned long lastTrustX = 0;
     unsigned long lastTrustY = 0;

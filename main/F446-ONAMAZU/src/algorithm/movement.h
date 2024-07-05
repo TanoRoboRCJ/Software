@@ -11,12 +11,21 @@ class Movement {
     double _oldCoordinateX = 0;
     double _oldCoordinateY = 0;
 
-    bool isHit = false;
-
     const int Radius = 20;
-    const int _Wait = 500;
+    const int _Wait  = 500;
+    int adjustmentTimer = 0;
+    bool exception = false;
+    bool dir = 1;
+    bool isSlope = false;
+
+    void goOverBarrier(void);
+
    public:
+    bool isHit = false;
+    bool CanGoRight = false;
+    bool CanGoLeft = false;
     void move_1tile(void);
+    void back(void);
     void turnRight(void);
     void turnLeft(void);
     void turnReverse(void);
@@ -27,6 +36,7 @@ class Movement {
 
     void angleAdjustment(void);
     void avoidBarrier(void);
+    bool isStucked(int direction);
 };
 
 extern Movement movement;

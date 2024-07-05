@@ -4,6 +4,7 @@
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
 #include "../process/process.h"
+#include "./algorithm/movement.h"
 
 #define NORTH 0
 #define EAST 1
@@ -14,7 +15,8 @@
 #define RIGHT 0
 #define FRONT 1
 #define LEFT 2
-#define DISABLE 50
+#define BACK 3
+#define DISABLE 100
 
 class Exploring {
    public:
@@ -25,7 +27,7 @@ class Exploring {
     int leftWeight(void);
     int weighting(void);
 
-    int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2];
+    int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 };
 
 extern Exploring exploring;

@@ -10,6 +10,7 @@
 #include "../device/device.h"
 #include "../kit/RTOS-Kit.h"
 #include "../process/process.h"
+#include "../algorithm/homing.h"
 
 // mainApp.cpp
 extern void mainApp(App);
@@ -25,6 +26,7 @@ extern void monitorApp(App);
 extern void rightWallApp(App);
 extern void adjustmentApp(App);
 extern void homingApp(App);
+extern void floorApp(App);
 
 // process.cpp
 extern void locationApp(App);

@@ -6,6 +6,8 @@ DistanceSensor::DistanceSensor(TwoWire* _wirePtr) {
     for (int i = 0; i < Quantity; i++) {
         xshutPin[i] = LOW;
     }
+
+    _wirePtr->setClock(400000);
 }
 
 bool DistanceSensor::init(void) {

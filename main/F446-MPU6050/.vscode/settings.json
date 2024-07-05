@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.ino": "cpp",
+        "*.pde": "cpp",
+        "*.tcc": "cpp",
+        "unordered_map": "cpp",
+        "fstream": "cpp",
+        "istream": "cpp",
+        "sstream": "cpp",
+        "numeric": "cpp",
+        "ostream": "cpp",
+        "random": "cpp",
+        "complex": "cpp",
+        "chrono": "cpp",
+        "cmath": "cpp"
+    }
+}

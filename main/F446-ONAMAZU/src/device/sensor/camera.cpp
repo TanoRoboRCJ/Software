@@ -3,6 +3,7 @@
 CAMERA::CAMERA(HardwareSerial *ptr) {
     serialPtr = ptr;
     serialPtr->begin(115200);
+    led = 0.35;
 }
 
 void CAMERA::read(void) {
