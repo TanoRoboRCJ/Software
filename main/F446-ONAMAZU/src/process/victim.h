@@ -4,16 +4,54 @@
 #include "../device/device.h"
 #include "./location.h"
 
+#define H 0
+#define S 1
+#define U 2
+#define R 3
+#define G 4
+#define Y 5
+
 class VICTIM {
    public:
     bool isDetected   = false;
-    int isRightOrLeft = NONE;  // 0;NAN 1;right 2;left
+    int isRightOrLeft = NONE;  // RIGHT: 0 LEFT: 2 NONE: 5
     int id            = 0;
 
-    bool place[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]       = {false};
-    int kindOfVictim[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+    // int kindOfVictimX[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]    = {0};
+    // int kindOfVictimY[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]    = {0};
+    char _kindOfVictimX[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+    char _kindOfVictimY[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+
+    bool returnKindOfvictimY(int x, int y, int id) {
+        char tmp = _kindOfVictimY[x][y];
+        for (int i = 0; i < id; i++) {
+            tmp = tmp >> 1;
+        }
+        tmp &= 0x01;
+
+        return tmp;
+    }
+
+    bool returnKindOfvictimX(int x, int y, int id) {
+        char tmp = _kindOfVictimX[x][y];
+        for (int i = 0; i < id; i++) {
+            tmp = tmp >> 1;
+        }
+        tmp &= 0x01;
+
+        return tmp;
+    }
+
+    void setKindOfvictimY(int x, int y, int id) {
+        _kindOfVictimY[x][y] |= (1 << id);
+    } 
+
+    void setKindOfvictimX(int x, int y, int id) {
+        _kindOfVictimX[x][y] |= (1 << id);
+    }
 
     void read(void) {
+        // CHECK: このtimerなんなん
         static unsigned long timer = 0;
         for (int i = 0; i < 2; i++) {
             camera[i].read();

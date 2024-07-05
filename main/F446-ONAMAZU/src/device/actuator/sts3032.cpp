@@ -31,6 +31,11 @@ void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
     data[0] = angularVelocity - velocity;
     data[1] = angularVelocity + velocity;
 
+    // if (gyro.slope < -15) {
+    //     data[0] *= SlopeSpeed;
+    //     data[1] *= SlopeSpeed;
+    // }
+
     rightWheelSpeed = -data[0];
     leftWheelSpeed = data[1];
 
@@ -62,15 +67,19 @@ void STS3032::drive(int velocity, int angle) {
     while (angularVelocity < 0) {
         angularVelocity += 360;
     }
+    // CHECK: %= 360をつける方が安全
     if (angularVelocity > 180) {
         angularVelocity -= 360;
     }
 
-    if (abs(angularVelocity) > 40) {
+    // CHECK: ここの許容値もっと狭めてKpを上げるべきな気がする
+    if (abs(angularVelocity) > 30) {
         angularVelocity *= Kp;
+        angularVelocity = constrain(angularVelocity, -90, 90);
         driveAngularVelocity(0, angularVelocity);
     } else {
         angularVelocity *= Kp;
+        angularVelocity = constrain(angularVelocity, -90, 90);
         driveAngularVelocity(velocity, angularVelocity);
     }
 }
@@ -80,4 +89,74 @@ void STS3032::stop(void) {
 }
 
 void STS3032::rescueKit(int num, int position) {
+    int deg = gyro.deg;
+    int turnDeg = (deg + 180) % 360;
+    bool turn = false;
+
+    app.stop(servoApp);
+
+    for (int i = 0; i < num; i++) {
+        if (position == 0 && remainingRescueKitR == 0) {  // ないよ！！
+            if (turn == false && remainingRescueKitL > 0) {
+                position = 2;
+                turn = true;
+
+                unsigned long startTime = millis();
+
+                while (abs(gyro.deg - turnDeg) > 5 &&
+                       abs(gyro.deg - turnDeg) < 355) {
+                    drive(0, turnDeg);
+                    app.delay(10);
+
+                    if (millis() - startTime > 4000) {
+                        break;
+                    }
+                }
+            }
+        } else if (position == 2 && remainingRescueKitL == 0) {
+            if (turn == false && remainingRescueKitR > 0) {
+                position = 0;
+                turn = true;
+
+                unsigned long startTime = millis();
+
+                while (abs(gyro.deg - turnDeg) > 5 &&
+                       abs(gyro.deg - turnDeg) < 355) {
+                    drive(0, turnDeg);
+                    app.delay(10);
+
+                    if (millis() - startTime > 4000) {
+                        break;
+                    }
+                }
+            }
+        }
+        driveAngularVelocity(0, 0);
+
+        if (position == 0) {
+            bottom.rescueKit[0] = false;
+            app.delay(200);
+            bottom.rescueKit[0] = true;
+            app.delay(150);
+            remainingRescueKitR--;
+
+        } else if (position == 2) {
+            bottom.rescueKit[1] = false;
+            app.delay(200);
+            bottom.rescueKit[1] = true;
+            app.delay(150);
+            remainingRescueKitL--;
+        }
+
+        remainingRescueKitR = constrain(remainingRescueKitR, 0, 6);
+        remainingRescueKitL = constrain(remainingRescueKitL, 0, 6);
+    }
+
+    while (abs(gyro.deg - deg) > 5 && abs(gyro.deg - deg) < 355) {
+        drive(0, deg);
+        app.delay(10);
+    }
+    driveAngularVelocity(0, 0);
+
+    app.start(servoApp);
 }

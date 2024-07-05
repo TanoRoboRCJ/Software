@@ -7,7 +7,7 @@
 Output ledToggle = Output(PA0);
 Output ledBuiltin = Output(PB12);
 
-const int PushDeg[2] = {-24, 24};
+const int PushDeg[2] = {-38, 38};
 const int PullDeg[2] = {40, -40};
 Output servo[2] = {Output(PB2), Output(PB1)};
 bool isPushing[2] = {true, true};
@@ -161,6 +161,12 @@ void loop(void) {
             uartForDebug.print("\t");
         }
     }
+
+    static unsigned long lastTime = millis();
+    uartForDebug.print("Period: ");
+    uartForDebug.print((millis() - lastTime));
+
+    lastTime = millis();
 
     uartForDebug.println();
 }

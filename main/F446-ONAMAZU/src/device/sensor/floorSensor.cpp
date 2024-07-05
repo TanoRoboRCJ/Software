@@ -5,25 +5,41 @@ void FLOOR_SENSOR::read(void) {
     frontCRGB[1] = bottom.tcsRed[0];
     frontCRGB[2] = bottom.tcsGreen[0];
     frontCRGB[3] = bottom.tcsBlue[0];
-    backCRGB[0] = bottom.tcsClear[1];
-    backCRGB[1] = bottom.tcsRed[1];
-    backCRGB[2] = bottom.tcsGreen[1];
-    backCRGB[3] = bottom.tcsBlue[1];
-    
-    // colorJudgment();`
+    backCRGB[0]  = bottom.tcsClear[1];
+    backCRGB[1]  = bottom.tcsRed[1];
+    backCRGB[2]  = bottom.tcsGreen[1];
+    backCRGB[3]  = bottom.tcsBlue[1];
+
+    frontColorJudgment();
+    backColorJudgment();
 }
 
-void FLOOR_SENSOR::colorJudgment(void) {
-    // if (redVal > 910 && blankVal > 910 && blueVal > 910) {
-    //     Color = 1;
-    //     // 黒
-    // }  else {
-    //     Color = 0;
-    //     // 白
-    // }//FIXME ここに銀色の判定を入れる
-    // // else if ( (blankVal > 100 && blankVal < 650) && blueVal < 300) {
-    // //     color = 2;
-    // //     // 青
-    // // } 
-   
+void FLOOR_SENSOR::frontColorJudgment(void) {
+    if (frontCRGB[0] < 70 && frontCRGB[1] < 35 && frontCRGB[2] < 35 &&
+        frontCRGB[3] < 35) {
+        frontColor = BLACK;
+    } else if (frontCRGB[0] > 90 && frontCRGB[0] < 180 && frontCRGB[1] < 50 &&
+               frontCRGB[2] < 60 && frontCRGB[3] < 70) {
+        frontColor = BLUE;
+    } else if (frontCRGB[0] > 160 && frontCRGB[0] < 220 && frontCRGB[1] < 100 &&
+               frontCRGB[2] < 100 && frontCRGB[3] < 100) {
+        frontColor = SILVER;
+    } else {
+        frontColor = WHITE;
+    }
+}
+
+void FLOOR_SENSOR::backColorJudgment(void) {
+    if (backCRGB[0] < 100 && backCRGB[1] < 35 && backCRGB[2] < 35 &&
+        backCRGB[3] < 35) {
+        backColor = BLACK;
+    } else if (backCRGB[0] > 80 && backCRGB[0] < 120 && backCRGB[1] < 45 &&
+               backCRGB[2] < 50 && backCRGB[3] < 70) {
+        backColor = BLUE;
+    } else if (backCRGB[0] > 150 && backCRGB[0] < 200 && backCRGB[1] < 100 &&
+               backCRGB[2] < 100 && backCRGB[3] < 100) {
+        backColor = SILVER;
+    } else {
+        backColor = WHITE;
+    }
 }

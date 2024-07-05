@@ -23,15 +23,23 @@ class DISTANCE_SENSOR {
 
     HardwareSerial *serialPtr;
 
-    int val[16] = {0};
+    int val[16]  = {0};
     int vecX[16] = {0};
     int vecY[16] = {0};
 
-    bool wallExists[4] = {false};
-    bool rightWallExists = false;
-    bool frontWallExists = false;
+    bool wallExists[4]    = {false};
+    bool rightWallExists  = false;
+    bool frontWallExists  = false;
     bool behindWallExists = false;
-    bool leftWallExists = false;
+    bool leftWallExists   = false;
+
+    bool lidarRightWallExists  = false;
+    bool lidarLeftWallExists  = false;
+
+    double covX = 0;
+    double covY = 0;
+
+    int canCorrect = 0;
 
    private:
     int _valTemp[16] = {0};

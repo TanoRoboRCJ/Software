@@ -15,7 +15,7 @@ DISTANCE_SENSOR::DISTANCE_SENSOR(HardwareSerial *p) {
 }
 
 int DISTANCE_SENSOR::read(void) {
-    if (serialPtr->available() >= 35) {
+    if (serialPtr->available() >= 35 + 8 + 1) {
         int checkDegit = 0;
 
         if (serialPtr->read() == 'V') {
@@ -40,11 +40,45 @@ int DISTANCE_SENSOR::read(void) {
             }
         }
 
+        uint8_t receivedBytesX[sizeof(float)];
+        for (size_t i = 0; i < sizeof(float); i++) {
+            receivedBytesX[i] = serialPtr->read();
+        }
+        // float covX_float = *reinterpret_cast<float *>(receivedBytesX);
+        float covX_float;
+        memcpy(&covX_float, receivedBytesX, sizeof(covX_float));
+
+        uint8_t receivedBytesY[sizeof(float)];
+        for (size_t i = 0; i < sizeof(float); i++) {
+            receivedBytesY[i] = serialPtr->read();
+        }
+        // float covY_float = *reinterpret_cast<float *>(receivedBytesY);
+        float covY_float;
+        memcpy(&covY_float, receivedBytesY, sizeof(covY_float));
+
+        covX = covX_float;
+        covY = covY_float;
+
+        char wallExists = serialPtr->read();
+        if (wallExists == 'A') {
+            lidarRightWallExists = true;
+            lidarLeftWallExists = true;
+        } else if (wallExists == 'R') {
+            lidarRightWallExists = true;
+            lidarLeftWallExists = false;
+        } else if (wallExists == 'L') {
+            lidarRightWallExists = false;
+            lidarLeftWallExists = true;
+        } else if (wallExists == 'N') {
+            lidarRightWallExists = false;
+            lidarLeftWallExists = false;
+        }
+
         while (serialPtr->available() > 0) {
             serialPtr->read();
         }
 
-        val[8] = bottom.tof[0];
+        val[8] = constrain(bottom.tof[1] - 5, 0, 1200);
 
         return 0;
 
@@ -60,50 +94,56 @@ void DISTANCE_SENSOR::calc(int angle) {
     }
     wallJudgment();
     direction();
+
+    // if (covX > 60 && covY > 60) {
+    //     canCorrect = true;
+    // } else {
+    //     canCorrect = false;
+    // }
 }
 
 void DISTANCE_SENSOR::direction(void) {
     if (gyro.direction == NORTH) {
         wallExists[NORTH] = frontWallExists;
-        wallExists[EAST]  = rightWallExists;
+        wallExists[EAST] = rightWallExists;
         wallExists[SOUTH] = behindWallExists;
-        wallExists[WEST]  = leftWallExists;
+        wallExists[WEST] = leftWallExists;
     } else if (gyro.direction == EAST) {
         wallExists[NORTH] = leftWallExists;
-        wallExists[EAST]  = frontWallExists;
+        wallExists[EAST] = frontWallExists;
         wallExists[SOUTH] = rightWallExists;
-        wallExists[WEST]  = behindWallExists;
+        wallExists[WEST] = behindWallExists;
     } else if (gyro.direction == SOUTH) {
         wallExists[NORTH] = behindWallExists;
-        wallExists[EAST]  = leftWallExists;
+        wallExists[EAST] = leftWallExists;
         wallExists[SOUTH] = frontWallExists;
-        wallExists[WEST]  = rightWallExists;
+        wallExists[WEST] = rightWallExists;
     } else if (gyro.direction == WEST) {
         wallExists[NORTH] = rightWallExists;
-        wallExists[EAST]  = behindWallExists;
+        wallExists[EAST] = behindWallExists;
         wallExists[SOUTH] = leftWallExists;
-        wallExists[WEST]  = frontWallExists;
+        wallExists[WEST] = frontWallExists;
     }
 }
 
 void DISTANCE_SENSOR::wallJudgment(void) {
-    gyro.read();
+    gyro.read();  //  NOTE: これを消すと動かない
     if (val[4] > 215) {
         rightWallExists = false;
     } else {
         rightWallExists = true;
     }
-    if (val[0] > 145) {
+    if (val[0] > 140) {
         frontWallExists = false;
     } else {
         frontWallExists = true;
     }
-    if (val[8] > 215) {
+    if (val[8] > 180) {
         behindWallExists = false;
     } else {
         behindWallExists = true;
     }
-    if (val[12] > 210) {
+    if (val[12] > 215) {
         leftWallExists = false;
     } else {
         leftWallExists = true;
