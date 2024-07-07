@@ -14,6 +14,7 @@ class Movement {
     const int Radius = 20;
     const int _Wait  = 500;
     int adjustmentTimer = 0;
+    int loopCounter = 0;
     bool exception = false;
     bool dir = 1;
     bool isSlope = false;
@@ -24,6 +25,7 @@ class Movement {
     bool isHit = false;
     bool CanGoRight = false;
     bool CanGoLeft = false;
+    bool loop = false;
     void move_1tile(void);
     void back(void);
     void turnRight(void);

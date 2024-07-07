@@ -117,6 +117,17 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
             if (tof.leftWallExists == false) {
                 CanGoLeft = true;
             }
+            if(location.coordinateX == _oldCoordinateX && location.coordinateY == _oldCoordinateY){
+                loopCounter++;
+                if(loopCounter >= 2){
+                    loop = true;
+                    buzzer.beat(440, 1);
+                    break;
+                }
+            }else{
+                loopCounter = 0;
+                loop = false;
+            }
             break;
         }
         if (abs(location.coordinateX - _oldCoordinateX) > 280 ||
