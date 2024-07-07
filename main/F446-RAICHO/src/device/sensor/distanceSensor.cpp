@@ -138,7 +138,7 @@ void DISTANCE_SENSOR::wallJudgment(void) {
     } else {
         frontWallExists = true;
     }
-    if (val[8] > 180) {
+    if (val[8] > 260) {
         behindWallExists = false;
     } else {
         behindWallExists = true;
