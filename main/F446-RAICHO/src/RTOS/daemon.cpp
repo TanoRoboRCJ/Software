@@ -124,7 +124,7 @@ void monitorApp(App) {
         // uart1.print(",");
         // uart1.print(location.y);
 
-        uart1.println();
+        // uart1.println();
         app.delay(10);
     }
 }

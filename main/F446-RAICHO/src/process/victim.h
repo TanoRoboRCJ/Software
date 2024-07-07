@@ -55,6 +55,7 @@ class VICTIM {
         static unsigned long timer = 0;
         for (int i = 0; i < 2; i++) {
             camera[i].read();
+            // uart1.print(camera[i].data);
             if (camera[i].data != 'N') {
                 this->id = camera[i].data;
                 timer    = millis();
