@@ -71,7 +71,7 @@ void Location::updateObservationData(void) {
                         gyro.deg > 360 - allowanceDegError);
         // width
         widthX = abs(tof.vecX[4]) + abs(tof.vecX[12]) + SensorRadius * 2;
-        widthY = abs(tof.vecY[0]) + abs(tof.vecY[8]) + 76 + 30 + SensorRadius;
+        widthY = abs(tof.vecY[0]) + abs(tof.vecY[8]) + SensorRadius * 2;
 
         // uart1.print(widthX);
         // uart1.print("\t");
@@ -112,7 +112,8 @@ void Location::updateObservationData(void) {
                 coordinateY = round(coordinateY / 300.0) * 300.0;
 
                 if (isNorth) {
-                    coordinateY += (abs(tof.vecY[8]) % 300) - (150 - 76);
+                    coordinateY +=
+                        (abs(tof.vecY[8]) % 300) - (150 - SensorRadius + 37);
                 } else {
                     coordinateY +=
                         (abs(tof.vecY[0]) % 300) - (150 - SensorRadius - 37);
@@ -136,7 +137,7 @@ void Location::updateObservationData(void) {
                 gyro.deg < 270 + allowanceDegError)) {
         bool isEast = (90 - allowanceDegError < gyro.deg &&
                        gyro.deg < 90 + allowanceDegError);
-        widthX = abs(tof.vecX[0]) + abs(tof.vecX[8]) + 76 + 30 + SensorRadius;
+        widthX = abs(tof.vecX[0]) + abs(tof.vecX[8]) + SensorRadius * 2;
         widthY = abs(tof.vecY[4]) + abs(tof.vecY[12]) + SensorRadius * 2;
 
         // uart1.print(widthX);
@@ -151,7 +152,7 @@ void Location::updateObservationData(void) {
                 coordinateX = round(coordinateX / 300.0) * 300.0;
 
                 if (isEast) {
-                    coordinateX += (abs(tof.vecX[8]) % 300) - (150 - 76);
+                    coordinateX += (abs(tof.vecX[8]) % 300) - (150 - SensorRadius + 37);
                 } else {
                     coordinateX +=
                         (abs(tof.vecX[0]) % 300) - (150 - SensorRadius - 37);
