@@ -29,7 +29,7 @@ void rightWallApp(App) {
         app.delay(Period);
 
         // CHECK:とりあえずプリントデバッグしてみよう
-        if (abs(gyro.slope) < 15 || movement.loop == true) {
+        if (abs(gyro.slope) < 15 || movement) {
             //NOTE:28-30cmで壁判定Done
             switch (exploring.weighting()) {
                 case 0:  // right

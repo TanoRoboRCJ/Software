@@ -121,7 +121,6 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
                 loopCounter++;
                 if(loopCounter >= 2){
                     loop = true;
-                    buzzer.beat(440, 1);
                     break;
                 }
             }else{
