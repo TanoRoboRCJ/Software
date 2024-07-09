@@ -92,7 +92,7 @@ void Movement::turnReverse(void) {
 
         turnReverse();
     }
-    dir = 0s;
+    dir = 0;
 }
 
 void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
