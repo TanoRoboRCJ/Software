@@ -94,7 +94,11 @@ class GYRO {
     bool South = false;
     bool West = false;
 
+    bool isAdjusting = false;
+
     int direction = 0;
+
+    double deviation = 0;
 
    private:
 };

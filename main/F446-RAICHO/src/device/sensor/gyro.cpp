@@ -216,6 +216,37 @@ int GYRO::read(void) {
 
     directionDecision();
 
+    if (isAdjusting) {
+        const double sensitivity = 0.002;
+
+        switch (direction) {
+            case NORTH:
+                if (deg >= 315) {
+                    deviation = deviation * (1.0 - sensitivity) +
+                                (deg - 360) * sensitivity;
+                } else {
+                    deviation = deviation * (1.0 - sensitivity) +
+                                (deg - 0) * sensitivity;
+                }
+                break;
+            case EAST:
+                deviation =
+                    deviation * (1.0 - sensitivity) + (deg - 90) * sensitivity;
+                break;
+            case SOUTH:
+                deviation =
+                    deviation * (1.0 - sensitivity) + (deg - 180) * sensitivity;
+                break;
+            case WEST:
+                deviation =
+                    deviation * (1.0 - sensitivity) + (deg - 270) * sensitivity;
+                break;
+        }
+    }
+
+    deg -= deviation + 360;
+    deg %= 360;
+
     return deg;
 }
 

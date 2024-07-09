@@ -96,7 +96,7 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     _oldCoordinateY = location.coordinateY;
     // exception       = true;
     CanGoRight = false;
-    CanGoLeft  = false;
+    CanGoLeft = false;
 
     adjustmentTimer = 0;
 
@@ -117,13 +117,14 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
             if (tof.leftWallExists == false) {
                 CanGoLeft = true;
             }
-            if(location.coordinateX == _oldCoordinateX && location.coordinateY == _oldCoordinateY){
+            if (location.coordinateX == _oldCoordinateX &&
+                location.coordinateY == _oldCoordinateY) {
                 loopCounter++;
-                if(loopCounter >= 2){
+                if (loopCounter >= 2) {
                     loop = true;
                     break;
                 }
-            }else{
+            } else {
                 loopCounter = 0;
                 loop = false;
             }
@@ -138,7 +139,7 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
                 CanGoLeft = true;
             }
         }
-        servo.suspend  = false;
+        servo.suspend = false;
         servo.velocity = servo.DefaultSpeed;
         // exception      = false;
 
@@ -146,7 +147,7 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
     }  // 次のタイルまで前進
     while (140 < tof.val[0] && tof.val[0] < 250) {
         app.stop(locationApp);
-        servo.suspend  = false;
+        servo.suspend = false;
         servo.velocity = servo.DefaultSpeed;
         app.delay(Period);
     }
@@ -165,8 +166,8 @@ void Movement::back(void) {
     while (abs(location.coordinateX - _oldCoordinateX) < 100 &&
            abs(location.coordinateY - _oldCoordinateY) < 100) {
         servo.isCorrectingAngle = 0;
-        servo.suspend           = false;
-        servo.velocity          = -servo.DefaultSpeed;
+        servo.suspend = false;
+        servo.velocity = -servo.DefaultSpeed;
         app.delay(Period);
     }  // NOTE 黒タイルから後退
 }
@@ -174,8 +175,8 @@ void Movement::back(void) {
 void Movement::turnNorth(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend           = false;
-    servo.angle             = 0;
+    servo.suspend = false;
+    servo.angle = 0;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -183,8 +184,8 @@ void Movement::turnNorth(void) {
 void Movement::turnEast(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend           = false;
-    servo.angle             = 90;
+    servo.suspend = false;
+    servo.angle = 90;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -192,8 +193,8 @@ void Movement::turnEast(void) {
 void Movement::turnSouth(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend           = false;
-    servo.angle             = 180;
+    servo.suspend = false;
+    servo.angle = 180;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
@@ -201,24 +202,28 @@ void Movement::turnSouth(void) {
 void Movement::turnWest(void) {
     servo.suspend = true;
     app.delay(_Wait);
-    servo.suspend           = false;
-    servo.angle             = 270;
+    servo.suspend = false;
+    servo.angle = 270;
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 }
 
 void Movement::angleAdjustment(void) {
+    gyro.isAdjusting = false;
     if (tof.rightWallExists == true && tof.leftWallExists == true) {
         servo.isCorrectingAngle =
             map(tof.val[4] - tof.val[12], -100, 100, -20, 20);
+        gyro.isAdjusting = true;
     }
 
     if (tof.rightWallExists == true && tof.leftWallExists == false) {
         servo.isCorrectingAngle = map(tof.val[4] - 130, -85, 85, -20, 20);
+        gyro.isAdjusting = true;
     }
 
     if (tof.rightWallExists == false && tof.leftWallExists == true) {
         servo.isCorrectingAngle = map(130 - tof.val[12], -85, 85, -20, 20);
+        gyro.isAdjusting = true;
     }
 
     if ((tof.rightWallExists == false) && (tof.leftWallExists == false)) {
@@ -326,7 +331,7 @@ bool Movement::isStucked(int direction) {
 }
 
 void Movement::goOverBarrier(void) {
-    servo.suspend  = true;
+    servo.suspend = true;
     servo.velocity = 0;
     app.delay(_Wait);
     // switch (gyro.direction) {
@@ -352,7 +357,7 @@ void Movement::goOverBarrier(void) {
            abs(location.coordinateY - _oldCoordinateY) < 30) {
         app.stop(adjustmentApp);
         app.stop(servoApp);
-        servo.suspend  = false;
+        servo.suspend = false;
         servo.velocity = servo.DefaultSpeed;
 
         if (dir) {
