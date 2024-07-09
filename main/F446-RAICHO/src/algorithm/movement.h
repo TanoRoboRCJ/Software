@@ -16,7 +16,7 @@ class Movement {
     int adjustmentTimer = 0;
     int loopCounter = 0;
     bool exception = false;
-    bool dir = 1;
+    int dir = 0;
     bool isSlope = false;
 
     void goOverBarrier(void);
