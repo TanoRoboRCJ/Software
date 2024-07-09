@@ -27,9 +27,10 @@ void Movement::turnRight(void) {
     if (isStucked(gyro.direction) == true) {
         // uart1.println("stucked");
         goOverBarrier();
-    } else {
-        dir = 1;
+
+        turnRight();
     }
+    dir = 0;
 }
 
 // FIXME: 絶対方位指定じゃないとバグります！//NOTE:修正済み
@@ -54,12 +55,13 @@ void Movement::turnLeft(void) {
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 2);
 
-    if (isStucked(gyro.direction) == true) {
+    while (isStucked(gyro.direction) == true) {
         // uart1.println("stucked");
         goOverBarrier();
-    } else {
-        dir = 1;
+
+        turnLeft();
     }
+    dir = 0;
 }
 
 // FIXME: 絶対方位指定じゃないとバグります！//NOTE:修正済み
@@ -84,11 +86,13 @@ void Movement::turnReverse(void) {
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 3);
 
-    if (isStucked(gyro.direction) == true) {
+    while (isStucked(gyro.direction) == true) {
+        // uart1.println("stucked");
         goOverBarrier();
-    } else {
-        dir = 1;
+
+        turnReverse();
     }
+    dir = 0s;
 }
 
 void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
@@ -117,15 +121,16 @@ void Movement::move_1tile(void) {  // 絶妙な位置なら詰める
             if (tof.leftWallExists == false) {
                 CanGoLeft = true;
             }
-            if(location.coordinateX == _oldCoordinateX && location.coordinateY == _oldCoordinateY){
+            if (location.coordinateX == _oldCoordinateX &&
+                location.coordinateY == _oldCoordinateY) {
                 loopCounter++;
-                if(loopCounter >= 2){
+                if (loopCounter >= 2) {
                     loop = true;
                     break;
                 }
-            }else{
+            } else {
                 loopCounter = 0;
-                loop = false;
+                loop        = false;
             }
             break;
         }
@@ -347,25 +352,30 @@ void Movement::goOverBarrier(void) {
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
 
-    while (abs(location.coordinateX - _oldCoordinateX) <
-               30 &&  // NOTE 進む距離調整
-           abs(location.coordinateY - _oldCoordinateY) < 30) {
-        app.stop(adjustmentApp);
-        app.stop(servoApp);
-        servo.suspend  = false;
-        servo.velocity = servo.DefaultSpeed;
+    // while (abs(location.coordinateX - _oldCoordinateX) <
+    //            50 &&  // NOTE 進む距離調整
+    //        abs(location.coordinateY - _oldCoordinateY) < 50) {
+    app.stop(adjustmentApp);
+    app.stop(servoApp);
+    app.stop(locationApp);
+    servo.suspend  = false;
+    servo.velocity = servo.DefaultSpeed;
+    dir %= 2;
 
-        if (dir) {
-            servo.driveAngularVelocity(100, 0);
-        } else {
-            servo.driveAngularVelocity(-100, 0);
-        }
-
-        app.delay(Period);
-        app.start(servoApp);
+    if (dir == 0) {
+        servo.driveAngularVelocity(100, 0);
+    } else {
+        servo.driveAngularVelocity(-100, 0);
     }
+
+    app.delay(200);
+
+    app.delay(Period);
+    app.start(servoApp);
+    app.start(locationApp);
+    // }
     randomSeed(millis());
 
-    dir = random() % 2;
+    dir = random() % 5;
     app.start(adjustmentApp);
 }
