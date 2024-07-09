@@ -8,6 +8,8 @@
 LGFX_Sprite mainSprite(&display);
 LGFX_Sprite textSprite(&mainSprite);
 
+float scale = 1;
+
 void setup() {
     display.init();
     display.fillScreen(TFT_BLACK);
@@ -19,34 +21,64 @@ void setup() {
                        (unsigned int)KuyopoyoImg_len);
     mainSprite.pushSprite(0, 0);
 
-    textSprite.createSprite(120, 50);
+    textSprite.createSprite(120 / scale, 50 / scale);
 }
 
 void loop() {
+    mainSprite.drawPng((std::uint8_t*)BgImgPtr[3],
+                       (unsigned int)BgImgLenPtr[3]);
+    mainSprite.pushSprite(0, 0);
+
     for (int i = 0; i < 100; i++) {
-        // mainSprite.drawPng((std::uint8_t*)BgImgPtr[i],
-        //                    (unsigned int)BgImgLenPtr[i]);
-
-        textSprite.fillSprite(TFT_BLACK);
-        textSprite.setTextColor(TFT_WHITE);
-        textSprite.setTextSize(0.5);
-        textSprite.setFont(&fonts::Font8);
-        textSprite.setCursor(1, 0);
-        textSprite.print(i);
-        textSprite.pushSprite(&display, 60, 80);
-
         textSprite.fillSprite(TFT_WHITE);
         textSprite.setTextColor(TFT_BLACK);
-        textSprite.setTextSize(1);
+        textSprite.setTextSize(0.5 / scale);
         textSprite.setFont(&fonts::Font8);
         textSprite.setCursor(0, 0);
         textSprite.print(i);
-        // textSprite.pushSprite(&display, 60, 90);
 
-        // mainSprite.pushSprite(0, 0);
+        float matrix1[6] = {
+            scale,  // 横2倍
+            0,      // 横傾き
+            60,     // X座標100
+            0,      // 縦傾き
+            scale,  // 縦3倍
+            60      // Y座標10
+        };
+        textSprite.pushAffineWithAA(&display, matrix1);
 
-        if (Serial.available()) {
-            while (1);
-        }
+        textSprite.fillSprite(TFT_WHITE);
+        textSprite.setTextColor(TFT_BLACK);
+        textSprite.setTextSize(0.5 / scale);
+        textSprite.setFont(&fonts::Font8);
+        textSprite.setCursor(0, 0);
+        textSprite.print(i);
+
+        float matrix2[6] = {
+            scale,  // 横2倍
+            0,      // 横傾き
+            60,     // X座標100
+            0,      // 縦傾き
+            scale,  // 縦3倍
+            100     // Y座標10
+        };
+        textSprite.pushAffineWithAA(&display, matrix2);
+
+        textSprite.fillSprite(TFT_WHITE);
+        textSprite.setTextColor(TFT_BLACK);
+        textSprite.setTextSize(0.5 / scale);
+        textSprite.setFont(&fonts::Font8);
+        textSprite.setCursor(0, 0);
+        textSprite.print(i);
+
+        float matrix3[6] = {
+            scale,  // 横2倍
+            0,      // 横傾き
+            60,     // X座標100
+            0,      // 縦傾き
+            scale,  // 縦3倍
+            140     // Y座標10
+        };
+        textSprite.pushAffineWithAA(&display, matrix3);
     }
 }
