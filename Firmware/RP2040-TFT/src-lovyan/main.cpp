@@ -27,26 +27,26 @@ void setup() {
 }
 
 void loop() {
-    // mainSprite.fillScreen(TFT_WHITE);
-    // mainSprite.pushSprite(0, 0);
-    // delay(100);
-
-    // mainSprite.fillScreen(TFT_RED);
-    // mainSprite.pushSprite(0, 0);
-    // delay(100);
-
-    // mainSprite.fillScreen(TFT_BLUE);
-    // mainSprite.pushSprite(0, 0);
-    // delay(100);
-
-    // mainSprite.fillScreen(TFT_GREEN);
-    // mainSprite.pushSprite(0, 0);
-    // delay(100);
-
-    mainSprite.drawJpg((std::uint8_t*)KuyopoyoImg,
-                       (unsigned int)KuyopoyoImg_len);
+    mainSprite.fillScreen(TFT_WHITE);
     mainSprite.pushSprite(0, 0);
-    delay(10);
+    delay(200);
+
+    mainSprite.fillScreen(TFT_RED);
+    mainSprite.pushSprite(0, 0);
+    delay(200);
+
+    mainSprite.fillScreen(TFT_BLUE);
+    mainSprite.pushSprite(0, 0);
+    delay(200);
+
+    mainSprite.fillScreen(TFT_GREEN);
+    mainSprite.pushSprite(0, 0);
+    delay(200);
+
+    // mainSprite.drawJpg((std::uint8_t*)KuyopoyoImg,
+    //                    (unsigned int)KuyopoyoImg_len);
+    // mainSprite.pushSprite(0, 0);
+    // delay(10);
 
     // for (int i = 0; i < 100; i++) {
     //     textSprite.fillSprite(TFT_WHITE);
