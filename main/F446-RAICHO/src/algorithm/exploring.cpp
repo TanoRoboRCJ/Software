@@ -214,14 +214,14 @@ int Exploring::getReachedCount3D(int x, int y) {
     const int Z_range = 150;
 
     for (int i = 0; i < FloorNum; i++) {
-        if (reachedCount3D[x + FIELD_ORIGIN][y + FIELD_ORIGIN]
+        if (reachedCount3D[x][y]
                           [i]
                               .z < location.coordinateZ + Z_range &&
-            reachedCount3D[x + FIELD_ORIGIN][y + FIELD_ORIGIN]
+            reachedCount3D[x][y]
                           [i]
                               .z > location.coordinateZ - Z_range) {
-            return reachedCount3D[x + FIELD_ORIGIN]
-                                 [y + FIELD_ORIGIN][i]
+            return reachedCount3D[x]
+                                 [y][i]
                                      .count;
         }
     }
