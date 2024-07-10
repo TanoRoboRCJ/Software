@@ -24,7 +24,7 @@ void Movement::turnRight(void) {
     servo.isCorrectingAngle = 0;
     app.delay(_Wait * 2);
 
-    if (isStucked(gyro.direction) == true) {
+    while (isStucked(gyro.direction) == true) {
         // uart1.println("stucked");
         goOverBarrier();
 
@@ -352,13 +352,7 @@ void Movement::goOverBarrier(void) {
     //         servo.angle = 270;
     //         break;
     // }
-    // FIXME:スタックしてるのにlocationの情報使うのは良くない
-    _oldCoordinateX = location.coordinateX;
-    _oldCoordinateY = location.coordinateY;
 
-    // while (abs(location.coordinateX - _oldCoordinateX) <
-    //            50 &&  // NOTE 進む距離調整
-    //        abs(location.coordinateY - _oldCoordinateY) < 50) {
     app.stop(adjustmentApp);
     app.stop(servoApp);
     app.stop(locationApp);
