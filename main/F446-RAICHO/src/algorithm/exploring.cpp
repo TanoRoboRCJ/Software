@@ -177,6 +177,56 @@ void Exploring::updateMap(void) {
 
     i++;
     constrain(i, 0, 999);
+
+    const int Z_range = 150;
+    for (int i = 0; i < FloorNum; i++) {
+        if (reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
+                          [i]
+                              .z < location.coordinateZ + Z_range &&
+            reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
+                          [i]
+                              .z > location.coordinateZ - Z_range) {
+            reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
+                          [i]
+                              .count++;
+            return;
+        }
+    }
+
+    // 未到達可能性
+    for (int i = 0; i < FloorNum; i++) {
+        if (reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
+                          [i]
+                              .count == 0) {
+            reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
+                          [i]
+                              .z = location.coordinateZ;
+            reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
+                          [i]
+                              .count++;
+
+            return;
+        }
+    }
+}
+
+int Exploring::getReachedCount3D(int x, int y) {
+    const int Z_range = 150;
+
+    for (int i = 0; i < FloorNum; i++) {
+        if (reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
+                          [i]
+                              .z < location.coordinateZ + Z_range &&
+            reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
+                          [i]
+                              .z > location.coordinateZ - Z_range) {
+            return reachedCount3D[location.x + FIELD_ORIGIN]
+                                 [location.y + FIELD_ORIGIN][i]
+                                     .count;
+        }
+    }
+
+    return 0;
 }
 
 int Exploring::weighting(void) {

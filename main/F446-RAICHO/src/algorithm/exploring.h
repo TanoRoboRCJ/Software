@@ -37,6 +37,9 @@ class Exploring {
 #else
 
 class Exploring {
+   private:
+    static const int FloorNum = 3;
+
    public:
     void updateMap(void);
 
@@ -46,6 +49,16 @@ class Exploring {
     int weighting(void);
 
     int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+
+    struct reachdCount3D_tile {
+        int count = 0;
+        int z = 0;
+    };
+
+    struct reachdCount3D_tile reachedCount3D[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]
+                                            [FloorNum];
+
+    int getReachedCount3D(int x, int y);
 };
 
 #endif
