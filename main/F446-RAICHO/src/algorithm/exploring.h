@@ -18,7 +18,7 @@
 #define BACK 3
 #define DISABLE 100
 
-#define FIELD_3D
+ #define FIELD_3D
 
 #ifndef FIELD_3D
 
@@ -48,19 +48,19 @@ class Exploring {
     int leftWeight(void);
     int weighting(void);
 
-    int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+    char reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
     struct reachdCount3D_tile {
-        int count = 0;
-        int z = 0;
+        char count = 0;
+        char z = 0;
     };
 
     struct reachdCount3D_tile reachedCount3D[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]
                                             [FloorNum];
 
-    int getReachedCount3D(int x, int y);
+    char getReachedCount3D(int x, int y);
 
-    int* reachedCount3DPtr(int x, int y);
+    char* reachedCount3DPtr(int x, int y);
 };
 
 #endif

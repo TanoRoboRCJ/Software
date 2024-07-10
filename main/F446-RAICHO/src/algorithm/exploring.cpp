@@ -210,7 +210,7 @@ void Exploring::updateMap(void) {
     }
 }
 
-int Exploring::getReachedCount3D(int x, int y) {
+char Exploring::getReachedCount3D(int x, int y) {
     const int Z_range = 150;
 
     for (int i = 0; i < FloorNum; i++) {
@@ -223,7 +223,7 @@ int Exploring::getReachedCount3D(int x, int y) {
     return 0;
 }
 
-int* Exploring::reachedCount3DPtr(int x, int y) {
+char* Exploring::reachedCount3DPtr(int x, int y) {
     const int Z_range = 150;
 
     for (int i = 0; i < FloorNum; i++) {
@@ -315,16 +315,16 @@ int Exploring::rightWeight(void) {
     int weight = 0;
 
     if (gyro.direction == WEST && tof.wallExists[NORTH] == false) {
-        weight = reachedCount[x][y + 1];
+        weight = getReachedCount3D(x, y + 1);
 
     } else if (gyro.direction == NORTH && tof.wallExists[EAST] == false) {
-        weight = reachedCount[x + 1][y];
+        weight = getReachedCount3D(x + 1, y);
 
     } else if (gyro.direction == EAST && tof.wallExists[SOUTH] == false) {
-        weight = reachedCount[x][y - 1];
+        weight = getReachedCount3D(x, y - 1);
 
     } else if (gyro.direction == SOUTH && tof.wallExists[WEST] == false) {
-        weight = reachedCount[x - 1][y];
+        weight = getReachedCount3D(x - 1, y);
     }
     if (weight > 1000) {
         weight = 1000;
@@ -340,16 +340,16 @@ int Exploring::frontWeight(void) {
     int weight = 0;
 
     if (gyro.direction == WEST && tof.wallExists[WEST] == false) {
-        weight = reachedCount[x - 1][y];
+        weight = getReachedCount3D(x - 1, y);
 
     } else if (gyro.direction == NORTH && tof.wallExists[NORTH] == false) {
-        weight = reachedCount[x][y + 1];
+        weight = getReachedCount3D(x, y + 1);
 
     } else if (gyro.direction == EAST && tof.wallExists[EAST] == false) {
-        weight = reachedCount[x + 1][y];
+        weight = getReachedCount3D(x + 1, y);
 
     } else if (gyro.direction == SOUTH && tof.wallExists[SOUTH] == false) {
-        weight = reachedCount[x][y - 1];
+        weight = getReachedCount3D(x, y - 1);
     }
     if (weight > 1000) {
         weight = 1000;
@@ -365,16 +365,16 @@ int Exploring::leftWeight(void) {
     int weight = 0;
 
     if (gyro.direction == WEST && tof.wallExists[SOUTH] == false) {
-        weight = reachedCount[x][y - 1];
+        weight = getReachedCount3D(x, y - 1);
 
     } else if (gyro.direction == NORTH && tof.wallExists[WEST] == false) {
-        weight = reachedCount[x - 1][y];
+        weight = getReachedCount3D(x - 1, y);
 
     } else if (gyro.direction == EAST && tof.wallExists[NORTH] == false) {
-        weight = reachedCount[x][y + 1];
+        weight = getReachedCount3D(x, y + 1);
 
     } else if (gyro.direction == SOUTH && tof.wallExists[EAST] == false) {
-        weight = reachedCount[x + 1][y];
+        weight = getReachedCount3D(x + 1, y);
     }
     if (weight > 1000) {
         weight = 1000;
