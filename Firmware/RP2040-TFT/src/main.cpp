@@ -1,28 +1,44 @@
 #include <Arduino.h>
+#include <TFT_eSPI.h>
 
-#include "./ui_kit/ui_kit.h"
-UI_KIT ui;
+#include "display.h"
 
-#include "./ui_kit/device/display.h"
+#include "ui_kit/img/kuyopoyo.h"
+#include "ui_kit/img/ui_image/ui_image.h"
 
-// #include "./ui_kit/img/kuyopoyo.h"
-#include "./ui_kit/img/kuyopoyo_png.h"
+LGFX_Sprite mainSprite(&display);
+LGFX_Sprite textSprite(&mainSprite);
 
-TFT_eSPI tft = TFT_eSPI();
-TFT_eSprite sprite = TFT_eSprite(&tft);
-DISPLAY_DEVICE display(&tft, &sprite);
+TFT_eSprite sprite = TFT_eSprite(nullptr);
 
 void setup() {
-    Serial.begin(115200);
-    ui.init();
+    display.init();
+    display.fillScreen(TFT_BLACK);
+    display.setRotation(1);
+    display.setColorDepth(16);
+
+    mainSprite.createSprite(240, 240);
+    mainSprite.drawJpg((std::uint8_t*)KuyopoyoImg,
+                       (unsigned int)KuyopoyoImg_len);
+    mainSprite.pushSprite(0, 0);
 }
 
 void loop() {
-    // display.createSprite();
-    // display.setBackgroundImage(bootImage);
-    // display.publish();
+    mainSprite.drawJpg((std::uint8_t*)KuyopoyoImg,
+                       (unsigned int)KuyopoyoImg_len);
+                       
+    sprite.createSprite(120, 50);
+    sprite.fillScreen(TFT_RED);
 
-    display.createSprite();
-    display.setBackgroundImagePNG((uint8_t*)KuyopoyoImg, KuyopoyoImg_len);
-    display.publish();
+    textSprite.createSprite(120, 50);
+    uint16_t* imgBufPtr = (uint16_t*)sprite.getPointer();
+    textSprite.pushImage(0, 0, 120, 50, imgBufPtr);
+    // textSprite.fillSprite(TFT_WHITE);
+    textSprite.pushSprite(&mainSprite, 0, 0);
+    mainSprite.pushSprite(0, 0);
+
+    delay(2000);
+
+    // mainSprite.pushSprite(0, 0);
+    // delay(10);
 }

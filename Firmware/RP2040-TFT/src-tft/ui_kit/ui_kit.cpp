@@ -10,8 +10,8 @@ void UI_KIT::init(void) {
     display.init();
 
     // display.createSprite();
-    // // display.setBackgroundImage(bootImage);
-    // display.setBackgroundImagePNG((uint8_t*)KuyopoyoImg, KuyopoyoImg_len);
+    // display.setBackgroundImage(bootImage);
+    // // display.setBackgroundImagePNG((uint8_t*)KuyopoyoImg, KuyopoyoImg_len);
     // // display.tftPtr->fillScreen(TFT_WHITE);
     // display.publish();
 }
