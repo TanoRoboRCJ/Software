@@ -52,7 +52,7 @@ class Exploring {
 
     struct reachdCount3D_tile {
         char count = 0;
-        char z = 0;
+        int16_t z = -1000;
     };
 
     struct reachdCount3D_tile reachedCount3D[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]
