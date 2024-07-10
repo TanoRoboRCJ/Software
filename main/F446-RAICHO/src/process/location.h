@@ -82,6 +82,7 @@ class Location {
 
     double coordinateX = 0;  // 絶対座標 [mm]
     double coordinateY = 0;  // 絶対座標 [mm]
+    double coordinateZ = 0;
 
     unsigned long lastTrustX = 0;
     unsigned long lastTrustY = 0;

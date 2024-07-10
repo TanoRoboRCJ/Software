@@ -22,6 +22,9 @@ void Location::updateOdometory(void) {
     coordinateY += vecY * constrain((millis() - lastTime), 0, 20) *
                    _VelocityConstant * cos(radians(gyro.slope));
 
+    coordinateZ -= vec * constrain((millis() - lastTime), 0, 20) *
+                   _VelocityConstant * sin(radians(gyro.slope));
+
     lastTime = millis();
 }
 
@@ -152,7 +155,8 @@ void Location::updateObservationData(void) {
                 coordinateX = round(coordinateX / 300.0) * 300.0;
 
                 if (isEast) {
-                    coordinateX += (abs(tof.vecX[8]) % 300) - (150 - SensorRadius + 37);
+                    coordinateX +=
+                        (abs(tof.vecX[8]) % 300) - (150 - SensorRadius + 37);
                 } else {
                     coordinateX +=
                         (abs(tof.vecX[0]) % 300) - (150 - SensorRadius - 37);

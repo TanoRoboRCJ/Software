@@ -112,19 +112,21 @@ void monitorApp(App) {
         // uart1.print("gyro: ");
         // uart1.print(gyro.deg);
         // uart1.print("\t");
-        // uart1.print(gyro.slope);
-        // uart1.print("\t");
+        uart1.print(gyro.slope);
+        uart1.print("\t");
         // uart1.print(tof.lidarRightWallExists);
 
         // uart1.print("\t");
         // uart1.print(tof.lidarLeftWallExists);
 
         // NOTE: location
-        // uart1.print(location.x);
-        // uart1.print(",");
-        // uart1.print(location.y);
+        uart1.print(location.coordinateX);
+        uart1.print(",");
+        uart1.print(location.coordinateY);
 
-        uart1.print(gyro.deviation);
+        uart1.print(",");
+        // uart1.print(gyro.deviation);
+        uart1.print(location.coordinateZ);
 
         uart1.println();
         app.delay(10);

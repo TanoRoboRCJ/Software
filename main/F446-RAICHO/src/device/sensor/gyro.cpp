@@ -203,7 +203,7 @@ int GYRO::read(void) {
     acc = (sensorValue.status) & 0B00000011;
 
     deg = (int)(ypr.yaw - offset + 720) % 360;
-    slope = (int)(ypr.pitch - slopeOffset + 720) % 360;
+    slope = (int)(ypr.roll - slopeOffset + 720) % 360;
 
     if (slope >= 180) {
         slope -= 360;
