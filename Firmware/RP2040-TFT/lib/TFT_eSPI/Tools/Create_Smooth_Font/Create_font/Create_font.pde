@@ -127,10 +127,10 @@ int fontNumber = -1; // << Use [Number] in brackets from the fonts listed.
 //                                                  the font numbers are listed when the sketch is run.
 //                |         1         2     |       Maximum filename size for SPIFFS is 31 including leading /
 //                 1234567890123456789012345        and added point size and .vlw extension, so max is 25
-String fontName = "Final-Frontier";  // Manually crop the filename length later after creation if needed
+String fontName = "SF-Mono-HeavyItalic";  // Manually crop the filename length later after creation if needed
                                      // Note: SPIFFS does NOT accept underscore in a filename!
-String fontType = ".ttf";
-//String fontType = ".otf";
+//String fontType = ".ttf";
+String fontType = ".otf";
 
 
 // Define the font size in points for the TFT_eSPI font file
@@ -324,7 +324,7 @@ static final int[] unicodeBlocks = {
 static final int[] specificUnicodes = {
 
   // Commonly used codes, add or remove // in next line
-  // 0x00A3, 0x00B0, 0x00B5, 0x03A9, 0x20AC, // £ ° µ Ω €
+   0x00A3, 0x00B0, 0x00B5, 0x03A9, 0x20AC, // £ ° µ Ω €
 
   // Numbers and characters for showing time, change next line to //* to use
 /*
