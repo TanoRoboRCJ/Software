@@ -18,6 +18,10 @@
 #define BACK 3
 #define DISABLE 100
 
+#define FIELD_3D
+
+#ifndef FIELD_3D
+
 class Exploring {
    public:
     void updateMap(void);
@@ -29,6 +33,22 @@ class Exploring {
 
     int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 };
+
+#else
+
+class Exploring {
+   public:
+    void updateMap(void);
+
+    int rightWeight(void);
+    int frontWeight(void);
+    int leftWeight(void);
+    int weighting(void);
+
+    int reachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+};
+
+#endif
 
 extern Exploring exploring;
 
