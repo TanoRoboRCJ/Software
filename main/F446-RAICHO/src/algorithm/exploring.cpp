@@ -214,19 +214,26 @@ int Exploring::getReachedCount3D(int x, int y) {
     const int Z_range = 150;
 
     for (int i = 0; i < FloorNum; i++) {
-        if (reachedCount3D[x][y]
-                          [i]
-                              .z < location.coordinateZ + Z_range &&
-            reachedCount3D[x][y]
-                          [i]
-                              .z > location.coordinateZ - Z_range) {
-            return reachedCount3D[x]
-                                 [y][i]
-                                     .count;
+        if (reachedCount3D[x][y][i].z < location.coordinateZ + Z_range &&
+            reachedCount3D[x][y][i].z > location.coordinateZ - Z_range) {
+            return reachedCount3D[x][y][i].count;
         }
     }
 
     return 0;
+}
+
+int* Exploring::reachedCount3DPtr(int x, int y) {
+    const int Z_range = 150;
+
+    for (int i = 0; i < FloorNum; i++) {
+        if (reachedCount3D[x][y][i].z < location.coordinateZ + Z_range &&
+            reachedCount3D[x][y][i].z > location.coordinateZ - Z_range) {
+            return &reachedCount3D[x][y][i].count;
+        }
+    }
+
+    return nullptr;
 }
 
 int Exploring::weighting(void) {
@@ -234,14 +241,24 @@ int Exploring::weighting(void) {
 
     for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
         for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
-            reachedCount[i][j] %= 21;
+            // reachedCount[i][j] %= 21;
+
+            if (reachedCount3DPtr(i, j) != nullptr) {
+                *(reachedCount3DPtr(i, j)) %= 21;
+            }
         }
     }
     if (millis() - floorSensor.resetTimer > 60000) {
         for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
             for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
-                if (reachedCount[i][j] >= 20) {
-                    reachedCount[i][j] = 0;
+                // if (reachedCount[i][j] >= 20) {
+                //     reachedCount[i][j] = 0;
+                // }
+                
+                if (reachedCount3DPtr(i, j) != nullptr) {
+                    if (getReachedCount3D(i,j) >= 20) {
+                        *(reachedCount3DPtr(i,j)) = 0;
+                    }
                 }
             }
         }

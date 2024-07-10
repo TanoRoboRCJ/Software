@@ -59,6 +59,8 @@ class Exploring {
                                             [FloorNum];
 
     int getReachedCount3D(int x, int y);
+
+    int* reachedCount3DPtr(int x, int y);
 };
 
 #endif
