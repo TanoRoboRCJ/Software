@@ -159,12 +159,20 @@ void floorApp(App) {
 
 void homingApp(App) {  // CHECK 最適化されてない
     while (1) {
+        homing.dijkstra(location.x, location.y);
+        // uart1.println(homing.dijkstraSteps[location.x + FIELD_ORIGIN]
+        //                                   [location.y + FIELD_ORIGIN]);
+
         if (millis() > homing.HomingTime) {
             bottom.LED_color[0] = 255;
             bottom.LED_color[1] = 120;
             bottom.LED_color[2] = 0;
+
             if (homing.started == false && servo.suspend == true &&
-                victim.isDetected == false) {
+                victim.isDetected == false && location.coordinateZ < 150 &&
+                location.coordinateZ > -150 &&
+                homing.dijkstraSteps[location.x + FIELD_ORIGIN]
+                                    [location.y + FIELD_ORIGIN] != -1) {
                 app.stop(rightWallApp);
 
                 if (millis() > homing.HomingTime + 5000) {
