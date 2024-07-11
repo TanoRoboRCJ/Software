@@ -1,8 +1,15 @@
 #include "./bottom.h"
+#include "../process/location.h"
+#include "./sensor/gyro.h"
+#include "./sensor/distanceSensor.h"
+
+extern Location location;
+extern GYRO gyro;
+extern DISTANCE_SENSOR tof;
 
 Bottom::Bottom(HardwareSerial *ptr) {
     serialPtr = ptr;
-    serialPtr->begin(115200);
+    serialPtr->begin(1000000);
 }
 
 bool Bottom::read(void) {
@@ -23,8 +30,8 @@ bool Bottom::read(void) {
             tcsGreen[1] = (serialPtr->read() << 8) + serialPtr->read();
             tcsBlue[1] = (serialPtr->read() << 8) + serialPtr->read();
 
-            tof[0] = (serialPtr->read() << 8) + serialPtr->read();
-            tof[1] = (serialPtr->read() << 8) + serialPtr->read();
+            int gomi = (serialPtr->read() << 8) + serialPtr->read();
+            gomi = (serialPtr->read() << 8) + serialPtr->read();
         }
     }
 
@@ -45,7 +52,18 @@ void Bottom::write(void) {
 
     serialPtr->write(ToggleBrightness);
 
-    serialPtr->write(LED_color[0]);
-    serialPtr->write(LED_color[1]);
-    serialPtr->write(LED_color[2]);
+    serialPtr->write(highByte((int)location.coordinateX));
+    serialPtr->write(lowByte((int)location.coordinateX));
+
+    serialPtr->write(highByte((int)location.coordinateY));
+    serialPtr->write(lowByte((int)location.coordinateY));
+
+    serialPtr->write(highByte((int)location.coordinateZ));
+    serialPtr->write(lowByte((int)location.coordinateZ));
+
+    serialPtr->write(highByte(gyro.deg));
+    serialPtr->write(lowByte(gyro.deg));
+
+    char wall = tof.rightWallExists + (tof.frontWallExists << 1) + (tof.leftWallExists << 2) + (tof.behindWallExists << 3);
+    serialPtr->write(wall);
 }

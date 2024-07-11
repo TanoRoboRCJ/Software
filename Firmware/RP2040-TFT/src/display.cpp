@@ -1,18 +1,18 @@
 #include "display.h"
 
 Touch_XiaoRound::Touch_XiaoRound() {
-    _cfg.x_min = _cfg.y_min = 0;
-    _cfg.x_max = _cfg.y_max = 239;
-    _cfg.i2c_addr = 0x2e;
+    // _cfg.x_min = _cfg.y_min = 0;
+    // _cfg.x_max = _cfg.y_max = 239;
+    // _cfg.i2c_addr = 0x2e;
 }
 
 bool Touch_XiaoRound::init() {
-    if (isSPI()) {
-        return false;
-    }
-    if (_cfg.pin_int >= 0) {
-        lgfx::pinMode(_cfg.pin_int, lgfx::v1::pin_mode_t::input_pullup);
-    }
+    // if (isSPI()) {
+    //     return false;
+    // }
+    // if (_cfg.pin_int >= 0) {
+    //     lgfx::pinMode(_cfg.pin_int, lgfx::v1::pin_mode_t::input_pullup);
+    // }
 
     return lgfx::i2c::init(_cfg.i2c_port, _cfg.pin_sda, _cfg.pin_scl)
         .has_value();
@@ -28,29 +28,29 @@ void Touch_XiaoRound::sleep() {
 
 uint_fast8_t Touch_XiaoRound::getTouchRaw(lgfx::v1::touch_point_t *tp,
                                           uint_fast8_t count) {
-    tp[0].size = 0;
-    tp[0].id = 0;
-    if (_cfg.pin_int < 0) {
-        return 0;
-    }
-    if ((bool)lgfx::gpio_in(_cfg.pin_int)) {
-        ::delay(10);
-        if ((bool)lgfx::gpio_in(_cfg.pin_int)) {
-            return 0;
-        }
-    }
-    uint8_t buf[5];
-    if (!lgfx::i2c::transactionRead(_cfg.i2c_port, _cfg.i2c_addr, buf, 5,
-                                    _cfg.freq)
-             .has_value()) {
-        return 0;
-    }
-    if (buf[0] != 1) {
-        return 0;
-    }
-    tp[0].x = buf[2];
-    tp[0].y = buf[4];
-    tp[0].size = 1;
+    // tp[0].size = 0;
+    // tp[0].id = 0;
+    // if (_cfg.pin_int < 0) {
+    //     return 0;
+    // }
+    // if ((bool)lgfx::gpio_in(_cfg.pin_int)) {
+    //     ::delay(10);
+    //     if ((bool)lgfx::gpio_in(_cfg.pin_int)) {
+    //         return 0;
+    //     }
+    // }
+    // uint8_t buf[5];
+    // if (!lgfx::i2c::transactionRead(_cfg.i2c_port, _cfg.i2c_addr, buf, 5,
+    //                                 _cfg.freq)
+    //          .has_value()) {
+    //     return 0;
+    // }
+    // if (buf[0] != 1) {
+    //     return 0;
+    // }
+    // tp[0].x = buf[2];
+    // tp[0].y = buf[4];
+    // tp[0].size = 1;
     return 1;
 }
 
@@ -95,14 +95,14 @@ XiaoRoundDisplay::XiaoRoundDisplay() {
     _light.config(light_cfg);
     _panel.setLight(&_light);
 
-    auto touch_cfg = _touch.config();
-    touch_cfg.pin_int = D7;  // for XIAO RP2040
-    touch_cfg.i2c_port = 1;  // for XIAO RP2040
-    touch_cfg.pin_sda = D4;  // for XIAO RP2040
-    touch_cfg.pin_scl = D5;  // for XIAO RP2040
-    touch_cfg.freq = 400000;
-    _touch.config(touch_cfg);
-    _panel.setTouch(&_touch);
+    // auto touch_cfg = _touch.config();
+    // touch_cfg.pin_int = D7;  // for XIAO RP2040
+    // touch_cfg.i2c_port = 1;  // for XIAO RP2040
+    // touch_cfg.pin_sda = D4;  // for XIAO RP2040
+    // touch_cfg.pin_scl = D5;  // for XIAO RP2040
+    // touch_cfg.freq = 400000;
+    // _touch.config(touch_cfg);
+    // _panel.setTouch(&_touch);
 
     setPanel(&_panel);
 }

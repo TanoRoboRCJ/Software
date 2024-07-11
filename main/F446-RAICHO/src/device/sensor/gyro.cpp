@@ -244,7 +244,8 @@ int GYRO::read(void) {
         }
     }
 
-    deg -= deviation + 360;
+    deg -= deviation;
+    deg += 360;
     deg %= 360;
 
     return deg;

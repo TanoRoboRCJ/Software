@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <TFT_eSPI.h>
+#include <Wire.h>
 
 #include "display.h"
 #include "ui_kit/font/SF-Mono-HeavyItalic60.h"
@@ -23,23 +24,61 @@ int wallStatus = 0;
 volatile bool refleshFlag = false;
 volatile bool drawFlag = true;
 
-int coordX = 340;
-int coordY = -1602;
-int coordZ = 123;
-int deg = 36;
+int coordX = 0;
+int coordY = 0;
+int coordZ = 0;
+int deg = 0;
 
-/*
-（月曜 普通授業）
-火 2限 国語 3限 機械運動学
-水 1限 数B  2限 ドイツ語
-木 1限 計測 2限 制御
-金 2限 数D  3限 現代社会と法
-（土日）
-月 1限 英語A 2限 情報処理 3限 電磁気
-火 3限 応用物理
-*/
+char dataBuf[9] = {0};
+
+#define I2C_ADDR 0x01  // スレーブ側に指定するI2Cアドレス
+#define I2C_SDA 6      // SDAにはGP0を使用する
+#define I2C_SCL 7      // SCLにはGP1を使用する
+
+void textX1(void);
+void textY1(void);
+void textCoordinate(void);
+void textDeg(void);
+
+bool deviceScanner(void) {
+    char error, address;
+    int nDevices;
+
+    Serial.println("Scanning...");
+
+    nDevices = 0;
+    for (address = 1; address < 127; address++) {
+        Wire.beginTransmission(address);
+        error = Wire.endTransmission();
+
+        if (error == 0) {
+            Serial.print("I2C device found at address 0x");
+            if (address < 16) Serial.print("0");
+            Serial.print(address, HEX);
+            Serial.println("  !");
+
+            nDevices++;
+        } else if (error == 4) {
+            Serial.print("Unknown error at address 0x");
+            if (address < 16) Serial.print("0");
+            Serial.println(address, HEX);
+        }
+    }
+    if (nDevices == 0)
+        Serial.println("No I2C devices found\n");
+    else
+        Serial.println("done\n");
+
+    return (nDevices == 0);
+}
+
+byte dt;
 
 void setup() {
+    Wire.setSDA(I2C_SDA);  // I2Cアドレスピンを指定して通信開始
+    Wire.setSCL(I2C_SCL);
+    Wire.begin();
+
     Serial.begin(115200);
 
     display.init();
@@ -47,16 +86,104 @@ void setup() {
     display.setRotation(3);
     display.setColorDepth(16);
 
-    mainSprite.createSprite(240, 240);
-    mainSprite.drawJpg((std::uint8_t*)KuyopoyoImg,
-                       (unsigned int)KuyopoyoImg_len);
-    mainSprite.pushSprite(0, 0);
+    // mainSprite.createSprite(240, 240);
+    // mainSprite.drawJpg((std::uint8_t*)KuyopoyoImg,
+    //                    (unsigned int)KuyopoyoImg_len);
+    // mainSprite.pushSprite(0, 0);
 
-    delay(1000);
+    // delay(1000);
 
     mainSprite.createSprite(240, 240);
     mainSprite.drawPng((std::uint8_t*)BgImgPtr[0],
                        (unsigned int)BgImgLenPtr[0]);
+}
+
+void loop() {
+    static int prevWallStatus = wallStatus;
+
+    Wire.requestFrom(I2C_ADDR, 9);
+    if (Wire.available() >= 9) {
+        for (int i = 0; i < 9; i++) {
+            dataBuf[i] = Wire.read();
+        }
+
+        coordX = (dataBuf[0] << 8) | dataBuf[1];
+        coordY = (dataBuf[2] << 8) | dataBuf[3];
+        coordZ = (dataBuf[4] << 8) | dataBuf[5];
+
+        if (coordX >= 32768) {
+            coordX -= 65536;
+        }
+
+        if (coordY >= 32768) {
+            coordY -= 65536;
+        }
+
+        if (coordZ >= 32768) {
+            coordZ -= 65536;
+        }
+        deg = (dataBuf[6] << 8) | dataBuf[7];
+        wallStatus = dataBuf[8];
+    }
+
+    if (wallStatus != prevWallStatus && refleshFlag == false &&
+        drawFlag == false) {
+        refleshFlag = true;
+    }
+
+    if (drawFlag) {
+        textX1();
+        textSprite.pushSprite(60, 50);
+
+        textY1();
+        textSprite.pushSprite(60, 99);
+
+        textCoordinate();
+        miniTextSprite.pushSprite(55, 163);
+
+        textDeg();
+        degTextSprite.pushSprite(85, 185);
+
+        mainSprite.pushSprite(0, 0);
+        drawFlag = false;
+    } else {
+        textX1();
+        textSprite.pushSprite(&display, 60, 50);
+
+        textY1();
+        textSprite.pushSprite(&display, 60, 99);
+
+        textCoordinate();
+        miniTextSprite.pushSprite(&display, 55, 163);
+
+        textDeg();
+        degTextSprite.pushSprite(&display, 85, 185);
+    }
+
+    prevWallStatus = wallStatus;
+
+    Serial.println(wallStatus);
+}
+
+void setup1() {
+}
+
+void loop1() {
+    int _wallStatus = 0;
+    static unsigned long timer = 0;
+
+    if (refleshFlag || (timer + 1000 < millis())){
+        _wallStatus = wallStatus;
+        mainSprite.createSprite(240, 240);
+        mainSprite.drawPng((std::uint8_t*)BgImgPtr[_wallStatus],
+                           (unsigned int)BgImgLenPtr[_wallStatus]);
+
+        // delay(250);
+        refleshFlag = false;
+        drawFlag = true;
+
+        timer = millis();
+    }
 }
 
 void textX1(void) {
@@ -136,63 +263,4 @@ void textDeg(void) {
     degTextSprite.createSprite(70, 22);
     uint16_t* imgBufPtr = (uint16_t*)degSprite.getPointer();
     degTextSprite.pushImage(0, 0, 70, 22, imgBufPtr);
-}
-
-void loop() {
-    static int prevWallStatus = wallStatus;
-
-    wallStatus = (millis() / 220) % 16;
-
-    if (wallStatus != prevWallStatus && refleshFlag == false &&
-        drawFlag == false) {
-        refleshFlag = true;
-    }
-
-    if (drawFlag) {
-        textX1();
-        textSprite.pushSprite(60, 50);
-
-        textY1();
-        textSprite.pushSprite(60, 99);
-
-        textCoordinate();
-        miniTextSprite.pushSprite(55, 163);
-
-        textDeg();
-        degTextSprite.pushSprite(85, 185);
-
-        mainSprite.pushSprite(0, 0);
-        drawFlag = false;
-    } else {
-        textX1();
-        textSprite.pushSprite(&display, 60, 50);
-
-        textY1();
-        textSprite.pushSprite(&display, 60, 99);
-
-        textCoordinate();
-        miniTextSprite.pushSprite(&display, 55, 163);
-
-        textDeg();
-        degTextSprite.pushSprite(&display, 85, 185);
-    }
-
-    prevWallStatus = wallStatus;
-}
-
-void setup1() {
-}
-
-void loop1() {
-    int _wallStatus = 0;
-    if (refleshFlag) {
-        _wallStatus = wallStatus;
-        mainSprite.createSprite(240, 240);
-        mainSprite.drawPng((std::uint8_t*)BgImgPtr[_wallStatus],
-                           (unsigned int)BgImgLenPtr[_wallStatus]);
-
-        // delay(250);
-        refleshFlag = false;
-        drawFlag = true;
-    }
 }

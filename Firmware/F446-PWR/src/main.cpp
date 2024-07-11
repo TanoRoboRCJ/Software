@@ -46,13 +46,13 @@ int degToPulse(int deg) {
 
 void uartRead(void) {
     // serial
-    if (uart2.available() >= 8) {
+    if (uart2.available() >= 14) {
         int checkDegit = 0;
-        char data[6] = {0};
+        char data[12] = {0};
 
         if (uart2.read() == 'P') {
             if (uart2.read() == 'W') {
-                for (int i = 0; i < 6; i++) {
+                for (int i = 0; i < 12; i++) {
                     data[i] = uart2.read();
                     checkDegit += data[i];
                 }
@@ -62,12 +62,16 @@ void uartRead(void) {
 
                 ledToggle <<= data[2];
 
-                uint8_t color[3] = {0};
-                for (int i = 0; i < 3; i++) {
-                    color[i] = data[i + 3];
-                }
+                // uint8_t color[3] = {0};
+                // for (int i = 0; i < 9; i++) {
+                //     color[i] = data[i + 3];
+                // }
 
-                enc.show(color);
+                // for (int i = 0; i < 6; i++) {
+                //     color[i] = data[i + 3];
+                // }
+
+                // enc.show(color);
             }
         }
 
@@ -106,7 +110,7 @@ void uartWrite(void) {
 
 void setup(void) {
     uartForDebug.begin(115200);
-    uart2.begin(115200);
+    uart2.begin(1000000);
 
     delay(100);
 

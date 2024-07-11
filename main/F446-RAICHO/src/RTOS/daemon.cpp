@@ -109,9 +109,9 @@ void monitorApp(App) {
         // }
 
         // NOTE: gyro
-        // uart1.print("gyro: ");
-        // uart1.print(gyro.deg);
-        // uart1.print("\t");
+        uart1.print("gyro: ");
+        uart1.print(gyro.deg);
+        uart1.print("\t");
         // uart1.print(gyro.slope);
         // uart1.print("\t");
         // uart1.print(tof.lidarRightWallExists);

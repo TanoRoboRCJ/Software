@@ -18,7 +18,7 @@ class Bottom {
     int tcsRed[2] = {0, 0};
     int tcsGreen[2] = {0, 0};
     int tcsBlue[2] = {0, 0};
-    int tof[2] = {0, 0};
+    // int tof[2] = {0, 0};
 
     // write
     bool rescueKit[2] = {true, true};
