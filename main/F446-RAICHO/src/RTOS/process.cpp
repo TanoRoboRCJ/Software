@@ -135,15 +135,15 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         switch (victim.id) {
             case VICTIM_H:
-                rescueKitNum = 3;
-                break;
-
-            case VICTIM_S:
                 rescueKitNum = 2;
                 break;
 
-            case VICTIM_RED:
+            case VICTIM_S:
                 rescueKitNum = 1;
+                break;
+
+            case VICTIM_RED:
+                rescueKitNum = 2;
                 break;
 
             case VICTIM_YELLOW:
