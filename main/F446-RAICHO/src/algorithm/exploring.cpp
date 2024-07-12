@@ -242,10 +242,14 @@ int Exploring::weighting(void) {
     for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
         for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
             // reachedCount[i][j] %= 21;
-
-            if (reachedCount3DPtr(i, j) != nullptr) {
-                *(reachedCount3DPtr(i, j)) %= 21;
+            for (int floor = 0; floor < 3; i++) {
+                reachedCount3D[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2][floor]
+                    .count %= 21;
             }
+
+            // if (reachedCount3DPtr(i, j) != nullptr) {
+            //     *(reachedCount3DPtr(i, j)) %= 21;
+            // }
         }
     }
     if (millis() - floorSensor.resetTimer > 60000) {
@@ -254,10 +258,10 @@ int Exploring::weighting(void) {
                 // if (reachedCount[i][j] >= 20) {
                 //     reachedCount[i][j] = 0;
                 // }
-                
+
                 if (reachedCount3DPtr(i, j) != nullptr) {
-                    if (getReachedCount3D(i,j) >= 20) {
-                        *(reachedCount3DPtr(i,j)) = 0;
+                    if (getReachedCount3D(i, j) >= 20) {
+                        *(reachedCount3DPtr(i, j)) = 0;
                     }
                 }
             }

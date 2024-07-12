@@ -86,6 +86,11 @@ void floorApp(App) {
             if (gyro.direction == NORTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
                                       [location.y + FIELD_ORIGIN + 1] = 20;
+#ifdef FIELD_3D
+                *(exploring.reachedCount3DPtr(location.x + FIELD_ORIGIN,
+                                              location.y + FIELD_ORIGIN + 1)) =
+                    20;
+#endif
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                          [location.y + FIELD_ORIGIN + 1] = 50;
 
@@ -97,6 +102,11 @@ void floorApp(App) {
                 homing.homingReachedCount[location.x + FIELD_ORIGIN + 1]
                                          [location.y + FIELD_ORIGIN] = 50;
 
+#ifdef FIELD_3D
+                *(exploring.reachedCount3DPtr(location.x + FIELD_ORIGIN + 1,
+                                              location.y + FIELD_ORIGIN)) = 20;
+#endif
+
                 location.setToAvoidBlackTile(location.x + 1, location.y);
             }
             if (gyro.direction == SOUTH) {
@@ -105,6 +115,12 @@ void floorApp(App) {
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                          [location.y + FIELD_ORIGIN - 1] = 50;
 
+#ifdef FIELD_3D
+                *(exploring.reachedCount3DPtr(location.x + FIELD_ORIGIN,
+                                              location.y + FIELD_ORIGIN - 1)) =
+                    20;
+#endif
+
                 location.setToAvoidBlackTile(location.x, location.y - 1);
             }
             if (gyro.direction == WEST) {
@@ -112,6 +128,11 @@ void floorApp(App) {
                                       [location.y + FIELD_ORIGIN] = 20;
                 homing.homingReachedCount[location.x + FIELD_ORIGIN - 1]
                                          [location.y + FIELD_ORIGIN] = 50;
+
+#ifdef FIELD_3D
+                *(exploring.reachedCount3DPtr(location.x + FIELD_ORIGIN - 1,
+                                              location.y + FIELD_ORIGIN)) = 20;
+#endif
 
                 location.setToAvoidBlackTile(location.x - 1, location.y);
             }
