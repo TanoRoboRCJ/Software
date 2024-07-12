@@ -34,7 +34,7 @@ void rightWallApp(App) {
             switch (exploring.weighting()) {
                 case 0:  // right
                          // uart1.println("CASE A: right");
-                    servo.suspend  = true;
+                    servo.suspend = true;
                     servo.velocity = 0;
                     movement.turnRight();
                     break;
@@ -42,7 +42,7 @@ void rightWallApp(App) {
                     // uart1.println("CASE B: front");
                     break;
                 case 2:  // left
-                    servo.suspend  = true;
+                    servo.suspend = true;
                     servo.velocity = 0;
                     movement.turnLeft();
                     // uart1.println("CASE C: left");
@@ -79,7 +79,7 @@ void floorApp(App) {
             } else {
                 app.stop(rightWallApp);
             }
-            servo.suspend  = true;
+            servo.suspend = true;
             servo.velocity = 0;
             movement.back();
             app.delay(100);
@@ -129,10 +129,10 @@ void floorApp(App) {
             } else {
                 app.stop(rightWallApp);
             }
-            servo.suspend  = true;
+            servo.suspend = true;
             servo.velocity = 0;
-            blueTileX      = location.x;
-            blueTileY      = location.y;
+            blueTileX = location.x;
+            blueTileY = location.y;
             app.delay(5500);
             if (homing.started == true && homing.hasFinished == false) {
                 app.start(homingApp);
@@ -168,11 +168,17 @@ void homingApp(App) {  // CHECK 最適化されてない
             bottom.LED_color[1] = 120;
             bottom.LED_color[2] = 0;
 
+            bool judgement_3d =
+                (location.coordinateZ < 150) && (location.coordinateZ > -150) &&
+                (homing.dijkstraSteps[location.x + FIELD_ORIGIN]
+                                     [location.y + FIELD_ORIGIN] != -1);
+
+#ifndef FIELD_3D
+            judgement_3d = true;
+#endif
+
             if (homing.started == false && servo.suspend == true &&
-                victim.isDetected == false && location.coordinateZ < 150 &&
-                location.coordinateZ > -150 &&
-                homing.dijkstraSteps[location.x + FIELD_ORIGIN]
-                                    [location.y + FIELD_ORIGIN] != -1) {
+                victim.isDetected == false && judgement_3d) {
                 app.stop(rightWallApp);
 
                 if (millis() > homing.HomingTime + 5000) {
@@ -211,7 +217,7 @@ void homingApp(App) {  // CHECK 最適化されてない
                     (location.route[0].wall[3] ==
                      tof.wallExists[WEST])) {  // NOTE 座標曖昧壁判定モード
                     app.stop(adjustmentApp);
-                    servo.suspend  = true;
+                    servo.suspend = true;
                     servo.velocity = 0;
                     buzzer.matsukenSamba();
                 } else {
@@ -219,19 +225,19 @@ void homingApp(App) {  // CHECK 最適化されてない
                     if (abs(gyro.slope) < 15) {
                         switch (homing.dijkstraWeighting()) {
                             case 0:  // right
-                                servo.suspend  = true;
+                                servo.suspend = true;
                                 servo.velocity = 0;
                                 movement.turnRight();
                                 break;
                             case 1:  // front
                                 break;
                             case 2:  // left
-                                servo.suspend  = true;
+                                servo.suspend = true;
                                 servo.velocity = 0;
                                 movement.turnLeft();
                                 break;
                             case 3:  // back
-                                servo.suspend  = true;
+                                servo.suspend = true;
                                 servo.velocity = 0;
                                 movement.turnReverse();
                                 break;
