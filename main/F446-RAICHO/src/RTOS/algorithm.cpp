@@ -87,9 +87,8 @@ void floorApp(App) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
                                       [location.y + FIELD_ORIGIN + 1] = 20;
 #ifdef FIELD_3D
-                *(exploring.reachedCount3DPtr(location.x + FIELD_ORIGIN,
-                                              location.y + FIELD_ORIGIN + 1)) =
-                    20;
+                exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN + 1);
 #endif
                 homing.homingReachedCount[location.x + FIELD_ORIGIN]
                                          [location.y + FIELD_ORIGIN + 1] = 50;
@@ -103,8 +102,8 @@ void floorApp(App) {
                                          [location.y + FIELD_ORIGIN] = 50;
 
 #ifdef FIELD_3D
-                *(exploring.reachedCount3DPtr(location.x + FIELD_ORIGIN + 1,
-                                              location.y + FIELD_ORIGIN)) = 20;
+                exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN + 1,
+                                            location.y + FIELD_ORIGIN);
 #endif
 
                 location.setToAvoidBlackTile(location.x + 1, location.y);
@@ -116,9 +115,8 @@ void floorApp(App) {
                                          [location.y + FIELD_ORIGIN - 1] = 50;
 
 #ifdef FIELD_3D
-                *(exploring.reachedCount3DPtr(location.x + FIELD_ORIGIN,
-                                              location.y + FIELD_ORIGIN - 1)) =
-                    20;
+                exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN,
+                                            location.y + FIELD_ORIGIN - 1);
 #endif
 
                 location.setToAvoidBlackTile(location.x, location.y - 1);
@@ -130,8 +128,8 @@ void floorApp(App) {
                                          [location.y + FIELD_ORIGIN] = 50;
 
 #ifdef FIELD_3D
-                *(exploring.reachedCount3DPtr(location.x + FIELD_ORIGIN - 1,
-                                              location.y + FIELD_ORIGIN)) = 20;
+                exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN - 1,
+                                            location.y + FIELD_ORIGIN);
 #endif
 
                 location.setToAvoidBlackTile(location.x - 1, location.y);

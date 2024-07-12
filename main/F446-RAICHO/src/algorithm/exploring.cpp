@@ -178,7 +178,6 @@ void Exploring::updateMap(void) {
     i++;
     constrain(i, 0, 999);
 
-    const int Z_range = 150;
     for (int i = 0; i < FloorNum; i++) {
         if (reachedCount3D[location.x + FIELD_ORIGIN][location.y + FIELD_ORIGIN]
                           [i]
@@ -211,8 +210,6 @@ void Exploring::updateMap(void) {
 }
 
 char Exploring::getReachedCount3D(int x, int y) {
-    const int Z_range = 150;
-
     for (int i = 0; i < FloorNum; i++) {
         if (reachedCount3D[x][y][i].z < location.coordinateZ + Z_range &&
             reachedCount3D[x][y][i].z > location.coordinateZ - Z_range) {
@@ -223,9 +220,8 @@ char Exploring::getReachedCount3D(int x, int y) {
     return 0;
 }
 
+// 非推奨
 char* Exploring::reachedCount3DPtr(int x, int y) {
-    const int Z_range = 150;
-
     for (int i = 0; i < FloorNum; i++) {
         if (reachedCount3D[x][y][i].z < location.coordinateZ + Z_range &&
             reachedCount3D[x][y][i].z > location.coordinateZ - Z_range) {
@@ -236,22 +232,55 @@ char* Exploring::reachedCount3DPtr(int x, int y) {
     return nullptr;
 }
 
+void Exploring::setReachedCount3D(char value, int x, int y) {
+    for (int i = 0; i < FloorNum; i++) {
+        if (reachedCount3D[x][y][i].z < location.coordinateZ + Z_range &&
+            reachedCount3D[x][y][i].z > location.coordinateZ - Z_range) {
+            reachedCount3D[x][y][i].count = value;
+            return;
+        }
+    }
+
+    // 未到達可能性
+    // for (int i = 0; i < FloorNum; i++) {
+    //     if (reachedCount3D[location.x + FIELD_ORIGIN][location.y +
+    //     FIELD_ORIGIN]
+    //                       [i]
+    //                           .count == 0) {
+    //         reachedCount3D[location.x + FIELD_ORIGIN][location.y +
+    //         FIELD_ORIGIN]
+    //                       [i]
+    //                           .z = location.coordinateZ;
+    //         reachedCount3D[location.x + FIELD_ORIGIN][location.y +
+    //         FIELD_ORIGIN]
+    //                       [i]
+    //                           .count = value;
+
+    //         return;
+    //     }
+    // }
+
+    for (int i = 0; i < FloorNum; i++) {
+        if (reachedCount3D[x][y][i].count == 0) {
+            reachedCount3D[x][y][i].z = location.coordinateZ;
+            reachedCount3D[x][y][i].count = value;
+
+            return;
+        }
+    }
+}
+
 int Exploring::weighting(void) {
     int weight[3] = {0};
 
     for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
         for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
-            // reachedCount[i][j] %= 21;
-            for (int floor = 0; floor < 3; i++) {
-                reachedCount3D[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2][floor]
-                    .count %= 21;
+            for (int floor = 0; floor < 3; floor++) {
+                reachedCount3D[i][j][floor].count %= 21;
             }
-
-            // if (reachedCount3DPtr(i, j) != nullptr) {
-            //     *(reachedCount3DPtr(i, j)) %= 21;
-            // }
         }
     }
+
     if (millis() - floorSensor.resetTimer > 60000) {
         for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
             for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
@@ -259,9 +288,9 @@ int Exploring::weighting(void) {
                 //     reachedCount[i][j] = 0;
                 // }
 
-                if (reachedCount3DPtr(i, j) != nullptr) {
-                    if (getReachedCount3D(i, j) >= 20) {
-                        *(reachedCount3DPtr(i, j)) = 0;
+                for (int floor = 0; floor < 3; floor++) {
+                    if (reachedCount3D[i][j][floor].count >= 20) {
+                        reachedCount3D[i][j][floor].count = 0;
                     }
                 }
             }
