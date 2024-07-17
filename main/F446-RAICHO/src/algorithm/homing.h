@@ -22,9 +22,9 @@ class Homing {
 
     int dijkstra(int destX, int destY, int originX = 0, int originY = 0);
     int dijkstraWeighting(void);
-    int dijkstraSteps[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+    int8_t dijkstraSteps[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
-    int homingReachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+    int16_t homingReachedCount[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
    private:
 };
