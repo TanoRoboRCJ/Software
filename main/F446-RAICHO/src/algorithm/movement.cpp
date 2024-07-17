@@ -167,8 +167,8 @@ void Movement::back(void) {
     _oldCoordinateX = location.coordinateX;
     _oldCoordinateY = location.coordinateY;
 
-    while (abs(location.coordinateX - _oldCoordinateX) < 100 &&
-           abs(location.coordinateY - _oldCoordinateY) < 100) {
+    while (abs(location.coordinateX - _oldCoordinateX) < 120 &&
+           abs(location.coordinateY - _oldCoordinateY) < 120) {
         servo.isCorrectingAngle = 0;
         servo.suspend = false;
         servo.velocity = -servo.DefaultSpeed;

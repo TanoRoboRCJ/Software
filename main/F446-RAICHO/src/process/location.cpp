@@ -15,17 +15,36 @@ Location::Location(/* args */) {
 void Location::updateOdometory(void) {
     static unsigned long lastTime = millis();
 
-    double vec = (servo.rightWheelSpeed + servo.leftWheelSpeed) / 2.0;
+    double vec  = (servo.rightWheelSpeed + servo.leftWheelSpeed) / 2.0;
     double vecX = vec * sin(radians(gyro.deg));
     double vecY = vec * cos(radians(gyro.deg));
 
-    coordinateX += vecX * constrain((millis() - lastTime), 0, 20) *
-                   _VelocityConstant * cos(radians(gyro.slope));
-    coordinateY += vecY * constrain((millis() - lastTime), 0, 20) *
-                   _VelocityConstant * cos(radians(gyro.slope));
+    if (gyro.slope < -10) {
+        coordinateX += vecX * constrain((millis() - lastTime), 0, 20) *
+                       _SlopeVelocityConstant * cos(radians(gyro.slope));
+        coordinateY += vecY * constrain((millis() - lastTime), 0, 20) *
+                       _SlopeVelocityConstant * cos(radians(gyro.slope));
 
-    coordinateZ -= vec * constrain((millis() - lastTime), 0, 20) *
-                   _VelocityConstant * sin(radians(gyro.slope));
+        coordinateZ -= vec * constrain((millis() - lastTime), 0, 20) *
+                       _SlopeVelocityConstant * sin(radians(gyro.slope));
+
+    } else if (gyro.slope > 10) {
+        coordinateX += vecX * constrain((millis() - lastTime), 0, 20) *
+                       _downVelocityConstant * cos(radians(gyro.slope));
+        coordinateY += vecY * constrain((millis() - lastTime), 0, 20) *
+                       _downVelocityConstant * cos(radians(gyro.slope));
+
+        coordinateZ -= vec * constrain((millis() - lastTime), 0, 20) *
+                       _downVelocityConstant * sin(radians(gyro.slope));
+    } else {
+        coordinateX += vecX * constrain((millis() - lastTime), 0, 20) *
+                       _VelocityConstant * cos(radians(gyro.slope));
+        coordinateY += vecY * constrain((millis() - lastTime), 0, 20) *
+                       _VelocityConstant * cos(radians(gyro.slope));
+
+        coordinateZ -= vec * constrain((millis() - lastTime), 0, 20) *
+                       _VelocityConstant * sin(radians(gyro.slope));
+    }
 
     lastTime = millis();
 }
@@ -64,9 +83,9 @@ void Location::updateObservationData(void) {
     const int SensorRadius = 24;
 
     // 北か南　誤差10°
-    const int allowanceDegError = 8;
+    const int allowanceDegError   = 8;
     const int allowanceWidthError = 25;
-    const int range = 3;  // 信用するマス数
+    const int range               = 3;  // 信用するマス数
 
     if ((gyro.deg < 0 + allowanceDegError ||
          gyro.deg > 360 - allowanceDegError) ||
@@ -85,9 +104,9 @@ void Location::updateObservationData(void) {
         for (int i = 1; i <= range; i++) {
             if ((i * 300 - allowanceWidthError) < widthX &&
                 widthX < (i * 300 + allowanceWidthError)) {
-                trustX = true;
+                trustX             = true;
                 int oldCoordinateX = coordinateX;
-                coordinateX = round(coordinateX / 300.0) * 300.0;
+                coordinateX        = round(coordinateX / 300.0) * 300.0;
 
                 if (isNorth) {
                     coordinateX +=
@@ -114,7 +133,7 @@ void Location::updateObservationData(void) {
                 trustY = true;
 
                 int oldCoordinateY = coordinateY;
-                coordinateY = round(coordinateY / 300.0) * 300.0;
+                coordinateY        = round(coordinateY / 300.0) * 300.0;
 
                 if (isNorth) {
                     coordinateY +=
@@ -142,8 +161,8 @@ void Location::updateObservationData(void) {
                 gyro.deg < 270 + allowanceDegError)) {
         bool isEast = (90 - allowanceDegError < gyro.deg &&
                        gyro.deg < 90 + allowanceDegError);
-        widthX = abs(tof.vecX[0]) + abs(tof.vecX[8]) + SensorRadius * 2;
-        widthY = abs(tof.vecY[4]) + abs(tof.vecY[12]) + SensorRadius * 2;
+        widthX      = abs(tof.vecX[0]) + abs(tof.vecX[8]) + SensorRadius * 2;
+        widthY      = abs(tof.vecY[4]) + abs(tof.vecY[12]) + SensorRadius * 2;
 
         // uart1.print(widthX);
         // uart1.print("\t");
@@ -152,9 +171,9 @@ void Location::updateObservationData(void) {
         for (int i = 1; i <= range; i++) {
             if ((i * 300 - allowanceWidthError) < widthX &&
                 widthX < (i * 300 + allowanceWidthError)) {
-                trustX = true;
+                trustX             = true;
                 int oldCoordinateX = coordinateX;
-                coordinateX = round(coordinateX / 300.0) * 300.0;
+                coordinateX        = round(coordinateX / 300.0) * 300.0;
 
                 if (isEast) {
                     coordinateX +=
@@ -182,7 +201,7 @@ void Location::updateObservationData(void) {
                 trustY = true;
 
                 int oldCoordinateY = coordinateY;
-                coordinateY = round(coordinateY / 300.0) * 300.0;
+                coordinateY        = round(coordinateY / 300.0) * 300.0;
 
                 if (isEast) {
                     coordinateY +=
@@ -214,21 +233,21 @@ void Location::updateObservationData(void) {
     if (abs(gyro.slope) > 8) {
         if (gyro.direction == NORTH || gyro.direction == SOUTH) {
             coordinateY = oldCoordinateY;
-            trustY = false;
+            trustY      = false;
         } else {
             coordinateX = oldCoordinateX;
-            trustX = false;
+            trustX      = false;
         }
     }
 
     if (tof.covX < 50) {
         coordinateX = oldCoordinateX;
-        trustX = false;
+        trustX      = false;
     }
 
     if (tof.covY < 50) {
         coordinateY = oldCoordinateY;
-        trustY = false;
+        trustY      = false;
     }
 
     if (trustX && trustY) {
@@ -286,10 +305,10 @@ void Location::updateObservationData(void) {
 }
 
 void Location::setToAvoidBlackTile(int x, int y) {
-    wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN].vertical = true;
+    wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN].vertical   = true;
     wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN].horizontal = true;
 
-    wall[x + FIELD_ORIGIN + 1][y + FIELD_ORIGIN].vertical = true;
+    wall[x + FIELD_ORIGIN + 1][y + FIELD_ORIGIN].vertical   = true;
     wall[x + FIELD_ORIGIN][y + FIELD_ORIGIN + 1].horizontal = true;
 }
 
