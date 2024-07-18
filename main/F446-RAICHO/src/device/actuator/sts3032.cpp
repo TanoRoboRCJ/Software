@@ -37,10 +37,10 @@ void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
         dekobokoTimer = millis();
     }
 
-    if (millis() - dekobokoTimer < 500 && millis() > 10000) {
-        data[0] = (millis() / 2000) % 2;
+    if (millis() - dekobokoTimer < 2000 && millis() > 10000) {
+        data[0] = (millis() / 500) % 2;
         data[0] *= 100;
-        data[1] = 1 - ((millis() / 2000) % 2);
+        data[1] = 1 - ((millis() / 500) % 2);
         data[1] *= 100;
     }
 

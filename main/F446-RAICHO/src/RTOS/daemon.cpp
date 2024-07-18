@@ -34,9 +34,9 @@ void monitorApp(App) {
         // uart1.print(tof.val[12]);
 
         // NOTE: loadcell
-        // uart1.print(loadcell.load[0]);
-        // uart1.print("\t");
-        // uart1.println(loadcell.load[1]);
+        uart1.print(loadcell.load[0]);
+        uart1.print("\t");
+        uart1.println(loadcell.load[1]);
 
         // 壁の状況を表示(location.wall)
         // if (uart1.available() > 0) {
@@ -109,9 +109,9 @@ void monitorApp(App) {
         // }
 
         // NOTE: gyro
-        uart1.print("gyro: ");
-        uart1.print(gyro.deg);
-        uart1.print("\t");
+        // uart1.print("gyro: ");
+        // uart1.print(gyro.deg);
+        // uart1.print("\t");
         // uart1.print(gyro.slope);
         // uart1.print("\t");
         // uart1.print(tof.lidarRightWallExists);
@@ -120,15 +120,15 @@ void monitorApp(App) {
         // uart1.print(tof.lidarLeftWallExists);
 
         // NOTE: location
-        uart1.print(location.coordinateX);
-        uart1.print(",");
-        uart1.print(location.coordinateY);
+        // uart1.print(location.coordinateX);
+        // uart1.print(",");
+        // uart1.print(location.coordinateY);
 
-        uart1.print(",");
+        // uart1.print(",");
         // uart1.print(gyro.deviation);
-        uart1.print(location.coordinateZ);
+        // uart1.print(location.coordinateZ);
 
-        uart1.println();
+        // uart1.println();
         app.delay(10);
     }
 }
