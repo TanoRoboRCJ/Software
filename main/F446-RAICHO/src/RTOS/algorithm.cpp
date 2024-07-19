@@ -82,7 +82,7 @@ void floorApp(App) {
             servo.suspend  = true;
             servo.velocity = 0;
             movement.back();
-            app.delay(100);
+            app.delay(Period);
             if (gyro.direction == NORTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
                                       [location.y + FIELD_ORIGIN + 1] = 20;
@@ -160,6 +160,8 @@ void floorApp(App) {
             }
             while (location.x == blueTileX && location.y == blueTileY) {
                 if (floorSensor.frontColor == floorSensor.BLACK) {
+                    blueTileX = FIELD_ORIGIN;
+                    blueTileY = FIELD_ORIGIN;
                     break;
                 }
                 app.delay(Period);
@@ -169,10 +171,9 @@ void floorApp(App) {
             floorSensor.backColor == floorSensor.SILVER && gyro.slope == 0) {
             floorSensor.checkPointX = location.x;
             floorSensor.checkPointY = location.y;
-            buzzer.beat(DO_, 2);
-            app.delay(Period);
+            buzzer.beat(DO_, 1);
         }
-        app.delay(Period);
+        app.delay(5);
     }
 }
 
@@ -197,7 +198,9 @@ void homingApp(App) {  // CHECK 最適化されてない
 #endif
 
             if (homing.started == false && servo.suspend == true &&
-                victim.isDetected == false && judgement_3d) {
+                victim.isDetected == false && judgement_3d &&
+                (floorSensor.frontColor != floorSensor.BLUE) &&
+                (floorSensor.backColor != floorSensor.BLUE)) {
                 app.stop(rightWallApp);
 
                 if (millis() > homing.HomingTime + 5000) {

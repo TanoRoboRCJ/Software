@@ -28,21 +28,21 @@ void STS3032::directDrive(int id, int percent, int acceleration) {
 
 void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
     int data[2];
-    static unsigned long dekobokoTimer = 0;
+    // static unsigned long dekobokoTimer = 0;
 
     data[0] = angularVelocity - velocity;
     data[1] = angularVelocity + velocity;
 
-    if (gyro.slope < -30) {
-        dekobokoTimer = millis();
-    }
+    // if (gyro.slope < -30) {
+    //     dekobokoTimer = millis();
+    // }
 
-    if (millis() - dekobokoTimer < 2000 && millis() > 10000) {
-        data[0] = (millis() / 500) % 2;
-        data[0] *= 100;
-        data[1] = 1 - ((millis() / 500) % 2);
-        data[1] *= 100;
-    }
+    // if (millis() - dekobokoTimer < 2000 && millis() > 10000) {
+    //     data[0] = (millis() / 500) % 2;
+    //     data[0] *= 100;
+    //     data[1] = 1 - ((millis() / 500) % 2);
+    //     data[1] *= 100;
+    // }
 
     rightWheelSpeed = -data[0];
     leftWheelSpeed  = data[1];
@@ -61,7 +61,7 @@ void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
 }
 
 void STS3032::drive(int velocity, int angle) {
-    const double Kp = -3.4;
+    const double Kp = -2.9;
 
     // 0-360変換
     while (angle < 0) {
