@@ -29,26 +29,26 @@ void rightWallApp(App) {
         app.delay(Period);
 
         // CHECK:とりあえずプリントデバッグしてみよう
-        if (abs(gyro.slope) < 15 || movement.loop == true) {
-            // NOTE:28-30cmで壁判定Done
-            switch (exploring.weighting()) {
-                case 0:  // right
-                         // uart1.println("CASE A: right");
-                    servo.suspend = true;
-                    servo.velocity = 0;
-                    movement.turnRight();
-                    break;
-                case 1:  // front
-                    // uart1.println("CASE B: front");
-                    break;
-                case 2:  // left
-                    servo.suspend = true;
-                    servo.velocity = 0;
-                    movement.turnLeft();
-                    // uart1.println("CASE C: left");
-                    break;
-            }
+        // if (abs(gyro.slope) < 15 || movement.loop == true) {
+        // NOTE:28-30cmで壁判定Done
+        switch (exploring.weighting()) {
+            case 0:  // right
+                     // uart1.println("CASE A: right");
+                servo.suspend  = true;
+                servo.velocity = 0;
+                movement.turnRight();
+                break;
+            case 1:  // front
+                // uart1.println("CASE B: front");
+                break;
+            case 2:  // left
+                servo.suspend  = true;
+                servo.velocity = 0;
+                movement.turnLeft();
+                // uart1.println("CASE C: left");
+                break;
         }
+        // }
         movement.move_1tile();
         // app.delay(100);
         exploring.reachedCount[location.x + FIELD_ORIGIN]
@@ -79,20 +79,20 @@ void floorApp(App) {
             } else {
                 app.stop(rightWallApp);
             }
-            servo.suspend = true;
+            servo.suspend  = true;
             servo.velocity = 0;
             movement.back();
-            app.delay(100);
+            app.delay(Period);
             if (gyro.direction == NORTH) {
                 exploring.reachedCount[location.x + FIELD_ORIGIN]
                                       [location.y + FIELD_ORIGIN + 1] = 20;
+                homing.homingReachedCount[location.x + FIELD_ORIGIN]
+                                         [location.y + FIELD_ORIGIN + 1] = 50;
+
 #ifdef FIELD_3D
                 exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN + 1);
 #endif
-                homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN + 1] = 50;
-
                 location.setToAvoidBlackTile(location.x, location.y + 1);
             }
             if (gyro.direction == EAST) {
@@ -148,10 +148,10 @@ void floorApp(App) {
             } else {
                 app.stop(rightWallApp);
             }
-            servo.suspend = true;
+            servo.suspend  = true;
             servo.velocity = 0;
-            blueTileX = location.x;
-            blueTileY = location.y;
+            blueTileX      = location.x;
+            blueTileY      = location.y;
             app.delay(5500);
             if (homing.started == true && homing.hasFinished == false) {
                 app.start(homingApp);
@@ -160,6 +160,8 @@ void floorApp(App) {
             }
             while (location.x == blueTileX && location.y == blueTileY) {
                 if (floorSensor.frontColor == floorSensor.BLACK) {
+                    blueTileX = FIELD_ORIGIN;
+                    blueTileY = FIELD_ORIGIN;
                     break;
                 }
                 app.delay(Period);
@@ -169,10 +171,9 @@ void floorApp(App) {
             floorSensor.backColor == floorSensor.SILVER && gyro.slope == 0) {
             floorSensor.checkPointX = location.x;
             floorSensor.checkPointY = location.y;
-            buzzer.beat(DO_, 2);
-            app.delay(Period);
+            buzzer.beat(DO_, 1);
         }
-        app.delay(Period);
+        app.delay(5);
     }
 }
 
@@ -197,7 +198,9 @@ void homingApp(App) {  // CHECK 最適化されてない
 #endif
 
             if (homing.started == false && servo.suspend == true &&
-                victim.isDetected == false && judgement_3d) {
+                victim.isDetected == false && judgement_3d &&
+                (floorSensor.frontColor != floorSensor.BLUE) &&
+                (floorSensor.backColor != floorSensor.BLUE)) {
                 app.stop(rightWallApp);
 
                 if (millis() > homing.HomingTime + 5000) {
@@ -236,7 +239,7 @@ void homingApp(App) {  // CHECK 最適化されてない
                     (location.route[0].wall[3] ==
                      tof.wallExists[WEST])) {  // NOTE 座標曖昧壁判定モード
                     app.stop(adjustmentApp);
-                    servo.suspend = true;
+                    servo.suspend  = true;
                     servo.velocity = 0;
                     buzzer.matsukenSamba();
                 } else {
@@ -244,19 +247,19 @@ void homingApp(App) {  // CHECK 最適化されてない
                     if (abs(gyro.slope) < 15) {
                         switch (homing.dijkstraWeighting()) {
                             case 0:  // right
-                                servo.suspend = true;
+                                servo.suspend  = true;
                                 servo.velocity = 0;
                                 movement.turnRight();
                                 break;
                             case 1:  // front
                                 break;
                             case 2:  // left
-                                servo.suspend = true;
+                                servo.suspend  = true;
                                 servo.velocity = 0;
                                 movement.turnLeft();
                                 break;
                             case 3:  // back
-                                servo.suspend = true;
+                                servo.suspend  = true;
                                 servo.velocity = 0;
                                 movement.turnReverse();
                                 break;

@@ -9,7 +9,7 @@
 class Homing {
    public:
     // NOTE 帰還時間
-    const int HomingTime = 90000;
+    const int HomingTime = 390000;
     bool started         = false;
 
     bool hasFinished = false;

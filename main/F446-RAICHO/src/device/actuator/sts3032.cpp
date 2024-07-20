@@ -28,16 +28,24 @@ void STS3032::directDrive(int id, int percent, int acceleration) {
 
 void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
     int data[2];
+    // static unsigned long dekobokoTimer = 0;
+
     data[0] = angularVelocity - velocity;
     data[1] = angularVelocity + velocity;
 
-    // if (gyro.slope < -15) {
-    //     data[0] *= SlopeSpeed;
-    //     data[1] *= SlopeSpeed;
+    // if (gyro.slope < -30) {
+    //     dekobokoTimer = millis();
+    // }
+
+    // if (millis() - dekobokoTimer < 2000 && millis() > 10000) {
+    //     data[0] = (millis() / 500) % 2;
+    //     data[0] *= 100;
+    //     data[1] = 1 - ((millis() / 500) % 2);
+    //     data[1] *= 100;
     // }
 
     rightWheelSpeed = -data[0];
-    leftWheelSpeed = data[1];
+    leftWheelSpeed  = data[1];
 
     for (int i = 0; i < 2; i++) {
         data[i] = constrain(data[i], -100, 100);
@@ -53,7 +61,7 @@ void STS3032::driveAngularVelocity(int velocity, int angularVelocity) {
 }
 
 void STS3032::drive(int velocity, int angle) {
-    const double Kp = -3.4;
+    const double Kp = -2.9;
 
     // 0-360変換
     while (angle < 0) {
@@ -89,9 +97,9 @@ void STS3032::stop(void) {
 }
 
 void STS3032::rescueKit(int num, int position) {
-    int deg = gyro.deg;
+    int deg     = gyro.deg;
     int turnDeg = (deg + 180) % 360;
-    bool turn = false;
+    bool turn   = false;
 
     app.stop(servoApp);
 
@@ -99,7 +107,7 @@ void STS3032::rescueKit(int num, int position) {
         if (position == 0 && remainingRescueKitR == 0) {  // ないよ！！
             if (turn == false && remainingRescueKitL > 0) {
                 position = 2;
-                turn = true;
+                turn     = true;
 
                 unsigned long startTime = millis();
 
@@ -116,7 +124,7 @@ void STS3032::rescueKit(int num, int position) {
         } else if (position == 2 && remainingRescueKitL == 0) {
             if (turn == false && remainingRescueKitR > 0) {
                 position = 0;
-                turn = true;
+                turn     = true;
 
                 unsigned long startTime = millis();
 

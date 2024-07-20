@@ -21,8 +21,8 @@ class STS3032 {
     const int maximumSpeed = 7000;
     const int baudRate = 1000000;
 
-    const int DefaultSpeed = 95;
-    const double SlopeSpeed = 0.8;
+    const int DefaultSpeed = 90;
+    const double SlopeSpeed = 1.0;
 
     void directDrive(int id, int percent, int acceleration = 0);
     void drive(int velocity, int angle);

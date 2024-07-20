@@ -15,14 +15,14 @@ void FLOOR_SENSOR::read(void) {
 }
 
 void FLOOR_SENSOR::frontColorJudgment(void) {
-    if (frontCRGB[0] < 70 && frontCRGB[1] < 35 && frontCRGB[2] < 35 &&
-        frontCRGB[3] < 35) {
+    if (frontCRGB[0] < 135 && frontCRGB[1] < 50 && frontCRGB[2] < 60 &&
+        frontCRGB[3] < 60) {
         frontColor = BLACK;
-    } else if (frontCRGB[0] > 90 && frontCRGB[0] < 180 && frontCRGB[1] < 50 &&
-               frontCRGB[2] < 60 && frontCRGB[3] < 70) {
+    } else if (frontCRGB[0] > 130 && frontCRGB[0] < 210 && frontCRGB[1] < 60 &&
+               frontCRGB[2] < 80 && frontCRGB[3] < 90) {
         frontColor = BLUE;
-    } else if (frontCRGB[0] < 500 && frontCRGB[0] < 340 && frontCRGB[1] > 80 &&
-               frontCRGB[2] > 100 && frontCRGB[3] > 100) {
+    } else if (frontCRGB[0] > 270 && frontCRGB[0] < 360 && frontCRGB[1] < 120 &&
+               frontCRGB[2] < 130 && frontCRGB[3] < 110) {
         frontColor = SILVER;
     } else {
         frontColor = WHITE;
@@ -30,14 +30,14 @@ void FLOOR_SENSOR::frontColorJudgment(void) {
 }
 
 void FLOOR_SENSOR::backColorJudgment(void) {
-    if (backCRGB[0] < 80 && backCRGB[1] < 35 && backCRGB[2] < 35 &&
-        backCRGB[3] < 35) {
+    if (backCRGB[0] < 100 && backCRGB[1] < 35 && backCRGB[2] < 45 &&
+        backCRGB[3] < 45) {
         backColor = BLACK;
-    } else if (backCRGB[0] > 80 && backCRGB[0] < 120 && backCRGB[1] < 45 &&
-               backCRGB[2] < 50 && backCRGB[3] < 70) {
+    } else if (backCRGB[0] > 100 && backCRGB[0] < 200 && backCRGB[1] < 50 &&
+               backCRGB[2] < 80 && backCRGB[3] < 85) {
         backColor = BLUE;
-    } else if (backCRGB[0] > 400 && backCRGB[0] < 500 && backCRGB[1] > 70 &&
-               backCRGB[2] > 130 && backCRGB[3] > 150) {
+    } else if (backCRGB[0] > 300 && backCRGB[0] < 390 && backCRGB[1] < 130 &&
+               backCRGB[2] < 155 && backCRGB[3] < 130){
         backColor = SILVER;
     } else {
         backColor = WHITE;

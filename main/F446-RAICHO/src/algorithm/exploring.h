@@ -18,7 +18,7 @@
 #define BACK 3
 #define DISABLE 100
 
-#define FIELD_3D
+ //#define FIELD_3D
 
 #ifndef FIELD_3D
 
@@ -58,13 +58,9 @@ class Exploring {
     struct reachdCount3D_tile reachedCount3D[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2]
                                             [FloorNum];
 
-    const int Z_range = 150;
-
     char getReachedCount3D(int x, int y);
 
     char* reachedCount3DPtr(int x, int y);
-
-    void setReachedCount3D(char value, int x, int y);
 };
 
 #endif
