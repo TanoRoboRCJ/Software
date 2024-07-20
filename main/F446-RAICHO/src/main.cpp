@@ -27,7 +27,7 @@ void setup() {
     // 動作系統
     app.create(rightWallApp);
     app.create(adjustmentApp);
-    //app.create(homingApp);
+    app.create(homingApp);
     app.create(floorApp,secondPriority);
 
     app.start(mainApp);

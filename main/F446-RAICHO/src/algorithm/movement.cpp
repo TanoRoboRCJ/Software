@@ -378,3 +378,11 @@ void Movement::goOverBarrier(void) {
     dir = random() % 5;
     app.start(adjustmentApp);
 }
+
+void Movement::turnRightAndPause(void) {
+    turnRight();
+    servo.suspend = true;
+    servo.velocity = 0;
+    app.delay(5000);
+    turnLeft();
+}

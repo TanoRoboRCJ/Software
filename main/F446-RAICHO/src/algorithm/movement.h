@@ -36,6 +36,9 @@ class Movement {
     void turnSouth(void);
     void turnWest(void);
 
+    void turnRightAndPause(void);
+    void turnLeftAndPause(void);
+
     void angleAdjustment(void);
     void avoidBarrier(void);
     bool isStucked(int direction);
