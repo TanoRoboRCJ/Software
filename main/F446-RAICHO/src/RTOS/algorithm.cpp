@@ -55,6 +55,11 @@ void rightWallApp(App) {
                               [location.y + FIELD_ORIGIN]++;
 
         exploring.updateMap();
+        while (tof.frontWallExists == true && tof.rightWallExists == true &&
+               tof.leftWallExists == true) {
+            servo.suspend  = true;
+            servo.velocity = 0;
+        }
     }
 }
 
@@ -71,212 +76,46 @@ void adjustmentApp(App) {
 
 void floorApp(App) {
     while (1) {
-        int blueTileX = FIELD_ORIGIN;
-        int blueTileY = FIELD_ORIGIN;
-        if (floorSensor.frontColor == floorSensor.BLACK) {
-            if (homing.started == true && homing.hasFinished == false) {
-                app.stop(homingApp);
-            } else {
-                app.stop(rightWallApp);
-            }
-            servo.suspend  = true;
-            servo.velocity = 0;
-            movement.back();
-            app.delay(Period);
-            if (gyro.direction == NORTH) {
-                exploring.reachedCount[location.x + FIELD_ORIGIN]
-                                      [location.y + FIELD_ORIGIN + 1] = 20;
-                homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN + 1] = 50;
+        // if (floorSensor.backColor == floorSensor.BLACK) {
+        //     app.stop(rightWallApp);
+        //     servo.suspend  = true;
+        //     servo.velocity = 0;
+        //     app.delay(5000);
+        //     servo.suspend = false;
+        //     app.start(rightWallApp);
+        //     int tempX = location.x;
+        //     int tempY = location.y;
 
-#ifdef FIELD_3D
-                exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN,
-                                            location.y + FIELD_ORIGIN + 1);
-#endif
-                location.setToAvoidBlackTile(location.x, location.y + 1);
-            }
-            if (gyro.direction == EAST) {
-                exploring.reachedCount[location.x + FIELD_ORIGIN + 1]
-                                      [location.y + FIELD_ORIGIN] = 20;
-                homing.homingReachedCount[location.x + FIELD_ORIGIN + 1]
-                                         [location.y + FIELD_ORIGIN] = 50;
+        //     while (1) {
+        //         if (location.x != tempX || location.y != tempY) {
+        //             break;
+        //         }
+        //         app.delay(Period);
+        //     }
 
-#ifdef FIELD_3D
-                exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN + 1,
-                                            location.y + FIELD_ORIGIN);
-#endif
+        //     app.delay(1400);
+        // }
 
-                location.setToAvoidBlackTile(location.x + 1, location.y);
-            }
-            if (gyro.direction == SOUTH) {
-                exploring.reachedCount[location.x + FIELD_ORIGIN]
-                                      [location.y + FIELD_ORIGIN - 1] = 20;
-                homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                         [location.y + FIELD_ORIGIN - 1] = 50;
+        // if (floorSensor.backColor == floorSensor.BLUE) {
+        //     app.stop(rightWallApp);
+        //     servo.suspend  = true;
+        //     servo.velocity = 0;
+        //     app.delay(5000);
+        //     servo.suspend = false;
+        //     app.start(rightWallApp);
 
-#ifdef FIELD_3D
-                exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN,
-                                            location.y + FIELD_ORIGIN - 1);
-#endif
+        //     int tempX = location.x;
+        //     int tempY = location.y;
 
-                location.setToAvoidBlackTile(location.x, location.y - 1);
-            }
-            if (gyro.direction == WEST) {
-                exploring.reachedCount[location.x + FIELD_ORIGIN - 1]
-                                      [location.y + FIELD_ORIGIN] = 20;
-                homing.homingReachedCount[location.x + FIELD_ORIGIN - 1]
-                                         [location.y + FIELD_ORIGIN] = 50;
+        //     while (1) {
+        //         if (location.x != tempX || location.y != tempY) {
+        //             break;
+        //         }
+        //         app.delay(Period);
+        //     }
 
-#ifdef FIELD_3D
-                exploring.setReachedCount3D(20, location.x + FIELD_ORIGIN - 1,
-                                            location.y + FIELD_ORIGIN);
-#endif
-
-                location.setToAvoidBlackTile(location.x - 1, location.y);
-            }
-            if (homing.started == true && homing.hasFinished == false) {
-                app.restart(homingApp);
-            } else {
-                app.restart(rightWallApp);
-            }
-        }
-        if (floorSensor.backColor == floorSensor.BLUE &&
-            floorSensor.frontColor == floorSensor.BLUE &&
-            abs(gyro.slope) <= 5) {  // 5秒止まる
-            if (homing.started == true && homing.hasFinished == false) {
-                app.stop(homingApp);
-            } else {
-                app.stop(rightWallApp);
-            }
-            servo.suspend  = true;
-            servo.velocity = 0;
-            blueTileX      = location.x;
-            blueTileY      = location.y;
-            app.delay(5500);
-            if (homing.started == true && homing.hasFinished == false) {
-                app.start(homingApp);
-            } else {
-                app.start(rightWallApp);
-            }
-            while (location.x == blueTileX && location.y == blueTileY) {
-                if (floorSensor.frontColor == floorSensor.BLACK) {
-                    blueTileX = FIELD_ORIGIN;
-                    blueTileY = FIELD_ORIGIN;
-                    break;
-                }
-                app.delay(Period);
-            }
-        }
-        if (floorSensor.frontColor == floorSensor.SILVER &&
-            floorSensor.backColor == floorSensor.SILVER && gyro.slope == 0) {
-            floorSensor.checkPointX = location.x;
-            floorSensor.checkPointY = location.y;
-            buzzer.beat(DO_, 1);
-        }
-        app.delay(5);
-    }
-}
-
-void homingApp(App) {  // CHECK 最適化されてない
-    while (1) {
-        homing.dijkstra(location.x, location.y);
-        // uart1.println(homing.dijkstraSteps[location.x + FIELD_ORIGIN]
-        //                                   [location.y + FIELD_ORIGIN]);
-
-        if (millis() > homing.HomingTime) {
-            bottom.LED_color[0] = 255;
-            bottom.LED_color[1] = 120;
-            bottom.LED_color[2] = 0;
-
-            bool judgement_3d =
-                (location.coordinateZ < 150) && (location.coordinateZ > -150) &&
-                (homing.dijkstraSteps[location.x + FIELD_ORIGIN]
-                                     [location.y + FIELD_ORIGIN] != -1);
-
-#ifndef FIELD_3D
-            judgement_3d = true;
-#endif
-
-            if (homing.started == false && servo.suspend == true &&
-                victim.isDetected == false && judgement_3d &&
-                (floorSensor.frontColor != floorSensor.BLUE) &&
-                (floorSensor.backColor != floorSensor.BLUE)) {
-                app.stop(rightWallApp);
-
-                if (millis() > homing.HomingTime + 5000) {
-                    homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                             [location.y + FIELD_ORIGIN]++;
-                }
-                buzzer.beat(440, 2);
-                homing.started = true;
-            }
-            //  if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
-            //         (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
-            //         (location.route[0].wall[1] == tof.wallExists[EAST]) &&
-            //         (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
-            //         (location.route[0].wall[3] ==
-            //          tof.wallExists[WEST])) {  // NOTE 座標曖昧壁判定モード
-            //         app.stop(adjustmentApp);
-            //         servo.suspend  = true;
-            //         servo.velocity = 0;
-            //         buzzer.matsukenSamba();
-            //     }
-            if (homing.started == true) {
-                // if ((location.x == 0) &&
-                //     (location.y == 0)) {  // NOTE 座標厳密モード
-                //     app.stop(adjustmentApp);
-                //     servo.suspend = true;
-                //     servo.velocity = 0;
-
-                //     homing.hasFinished = true;
-                //     buzzer.matsukenSamba();
-                // }
-
-                if ((abs(location.x) <= 1) && (abs(location.y) <= 1) &&
-                    (location.route[0].wall[0] == tof.wallExists[NORTH]) &&
-                    (location.route[0].wall[1] == tof.wallExists[EAST]) &&
-                    (location.route[0].wall[2] == tof.wallExists[SOUTH]) &&
-                    (location.route[0].wall[3] ==
-                     tof.wallExists[WEST])) {  // NOTE 座標曖昧壁判定モード
-                    app.stop(adjustmentApp);
-                    servo.suspend  = true;
-                    servo.velocity = 0;
-                    buzzer.matsukenSamba();
-                } else {
-                    app.delay(Period);
-                    if (abs(gyro.slope) < 15) {
-                        switch (homing.dijkstraWeighting()) {
-                            case 0:  // right
-                                servo.suspend  = true;
-                                servo.velocity = 0;
-                                movement.turnRight();
-                                break;
-                            case 1:  // front
-                                break;
-                            case 2:  // left
-                                servo.suspend  = true;
-                                servo.velocity = 0;
-                                movement.turnLeft();
-                                break;
-                            case 3:  // back
-                                servo.suspend  = true;
-                                servo.velocity = 0;
-                                movement.turnReverse();
-                                break;
-                        }
-                    }
-                    movement.move_1tile();
-
-                    if (millis() > homing.HomingTime + 5000) {
-                        homing.homingReachedCount[location.x + FIELD_ORIGIN]
-                                                 [location.y + FIELD_ORIGIN]++;
-                    }
-                    // app.delay(100);
-                }
-            }
-            app.delay(Period);
-        } else {
-            app.delay(Period);
-        }
+        //     app.delay(1400);
+        // }
+        app.delay(Period);
     }
 }
