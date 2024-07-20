@@ -29,6 +29,9 @@ class VICTIM {
     char _kindOfVictimX[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
     char _kindOfVictimY[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
 
+    int letterVictimCount = 0;
+    int colorVictimCount  = 0;
+
     bool returnKindOfvictimY(int x, int y, int id) {
         char tmp = _kindOfVictimY[x][y];
         for (int i = 0; i < id; i++) {
