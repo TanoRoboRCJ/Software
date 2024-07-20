@@ -39,9 +39,9 @@ void monitorApp(App) {
         // uart1.print(tof.val[12]);
 
         // NOTE: loadcell
-        uart1.print(loadcell.load[0]);
-        uart1.print("\t");
-        uart1.println(loadcell.load[1]);
+        // uart1.print(loadcell.load[0]);
+        // uart1.print("\t");
+        // uart1.println(loadcell.load[1]);
 
         // 壁の状況を表示(location.wall)
         // if (uart1.available() > 0) {

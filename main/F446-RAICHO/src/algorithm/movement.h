@@ -38,6 +38,7 @@ class Movement {
 
     void turnRightAndPause(void);
     void turnLeftAndPause(void);
+    void breakWall(void);
 
     void angleAdjustment(void);
     void avoidBarrier(void);

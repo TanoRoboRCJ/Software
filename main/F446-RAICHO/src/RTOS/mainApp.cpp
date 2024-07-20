@@ -52,8 +52,23 @@ void mainApp(App) {
             servo.suspend  = true;
             servo.velocity = 0;
             servo.driveAngularVelocity(0, 0);
-            location.coordinateX = floorSensor.checkPointX * 300;
-            location.coordinateY = floorSensor.checkPointY * 300;
+            // victim.remainingRescueKitL = 6;
+            // victim.remainingRescueKitR = 6;
+            location.coordinateX       = 0.0;
+            location.coordinateY       = 0.0;
+
+            //             char _kindOfVictimX[FIELD_ORIGIN * 2][FIELD_ORIGIN *
+            //             2] = {0};
+            // char _kindOfVictimY[FIELD_ORIGIN * 2][FIELD_ORIGIN * 2] = {0};
+            // all set to zero
+
+            // for (int i = 0; i < FIELD_ORIGIN * 2; i++) {
+            //     for (int j = 0; j < FIELD_ORIGIN * 2; j++) {
+            //         victim._kindOfVictimX[i][j] = 0;
+            //         victim._kindOfVictimY[i][j] = 0;
+            //     }
+            // }
+
             status = true;
         }
 

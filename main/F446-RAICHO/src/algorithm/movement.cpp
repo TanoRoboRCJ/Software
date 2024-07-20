@@ -398,3 +398,24 @@ void Movement::turnLeftAndPause(void) {
     victim.isDetected = false;
     turnRight();
 }
+
+void Movement::breakWall(void){
+    servo.suspend = true;
+    servo.velocity = 0;
+    app.stop(rightWallApp);
+    app.stop(locationApp);
+    turnNorth();
+    servo.suspend = false;
+    servo.velocity = -servo.DefaultSpeed;
+    app.delay(800);
+    servo.suspend = true;
+    servo.velocity = 0;
+    app.delay(Period);
+    servo.suspend = false;
+    servo.velocity = servo.DefaultSpeed;
+    app.delay(500);
+    servo.suspend = true;
+    servo.velocity = 0;
+    app.start(locationApp);
+    app.start(rightWallApp);
+}

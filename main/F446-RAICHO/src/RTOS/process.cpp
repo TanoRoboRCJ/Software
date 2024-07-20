@@ -133,6 +133,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             }
         }
 
+        rescueKitNum = 0;
+
         switch (victim.id) {
             case VICTIM_H:
             case VICTIM_S:
@@ -140,9 +142,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                 rescueKitNum = victim.letterVictimCount++;
                 break;
 
-            case VICTIM_RED:
-            case VICTIM_YELLOW:
-            case VICTIM_GREEN:
+            default:
                 rescueKitNum = victim.colorVictimCount++;
                 break;
         }
@@ -189,85 +189,37 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
         switch (victim.id) {
             case VICTIM_H:
                 if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, H) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, H) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN - 1,
-                                               H) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN + 1,
-                                               H)) {
+                                               location.y + FIELD_ORIGIN, H)) {
                     return true;
                 }
                 break;
             case VICTIM_S:
                 if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, S) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, S) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN - 1,
-                                               S) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN + 1,
-                                               S)) {
+                                               location.y + FIELD_ORIGIN, S)) {
                     return true;
                 }
                 break;
             case VICTIM_U:
                 if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, U) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, U) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN - 1,
-                                               U) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN + 1,
-                                               U)) {
+                                               location.y + FIELD_ORIGIN, U)) {
                     return true;
                 }
                 break;
             case VICTIM_RED:
                 if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, R) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, R) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN - 1,
-                                               R) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN + 1,
-                                               R)) {
+                                               location.y + FIELD_ORIGIN, R)) {
                     return true;
                 }
                 break;
             case VICTIM_YELLOW:
                 if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, Y) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, Y) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN - 1,
-                                               Y) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN + 1,
-                                               Y)) {
+                                               location.y + FIELD_ORIGIN, Y)) {
                     return true;
                 }
                 break;
             case VICTIM_GREEN:
                 if (victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, G) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, G) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN - 1,
-                                               G) ||
-                    victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN + 1,
-                                               G)) {
+                                               location.y + FIELD_ORIGIN, G)) {
                     return true;
                 }
                 break;
@@ -276,24 +228,12 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
         switch (victim.id) {
             case VICTIM_H:
                 if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, H) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, H) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
-                                               location.y + FIELD_ORIGIN, H) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
                                                location.y + FIELD_ORIGIN, H)) {
                     return true;
                 }
                 break;
             case VICTIM_S:
                 if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, S) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, S) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
-                                               location.y + FIELD_ORIGIN, S) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
                                                location.y + FIELD_ORIGIN, S)) {
                     return true;
                 }
@@ -301,48 +241,24 @@ bool duplicate(void) {  // 進行方向に今見ているデータと同じデ�
 
             case VICTIM_U:
                 if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, U) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, U) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
-                                               location.y + FIELD_ORIGIN, U) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
                                                location.y + FIELD_ORIGIN, U)) {
                     return true;
                 }
                 break;
             case VICTIM_RED:
                 if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, R) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, R) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
-                                               location.y + FIELD_ORIGIN, R) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
                                                location.y + FIELD_ORIGIN, R)) {
                     return true;
                 }
                 break;
             case VICTIM_YELLOW:
                 if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, Y) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, Y) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
-                                               location.y + FIELD_ORIGIN, Y) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
                                                location.y + FIELD_ORIGIN, Y)) {
                     return true;
                 }
                 break;
             case VICTIM_GREEN:
                 if (victim.returnKindOfvictimY(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, G) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN,
-                                               location.y + FIELD_ORIGIN, G) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN - 1,
-                                               location.y + FIELD_ORIGIN, G) ||
-                    victim.returnKindOfvictimX(location.x + FIELD_ORIGIN + 1,
                                                location.y + FIELD_ORIGIN, G)) {
                     return true;
                 }

@@ -30,8 +30,8 @@ void FLOOR_SENSOR::frontColorJudgment(void) {
 }
 
 void FLOOR_SENSOR::backColorJudgment(void) {
-    if (backCRGB[0] < 100 && backCRGB[1] < 35 && backCRGB[2] < 45 &&
-        backCRGB[3] < 45) {
+    if (backCRGB[0] < 110 && backCRGB[1] < 35 && backCRGB[2] < 55 &&
+        backCRGB[3] < 55) {
         backColor = BLACK;
     } else if (backCRGB[0] > 100 && backCRGB[0] < 200 && backCRGB[1] < 50 &&
                backCRGB[2] < 80 && backCRGB[3] < 85) {
