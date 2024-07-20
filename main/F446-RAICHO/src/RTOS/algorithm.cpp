@@ -82,6 +82,7 @@ void floorApp(App) {
             servo.velocity = 0;
             app.delay(5000);
             servo.suspend = false;
+            // movement.turnRightAndPause();
             app.start(rightWallApp);
             int tempX = location.x;
             int tempY = location.y;
@@ -102,6 +103,7 @@ void floorApp(App) {
             servo.velocity = 0;
             app.delay(5000);
             servo.suspend = false;
+            // movement.turnRightAndPause();
             app.start(rightWallApp);
 
             int tempX = location.x;

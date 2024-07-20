@@ -386,3 +386,11 @@ void Movement::turnRightAndPause(void) {
     app.delay(5000);
     turnLeft();
 }
+
+void Movement::turnLeftAndPause(void) {
+    turnLeft();
+    servo.suspend = true;
+    servo.velocity = 0;
+    app.delay(5000);
+    turnRight();
+}
