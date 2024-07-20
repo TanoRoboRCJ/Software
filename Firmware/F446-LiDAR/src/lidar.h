@@ -38,8 +38,8 @@ class LIDAR {
     double covX = 0;
     double covY = 0;
 
-    const int WallStart = 89;
-    const int WallEnd = 121;
+    const int WallStart = 85;
+    const int WallEnd = 135;
     const int WallRange = 225;
 
     bool rightWallExists = true;

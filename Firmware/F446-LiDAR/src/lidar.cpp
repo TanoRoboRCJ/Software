@@ -147,7 +147,7 @@ void LIDAR::judgeWall(void) {
         }
     }
 
-    const int Threshold = 15;
+    const int Threshold = 10;
 
     if (rightWallCounter > Threshold) {
         rightWallExists = false;
