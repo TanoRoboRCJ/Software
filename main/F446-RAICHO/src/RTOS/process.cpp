@@ -34,8 +34,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             if (victim.isRightOrLeft != NONE && ui.toggle == true) {
                 if (duplicate() == true) {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data       = 'N';
-                    camera[1].data       = 'N';
+                    camera[0].data = 'N';
+                    camera[1].data = 'N';
                 } else if ((victim.isRightOrLeft == RIGHT && tof.val[4] < 190 &&
                             tof.lidarRightWallExists) ||
                            (victim.isRightOrLeft == LEFT && tof.val[12] < 190 &&
@@ -43,8 +43,8 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
                     break;
                 } else {
                     victim.isRightOrLeft = NONE;
-                    camera[0].data       = 'N';
-                    camera[1].data       = 'N';
+                    camera[0].data = 'N';
+                    camera[1].data = 'N';
                 }
             }
             app.delay(10);
@@ -60,7 +60,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         victim.isDetected = true;
 
-        servo.suspend  = true;
+        servo.suspend = true;
         servo.velocity = 0;
         servo.driveAngularVelocity(0, 0);
 
@@ -68,7 +68,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         buzzer.beat(FA_, 0.1);
 
         unsigned long stopTimer = millis();
-        while (millis() - stopTimer < 5000) {
+        while (millis() - stopTimer < 2000) {
             servo.driveAngularVelocity(0, 0);
             app.delay(100);
         }
@@ -135,27 +135,29 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         switch (victim.id) {
             case VICTIM_H:
-                rescueKitNum = 2;
-                break;
-
             case VICTIM_S:
-                rescueKitNum = 1;
+            case VICTIM_U:
+                rescueKitNum = victim.letterVictimCount++;
                 break;
 
             case VICTIM_RED:
-                rescueKitNum = 2;
-                break;
-
             case VICTIM_YELLOW:
-                rescueKitNum = 1;
-                break;
-
-            default:
+            case VICTIM_GREEN:
+                rescueKitNum = victim.colorVictimCount++;
                 break;
         }
 
-        buzzer.rescueKit(rescueKitNum);
-        servo.rescueKit(rescueKitNum, victim.isRightOrLeft);
+        // buzzer.rescueKit(rescueKitNum);
+
+        // if servo
+        //     .rescueKit(rescueKitNum, victim.isRightOrLeft);
+
+        if (servo.remainingRescueKitL > rescueKitNum) {
+            servo.rescueKit(rescueKitNum, LEFT);
+        } else if (servo.remainingRescueKitR > rescueKitNum) {
+            servo.rescueKit(rescueKitNum, RIGHT);
+        }
+        
         app.delay(100);
 
         if (homing.started == true && homing.hasFinished == false) {
@@ -167,18 +169,18 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         app.start(floorApp);
         int camTimer = millis();
         while (millis() - camTimer < 1000) {
-            victim.isDetected    = false;
-            victim.id            = 0;
+            victim.isDetected = false;
+            victim.id = 0;
             victim.isRightOrLeft = NONE;
-            camera[0].data       = 'N';
-            camera[1].data       = 'N';
+            camera[0].data = 'N';
+            camera[1].data = 'N';
         }
 
-        victim.isDetected    = false;
-        victim.id            = 0;
+        victim.isDetected = false;
+        victim.id = 0;
         victim.isRightOrLeft = NONE;
-        camera[0].data       = 'N';
-        camera[1].data       = 'N';
+        camera[0].data = 'N';
+        camera[1].data = 'N';
     }
 }
 
