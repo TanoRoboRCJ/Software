@@ -154,10 +154,10 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
 
         if (servo.remainingRescueKitL > rescueKitNum) {
             servo.rescueKit(rescueKitNum, LEFT);
-        } else if (servo.remainingRescueKitR > rescueKitNum) {
+        } else {
             servo.rescueKit(rescueKitNum, RIGHT);
         }
-        
+
         app.delay(100);
 
         if (homing.started == true && homing.hasFinished == false) {
