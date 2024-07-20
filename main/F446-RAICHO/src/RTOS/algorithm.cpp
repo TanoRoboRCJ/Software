@@ -80,9 +80,9 @@ void floorApp(App) {
             app.stop(rightWallApp);
             servo.suspend  = true;
             servo.velocity = 0;
-            app.delay(5000);
-            servo.suspend = false;
-            // movement.turnRightAndPause();
+            // app.delay(5000);
+            // servo.suspend = false;
+            movement.turnRightAndPause();
             app.start(rightWallApp);
             int tempX = location.x;
             int tempY = location.y;
@@ -101,9 +101,9 @@ void floorApp(App) {
             app.stop(rightWallApp);
             servo.suspend  = true;
             servo.velocity = 0;
-            app.delay(5000);
-            servo.suspend = false;
-            // movement.turnRightAndPause();
+            // app.delay(5000);
+            // servo.suspend = false;
+            movement.turnRightAndPause();
             app.start(rightWallApp);
 
             int tempX = location.x;

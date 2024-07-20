@@ -381,16 +381,20 @@ void Movement::goOverBarrier(void) {
 
 void Movement::turnRightAndPause(void) {
     turnRight();
+    victim.isDetected = true;
     servo.suspend = true;
     servo.velocity = 0;
     app.delay(5000);
+    victim.isDetected = false;
     turnLeft();
 }
 
 void Movement::turnLeftAndPause(void) {
     turnLeft();
+    victim.isDetected = true;
     servo.suspend = true;
     servo.velocity = 0;
     app.delay(5000);
+    victim.isDetected = false;
     turnRight();
 }
