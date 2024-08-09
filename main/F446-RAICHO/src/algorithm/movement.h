@@ -36,9 +36,13 @@ class Movement {
     void turnSouth(void);
     void turnWest(void);
 
+//NOTE:テクニカルチャレンジ用
     void turnRightAndPause(void);
     void turnLeftAndPause(void);
+
+//NOTE:スーパーチーム用
     void breakWall(void);
+    bool wallWasBroken = false;
 
     void angleAdjustment(void);
     void avoidBarrier(void);

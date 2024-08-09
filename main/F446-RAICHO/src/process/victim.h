@@ -32,7 +32,11 @@ class VICTIM {
     //NOTE:スーパーチーム用
     bool isDetectedLetter = false;
     bool isDetectedColor  = false;
-    int kindOfVictim = -1;
+    char kindOfVictim = -1;
+    int detectVictimX[6] = {0};
+    int detectVictimY[6] = {0};
+    int keyX = 0;
+    int keyY = 0;
 
     int numOfVictim = 0;
 
@@ -70,7 +74,7 @@ class VICTIM {
     void read(void) {
         // CHECK: このtimerなんなん
         static unsigned long timer = 0;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             camera[i].read();
             // uart1.print(camera[i].data);
             if (camera[i].data != 'N') {

@@ -43,7 +43,7 @@ int Exploring::weighting(void) {
 
     weight[RIGHT] = rightWeight();
     weight[FRONT] = frontWeight();
-    weight[LEFT] = leftWeight();
+    weight[LEFT]  = leftWeight();
 
     if (tof.rightWallExists == false) {
         movement.CanGoRight = true;
@@ -70,10 +70,12 @@ int Exploring::weighting(void) {
     // uart1.print("\t");
     // uart1.print(gyro.deg);
     // uart1.println();
-
-    if (weight[RIGHT] <= weight[FRONT] &&
-        weight[RIGHT] <= weight[LEFT]) {  // NOTE 同列の場合は右優先
-        return 0;                         // right
+    if (weight[RIGHT] == DISABLE && weight[FRONT] == DISABLE &&
+        weight[LEFT] == DISABLE) {
+        return 2;
+    } else if (weight[RIGHT] <= weight[FRONT] &&
+               weight[RIGHT] <= weight[LEFT]) {  // NOTE 同列の場合は右優先
+        return 0;                                // right
     } else if (weight[FRONT] <= weight[RIGHT] &&
                weight[FRONT] <= weight[LEFT]) {
         return 1;  // front
@@ -262,7 +264,7 @@ void Exploring::setReachedCount3D(char value, int x, int y) {
 
     for (int i = 0; i < FloorNum; i++) {
         if (reachedCount3D[x][y][i].count == 0) {
-            reachedCount3D[x][y][i].z = location.coordinateZ;
+            reachedCount3D[x][y][i].z     = location.coordinateZ;
             reachedCount3D[x][y][i].count = value;
 
             return;
@@ -300,7 +302,7 @@ int Exploring::weighting(void) {
 
     weight[RIGHT] = rightWeight();
     weight[FRONT] = frontWeight();
-    weight[LEFT] = leftWeight();
+    weight[LEFT]  = leftWeight();
 
     if (tof.rightWallExists == false) {
         movement.CanGoRight = true;

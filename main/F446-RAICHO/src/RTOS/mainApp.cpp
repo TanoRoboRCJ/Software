@@ -30,6 +30,7 @@ void mainApp(App) {
                 app.start(victimNotifyApp);
                 app.start(homingApp);
                 app.start(floorApp);
+                app.start(superTeamApp);
 
                 gyro.setLoPStart();
 

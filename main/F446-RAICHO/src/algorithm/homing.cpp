@@ -118,73 +118,73 @@ int Homing::dijkstraWeighting(void) {
 
     switch (gyro.direction) {
         case NORTH:
-            weight[RIGHT] = dijkstra(location.x + 1, location.y) +
+            weight[RIGHT] = dijkstra(location.x + 1, location.y, victim.keyX, victim.keyY); +
                             homingReachedCount[location.x + FIELD_ORIGIN + 1]
                                               [location.y + FIELD_ORIGIN] *
                                 100;
-            weight[FRONT] = dijkstra(location.x, location.y + 1) +
+            weight[FRONT] = dijkstra(location.x, location.y + 1, victim.keyX, victim.keyY); +
                             homingReachedCount[location.x + FIELD_ORIGIN]
                                               [location.y + FIELD_ORIGIN + 1] *
                                 100;
-            weight[LEFT] = dijkstra(location.x - 1, location.y) +
+            weight[LEFT] = dijkstra(location.x - 1, location.y, victim.keyX, victim.keyY); +
                            homingReachedCount[location.x + FIELD_ORIGIN - 1]
                                              [location.y + FIELD_ORIGIN] *
                                100;
-            weight[BACK] = dijkstra(location.x, location.y - 1) +
+            weight[BACK] = dijkstra(location.x, location.y - 1, victim.keyX, victim.keyY); +
                            homingReachedCount[location.x + FIELD_ORIGIN]
                                              [location.y + FIELD_ORIGIN - 1] *
                                100;
             break;
         case EAST:
-            weight[RIGHT] = dijkstra(location.x, location.y - 1) +
+            weight[RIGHT] = dijkstra(location.x, location.y - 1, victim.keyX, victim.keyY); +
                             homingReachedCount[location.x + FIELD_ORIGIN]
                                               [location.y + FIELD_ORIGIN - 1] *
                                 100;
-            weight[FRONT] = dijkstra(location.x + 1, location.y) +
+            weight[FRONT] = dijkstra(location.x + 1, location.y, victim.keyX, victim.keyY); +
                             homingReachedCount[location.x + FIELD_ORIGIN + 1]
                                               [location.y + FIELD_ORIGIN] *
                                 100;
-            weight[LEFT] = dijkstra(location.x, location.y + 1) +
+            weight[LEFT] = dijkstra(location.x, location.y + 1, victim.keyX, victim.keyY); +
                            homingReachedCount[location.x + FIELD_ORIGIN]
                                              [location.y + FIELD_ORIGIN + 1] *
                                100;
-            weight[BACK] = dijkstra(location.x - 1, location.y) +
+            weight[BACK] = dijkstra(location.x - 1, location.y, victim.keyX, victim.keyY); +
                            homingReachedCount[location.x + FIELD_ORIGIN - 1]
                                              [location.y + FIELD_ORIGIN] *
                                100;
             break;
         case SOUTH:
-            weight[RIGHT] = dijkstra(location.x - 1, location.y) +
+            weight[RIGHT] = dijkstra(location.x - 1, location.y, victim.keyX, victim.keyY); +
                             homingReachedCount[location.x + FIELD_ORIGIN - 1]
                                               [location.y + FIELD_ORIGIN] *
                                 100;
-            weight[FRONT] = dijkstra(location.x, location.y - 1) +
+            weight[FRONT] = dijkstra(location.x, location.y - 1, victim.keyX, victim.keyY); +
                             homingReachedCount[location.x + FIELD_ORIGIN]
                                               [location.y + FIELD_ORIGIN - 1] *
                                 100;
-            weight[LEFT] = dijkstra(location.x + 1, location.y) +
+            weight[LEFT] = dijkstra(location.x + 1, location.y, victim.keyX, victim.keyY); +
                            homingReachedCount[location.x + FIELD_ORIGIN + 1]
                                              [location.y + FIELD_ORIGIN] *
                                100;
-            weight[BACK] = dijkstra(location.x, location.y + 1) +
+            weight[BACK] = dijkstra(location.x, location.y + 1, victim.keyX, victim.keyY); +
                            homingReachedCount[location.x + FIELD_ORIGIN]
                                              [location.y + FIELD_ORIGIN + 1] *
                                100;
             break;
         case WEST:
-            weight[RIGHT] = dijkstra(location.x, location.y + 1) +
+            weight[RIGHT] = dijkstra(location.x, location.y + 1, victim.keyX, victim.keyY); +
                             homingReachedCount[location.x + FIELD_ORIGIN]
                                               [location.y + FIELD_ORIGIN + 1] *
                                 100;
-            weight[FRONT] = dijkstra(location.x - 1, location.y) +
+            weight[FRONT] = dijkstra(location.x - 1, location.y, victim.keyX, victim.keyY); +
                             homingReachedCount[location.x + FIELD_ORIGIN - 1]
                                               [location.y + FIELD_ORIGIN] *
                                 100;
-            weight[LEFT] = dijkstra(location.x, location.y - 1) +
+            weight[LEFT] = dijkstra(location.x, location.y - 1, victim.keyX, victim.keyY); +
                            homingReachedCount[location.x + FIELD_ORIGIN]
                                              [location.y + FIELD_ORIGIN - 1] *
                                100;
-            weight[BACK] = dijkstra(location.x + 1, location.y) +
+            weight[BACK] = dijkstra(location.x + 1, location.y, victim.keyX, victim.keyY); +
                            homingReachedCount[location.x + FIELD_ORIGIN + 1]
                                              [location.y + FIELD_ORIGIN] *
                                100;

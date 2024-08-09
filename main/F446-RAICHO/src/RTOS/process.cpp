@@ -58,7 +58,7 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         app.stop(adjustmentApp);
         app.stop(floorApp);
 
-        victim.isDetected = true;
+        // victim.isDetected = true;
 
         servo.suspend = true;
         servo.velocity = 0;
@@ -68,34 +68,52 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         buzzer.beat(FA_, 0.1);
 
         unsigned long stopTimer = millis();
-        while (millis() - stopTimer < 2000) {
-            servo.driveAngularVelocity(0, 0);
-            app.delay(100);
-        }
+        // while (millis() - stopTimer < 5000) {
+        //     servo.driveAngularVelocity(0, 0);
+        //     app.delay(100);
+        // }
 
         if (gyro.direction == NORTH || gyro.direction == SOUTH) {
             switch (victim.id) {
                 case VICTIM_H:
+                victim.detectVictimX[H] = location.x;
+                victim.detectVictimY[H] = location.y;
+                uart2.println("H");
                     victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, H);
                     break;
                 case VICTIM_S:
+                victim.detectVictimX[S] = location.x;
+                victim.detectVictimY[S] = location.y;
+                uart2.println("S");
                     victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, S);
                     break;
                 case VICTIM_U:
+                victim.detectVictimX[U] = location.x;
+                victim.detectVictimY[U] = location.y;
+                uart2.println("U");
                     victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, U);
                     break;
                 case VICTIM_RED:
+                victim.detectVictimX[R] = location.x;
+                victim.detectVictimY[R] = location.y;
+                uart2.println("R");
                     victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, R);
                     break;
                 case VICTIM_YELLOW:
+                victim.detectVictimX[Y] = location.x;
+                victim.detectVictimY[Y] = location.y;
+                uart2.println("Y");
                     victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, Y);
                     break;
                 case VICTIM_GREEN:
+                victim.detectVictimX[G] = location.x;
+                victim.detectVictimY[G] = location.y;
+                uart2.println("G");
                     victim.setKindOfvictimY(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, G);
                     break;
@@ -103,30 +121,44 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
         } else if (gyro.direction == EAST || gyro.direction == WEST) {
             switch (victim.id) {
                 case VICTIM_H:
+                victim.detectVictimX[H] = location.x;
+                victim.detectVictimY[H] = location.y;
+                uart2.println("H");
                     victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, H);
                     break;
                 case VICTIM_S:
-
+                victim.detectVictimX[S] = location.x;
+                victim.detectVictimY[S] = location.y;
+                uart2.println("S");
                     victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, S);
                     break;
                 case VICTIM_U:
-
+                victim.detectVictimX[U] = location.x;
+                victim.detectVictimY[U] = location.y;
+                uart2.println("U");
                     victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, U);
                     break;
                 case VICTIM_RED:
-
+                victim.detectVictimX[R] = location.x;
+                victim.detectVictimY[R] = location.y;
+                uart2.println("R");
                     victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, R);
                     break;
                 case VICTIM_YELLOW:
-
+                victim.detectVictimX[Y] = location.x;
+                victim.detectVictimY[Y] = location.y;
+                uart2.println("Y");
                     victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, Y);
                     break;
                 case VICTIM_GREEN:
+                victim.detectVictimX[G] = location.x;
+                victim.detectVictimY[G] = location.y;
+                uart2.println("G");
                     victim.setKindOfvictimX(location.x + FIELD_ORIGIN,
                                             location.y + FIELD_ORIGIN, G);
                     break;
@@ -139,11 +171,15 @@ void victimNotifyApp(App) {  // NOTE: ちょっとハードコードすぎるか
             case VICTIM_H:
             case VICTIM_S:
             case VICTIM_U:
-                rescueKitNum = victim.letterVictimCount++;
+                victim.isDetectedLetter = true;
+                // uart1.println("Letter");
+                // rescueKitNum = victim.letterVictimCount++;
                 break;
 
             default:
-                rescueKitNum = victim.colorVictimCount++;
+                victim.isDetectedColor = true;
+                // uart1.println("Color");
+                // rescueKitNum = victim.colorVictimCount++;
                 break;
         }
 

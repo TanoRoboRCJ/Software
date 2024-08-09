@@ -400,6 +400,7 @@ void Movement::turnLeftAndPause(void) {
 }
 
 void Movement::breakWall(void){
+    uart2.println("壁破壊開始");
     servo.suspend = true;
     servo.velocity = 0;
     app.stop(rightWallApp);
@@ -407,15 +408,9 @@ void Movement::breakWall(void){
     turnNorth();
     servo.suspend = false;
     servo.velocity = -servo.DefaultSpeed;
-    app.delay(800);
+    app.delay(750);
     servo.suspend = true;
     servo.velocity = 0;
-    app.delay(Period);
-    servo.suspend = false;
-    servo.velocity = servo.DefaultSpeed;
-    app.delay(500);
-    servo.suspend = true;
-    servo.velocity = 0;
-    app.start(locationApp);
-    app.start(rightWallApp);
+    wallWasBroken = true;
+    uart2.println("壁破壊完了");
 }
